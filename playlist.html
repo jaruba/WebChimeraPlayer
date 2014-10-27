@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+<title>Playlist Demo for Chimera Web Plugin UI</title>
+
+</head>
+
+<body>
+
+<div id="close_wrapper"><a id="close_button" href="index.html"><img src="images/close_but.png"></a></div>
+
+<div id="page_title">Playlist Demo</div>
+
+<div id="player_wrapper">
+<object id="webchimera" type="application/x-chimera-plugin" width="100%" height="100%">
+<param name="qmlsrc" value="default.qml" />
+</object>
+</div>
+
+
+<script>
+var playerid = "webchimera";
+function playlistadd(mrl) {
+	var videoelem = document.getElementById(playerid);
+	videoelem.playlist.add(mrl);
+}
+function startplayer() {
+	var videoelem = document.getElementById(playerid);
+	videoelem.playlist.setCurrentItem(0);
+	videoelem.playlist.play(0);
+	videoelem.playlist.Normal;
+}
+playlistadd("http://www.youtube.com/watch?v=xrnuV-9FKLk");
+playlistadd("http://www.youtube.com/watch?v=agk2svo7svI");
+playlistadd("http://www.youtube.com/watch?v=xQuGpW0NuW8");
+startplayer();
+</script>
+
+</body>
+
+</html>
