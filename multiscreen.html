@@ -52,38 +52,6 @@ startplayer("webchimera2");
 startplayer("webchimera3");
 startplayer("webchimera4");
 
-function checkfs() {
-	var playerid1 = document.getElementById("webchimera1");
-	var playerid2 = document.getElementById("webchimera2");
-	var playerid3 = document.getElementById("webchimera3");
-	var playerid4 = document.getElementById("webchimera4");
-	
-	if (playerid1.video.fullscreen) {
-		playerid2.pause();
-		playerid3.pause();
-		playerid4.pause();
-	} else if (playerid2.video.fullscreen) {
-		playerid3.pause();
-		playerid4.pause();
-		playerid1.pause();
-	} else if (playerid3.video.fullscreen) {
-		playerid4.pause();
-		playerid1.pause();
-		playerid2.pause();
-	} else if (playerid4.video.fullscreen) {
-		playerid1.pause();
-		playerid2.pause();
-		playerid3.pause();
-	} else {
-		if (playerid1.state == 4) playerid1.play();
-		if (playerid2.state == 4) playerid2.play();
-		if (playerid3.state == 4) playerid3.play();
-		if (playerid4.state == 4) playerid4.play();
-	}
-	setTimeout(checkfs(), 2000);
-}
-
-setTimeout(checkfs(), 2000);
 
 </script>
 
