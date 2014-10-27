@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+<title>Multiscreen Demo for Chimera Web Plugin UI</title>
+
+</head>
+
+<body>
+
+<div id="close_wrapper"><a id="close_button" href="index.html"><img src="images/close_but.png"></a></div>
+
+<div id="page_title">Multiscreen Demo</div>
+
+<div id="player_wrapper" style="background-color: #000">
+<object id="webchimera1" type="application/x-chimera-plugin" width="49%" height="49%" style="margin-left: 5px; margin-top: 2px">
+<param name="qmlsrc" value="multiscreen.qml" />
+</object>
+<object id="webchimera2" type="application/x-chimera-plugin" width="49%" height="49%" style="margin-top: 2px">
+<param name="qmlsrc" value="multiscreen.qml" />
+</object>
+<object id="webchimera3" type="application/x-chimera-plugin" width="49%" height="49%" style="margin-left: 5px">
+<param name="qmlsrc" value="multiscreen.qml" />
+</object>
+<object id="webchimera4" type="application/x-chimera-plugin" width="49%" height="49%">
+<param name="qmlsrc" value="multiscreen.qml" />
+</object>
+</div>
+
+
+<script>
+function playlistadd(mrl,playerid) {
+	var videoelem = document.getElementById(playerid);
+	videoelem.playlist.add(mrl);
+}
+function startplayer(playerid) {
+	var videoelem = document.getElementById(playerid);
+	videoelem.playlist.setCurrentItem(0);
+	videoelem.playlist.play(0);
+	videoelem.playlist.Loop;
+}
+playlistadd("http://archive.org/download/BettyHoLawrenceKwanKristenStewartDavidWallace/BirdsOfAFeatherDIVX.avi","webchimera1");
+playlistadd("http://archive.org/download/CrayonDragonAnAnimatedShortFilmByTonikoPantoja/Crayon%20Dragon%20-%20An%20animated%20short%20film%20by%20Toniko%20Pantoja.mp4","webchimera2");
+playlistadd("http://archive.org/download/CartoonClassics/Krazy_Kat_-_Keeping_Up_With_Krazy.mp4","webchimera3");
+playlistadd("http://archive.org/download/CartoonClassics/Mel-O-Toons__Peter_and_the_Wolf.mp4","webchimera4");
+
+startplayer("webchimera1");
+startplayer("webchimera2");
+startplayer("webchimera3");
+startplayer("webchimera4");
+
+function checkfs() {
+	var playerid1 = document.getElementById("webchimera1");
+	var playerid2 = document.getElementById("webchimera2");
+	var playerid3 = document.getElementById("webchimera3");
+	var playerid4 = document.getElementById("webchimera4");
+	
+	if (playerid1.video.fullscreen) {
+		playerid2.pause();
+		playerid3.pause();
+		playerid4.pause();
+	} else if (playerid2.video.fullscreen) {
+		playerid3.pause();
+		playerid4.pause();
+		playerid1.pause();
+	} else if (playerid3.video.fullscreen) {
+		playerid4.pause();
+		playerid1.pause();
+		playerid2.pause();
+	} else if (playerid4.video.fullscreen) {
+		playerid1.pause();
+		playerid2.pause();
+		playerid3.pause();
+	} else {
+		if (playerid1.state == 4) playerid1.play();
+		if (playerid2.state == 4) playerid2.play();
+		if (playerid3.state == 4) playerid3.play();
+		if (playerid4.state == 4) playerid4.play();
+	}
+	setTimeout(checkfs(), 2000);
+}
+
+setTimeout(checkfs(), 2000);
+
+</script>
+
+</body>
+
+</html>
