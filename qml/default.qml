@@ -29,7 +29,7 @@ Rectangle {
 	property var laststate: 0;
 	property var ismoving: 1;
 	property var buffering: 0;
-	
+		
 	// Start Function for Toggle Pause
 	function togPause() {
 		if (vlcPlayer.state == 6) {
@@ -60,6 +60,16 @@ Rectangle {
         vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
     }
 	
+	// Keypress Event
+	Item {
+		focus: true
+		Keys.onPressed: {
+			if (event.key == Qt.Key_Space) { togPause(); }
+			if (event.key == Qt.Key_Escape) { toggleFullscreen(); }
+		}
+	}
+	// End Keypress Event
+
     function onBuffering( percents ) {
         buftext.text = "Buffering " + percents +"%"; // Announce Buffering Percent
 		buffering = percents; // Set Global Variable "buffering"
