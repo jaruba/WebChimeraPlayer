@@ -14,7 +14,7 @@ Current Features
 ==============
 - Playlist Support
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
-- Supported Streams: HTTP, FTP, File, Youtube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
+- Supported Streams: HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Audio Formats: MP3, AAC, MPEG3, FLAC, WAV and <a href="http://www.videolan.org/vlc/features.php?cat=audio" target="_blank">more</a>
 - UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> <i>loaded from a HTTP source</i>
 
