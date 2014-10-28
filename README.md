@@ -1,4 +1,4 @@
-Webchimera Player
+Webchimera UI
 ==============
 
 An Open Source Webchimera User Interface / Skin
