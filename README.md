@@ -7,7 +7,7 @@ To use Webchimera UI you need to install the lattest version of <a href="http://
 
 Webchimera is a Vlc Web Plugin based on FireBreath that offers the possibility of using <a href="http://qt-project.org/" target="_blank">QT QML</a> to build complex User Interfaces for the Web Player.
 
-<b>Make sure to view the <a href="http://jaruba.github.io/WebchimeraUI/" target="_blank">Demo Page</a></b>
+<b>Make sure to view the <a href="http://jaruba.github.io/WebchimeraPlayer/" target="_blank">Demo Page</a></b>
 
 
 Current Features
