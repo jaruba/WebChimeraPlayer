@@ -1,4 +1,4 @@
-Webchimera UI
+Webchimera User Interface
 ==============
 
 An Open Source Webchimera User Interface / Skin
