@@ -21,5 +21,5 @@ Upcoming Features
 ==============
 - Key Event Handlers
 - Playlist Menu
-- External Subtitle Support
+- External Subtitle Support (SRT, SUB, IDX)
 - Windowed Mode (Pop Out)
