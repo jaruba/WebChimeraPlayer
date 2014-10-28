@@ -1,6 +1,6 @@
 body { background-color: #424242 }
 
-#main_menu { width: 100%; margin-top: 60px; text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 39px; color: #eaeaea; font-weight: bold; text-shadow: 0px 0px 17px rgba(0, 0, 0, 0.8) }
+#main_menu { width: 100%; margin-top: 45px; margin-bottom: 45px; text-align: center; font-family: Helvetica, Arial, sans-serif; font-size: 39px; color: #eaeaea; font-weight: bold; text-shadow: 0px 0px 17px rgba(0, 0, 0, 0.8) }
 #main_content { font-size: 16px; font-weight: normal; text-shadow: 0px 0px 7px rgba(0, 0, 0, 0.8) }
 .smallh { font-weight: bold; font-size: 22px }
 a.github { color: #3CA0CB; font-weight: bold; font-size: 22px; text-decoration: none }
