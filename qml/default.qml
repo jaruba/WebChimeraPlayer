@@ -234,7 +234,7 @@ Rectangle {
 				visible: vlcPlayer.playlist.items.count > 1 ? true : false
                 color: '#2b2b2b'
                 Image {
-                    source: mouseAreaPrev.containsMouse ? "images/prev_h.png" : "images/prev.png"
+                    source: mouseAreaPrev.containsMouse ? "../images/prev_h.png" : "../images/prev.png"
                     anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaPrev
@@ -263,7 +263,7 @@ Rectangle {
                 width: 59
                 color: '#2b2b2b'
                 Image {
-                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "images/pause_h.png" : vlcPlayer.state != 6 ? "images/play3_h.png" : "images/replay2_h.png" : vlcPlayer.playing ?"images/pause.png" :  vlcPlayer.state != 6 ? "images/play3.png" : "images/replay2.png"
+                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play3_h.png" : "../images/replay2_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play3.png" : "../images/replay2.png"
                     anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaPlay
@@ -292,7 +292,7 @@ Rectangle {
 				visible: vlcPlayer.playlist.items.count > 1 ? true : false
                 color: '#2b2b2b'
                 Image {
-                    source: mouseAreaNext.containsMouse ? "images/next_h.png" : "images/next.png"
+                    source: mouseAreaNext.containsMouse ? "../images/next_h.png" : "../images/next.png"
                     anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaNext
@@ -323,7 +323,7 @@ Rectangle {
                 color: '#2b2b2b'
                 Image {
 					id: muteimg
-					source: vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png"
+					source: vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
                     anchors.top: parent.top
 					anchors.topMargin: 1
                     anchors.left: parent.left
@@ -362,13 +362,13 @@ Rectangle {
 				   hoverEnabled: true
                     onClicked: { 
 						vlcPlayer.toggleMute();
-						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png"
+						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
 					}
                     onEntered: { 
-						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png"
+						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
 					}
 					onExited: {
-						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png"
+						muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
 					}
 				}
             }
@@ -383,7 +383,7 @@ Rectangle {
 				color: 'transparent'
 	            Behavior on width { PropertyAnimation { duration: 250} }
                 Image {
-                    source: "images/volume.png"
+                    source: "../images/volume.png"
 					width: 106
 					height: 18
 					anchors.left: parent.left
@@ -419,7 +419,7 @@ Rectangle {
 						Image {
 							height: 8
 							width: 120
-							source: "images/volume_heat.png"
+							source: "../images/volume_heat.png"
 						}
 					}
 					Rectangle {
@@ -486,7 +486,7 @@ Rectangle {
                 width: 59
                 color: '#2b2b2b'
                 Image {
-					source: fullscreen ? mouseAreaFS.containsMouse ? "images/fullscreen2_h.png" : "images/fullscreen2.png" : mouseAreaFS.containsMouse ? "images/fullscreen_h.png" : "images/fullscreen.png"
+					source: fullscreen ? mouseAreaFS.containsMouse ? "../images/fullscreen2_h.png" : "../images/fullscreen2.png" : mouseAreaFS.containsMouse ? "../images/fullscreen_h.png" : "../images/fullscreen.png"
 					anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaFS
@@ -508,7 +508,7 @@ Rectangle {
 		Timer  {
 			interval: 1; running: vlcPlayer.state == 3 && vlcPlayer.time < 5 ? true : false; repeat: false
 			onTriggered: {
-				muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png"
+				muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
 			}
 		}
 		// End Set Mute Button State
@@ -527,7 +527,7 @@ Rectangle {
 				// End Show Previous/Next Buttons if Playlist available
 				
 				// Set Mute Button State (this is a quick fix, sometimes the Mute Button would appear as Mute on playback start even if Sound was not Muted)
-				muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "images/mute-off5_h.png" : "images/mute-off2.png" : mouseAreaMute.containsMouse ? "images/mute-on3_h.png" : "images/mute-on3.png";
+				muteimg.source = vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png";
 				// End Set Mute Button State
 				
 			}
@@ -537,7 +537,7 @@ Rectangle {
 		// Draw Play Icon Image (appears in center of screen when Toggle Pause)
 		Image {
 			id: playtog
-			source: "images/play2-150x150.png"
+			source: "../images/play2-150x150.png"
 			anchors.centerIn: parent
 			visible: false
 			height: gobigplay ? 150 : 80
@@ -565,7 +565,7 @@ Rectangle {
 		// Draw Pause Icon Image (appears in center of screen when Toggle Pause)
 		Image {
 			id: pausetog
-			source: "images/pause2-150x150.png"
+			source: "../images/pause2-150x150.png"
 			anchors.centerIn: parent
 			visible: false
 			height: gobigpause ? 150 : 80
@@ -603,7 +603,7 @@ Rectangle {
 			Image {
 				width: 62
 				height: 25
-				source: "images/show-time.png"
+				source: "../images/show-time.png"
 			}
 			// End Time Chat Bubble Background Image
 			
@@ -627,58 +627,58 @@ Rectangle {
 		Rectangle {
 			visible: false
 			Image {
-				source: "images/fullscreen_h.png"
+				source: "../images/fullscreen_h.png"
 			}
 			Image {
-				source: "images/fullscreen.png"
+				source: "../images/fullscreen.png"
 			}
 			Image {
-				source: "images/fullscreen2_h.png"
+				source: "../images/fullscreen2_h.png"
 			}
 			Image {
-				source: "images/fullscreen2.png"
+				source: "../images/fullscreen2.png"
 			}
 			Image {
-				source: "images/pause_h.png"
+				source: "../images/pause_h.png"
 			}
 			Image {
-				source: "images/pause.png"
+				source: "../images/pause.png"
 			}
 			Image {
-				source: "images/play3_h.png"
+				source: "../images/play3_h.png"
 			}
 			Image {
-				source: "images/play3.png"
+				source: "../images/play3.png"
 			}
 			Image {
-				source: "images/mute-off5_h.png"
+				source: "../images/mute-off5_h.png"
 			}
 			Image {
-				source: "images/mute-off2.png"
+				source: "../images/mute-off2.png"
 			}
 			Image {
-				source: "images/mute-on3_h.png"
+				source: "../images/mute-on3_h.png"
 			}
 			Image {
-				source: "images/mute-on3.png"
+				source: "../images/mute-on3.png"
 			}
 			Image {
-				source: "images/replay2.png"
+				source: "../images/replay2.png"
 			}
 			Image {
-				source: "images/replay2_h.png"
+				source: "../images/replay2_h.png"
 			}
 			Image {
-				source: "images/prev.png"
+				source: "../images/prev.png"
 			}
 			Image {
-				source: "images/prev_h.png"
+				source: "../images/prev_h.png"
 			}
 			Image {
-				source: "images/next.png"
+				source: "../images/next.png"
 			}
 			Image {
-				source: "images/next_h.png"
+				source: "../images/next_h.png"
 			}
 		}
 		// End Load All Images
