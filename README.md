@@ -7,7 +7,14 @@ To use Webchimera UI you need to install the lattest version of <a href="http://
 
 Webchimera is a Vlc Web Plugin based on FireBreath that offers the possibility of using <a href="http://qt-project.org/" target="_blank">QT QML</a> to build complex User Interfaces for the Web Player.
 
-Make sure to view the <a href="http://jaruba.github.io/WebchimeraUI/" target="_blank"><b>Demo Page</b></a>
+<b>Make sure to view the <a href="http://jaruba.github.io/WebchimeraUI/" target="_blank">Demo Page</a></b>
+
+
+Current Features
+==============
+- Supported Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
+- Playlist
+- Open Source UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> (loaded from an online source)
 
 
 Upcoming Features
