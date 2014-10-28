@@ -636,7 +636,7 @@ Rectangle {
 		
 		// Draw Time Chat Bubble (visible when hovering over Progress Bar)
 		Rectangle {
-			visible: dragging ? true : dragpos.containsMouse ? true : false
+			visible: vlcPlayer.position > 0 ? dragging ? true : dragpos.containsMouse ? true : false : false
 			anchors.bottom: parent.bottom
 			anchors.bottomMargin: 63
 			anchors.left: parent.left
