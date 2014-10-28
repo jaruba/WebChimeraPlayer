@@ -14,7 +14,7 @@ Current Features
 ==============
 - Supported Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Playlist
-- Open Source UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> (loaded from an online source)
+- Open Source UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> <b>loaded from an online source</b>
 
 
 Upcoming Features
