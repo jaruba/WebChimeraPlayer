@@ -1,9 +1,9 @@
-Webchimera User Interface
+Webchimera GUI
 ==============
 
-An Open Source Webchimera User Interface / Skin
+An Open Source Webchimera GUI
 
-To use Webchimera UI you need to install the lattest version of <a href="http://sourceforge.net/projects/webchimera/" target="_blank">Webchimera</a> (<a href="https://github.com/RSATom/WebChimera" target="_blank">Github</a>) on your PC.
+To use Webchimera GUI you need to install the lattest version of <a href="http://sourceforge.net/projects/webchimera/" target="_blank">Webchimera</a> (<a href="https://github.com/RSATom/WebChimera" target="_blank">Github</a>) on your PC.
 
 Webchimera is a VLC Web Plugin based on FireBreath that offers the possibility of using <a href="http://qt-project.org/" target="_blank">QT QML</a> to build complex User Interfaces for the Web Player.
 
