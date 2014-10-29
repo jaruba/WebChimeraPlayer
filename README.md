@@ -23,5 +23,6 @@ Upcoming Features
 ==============
 - Key Event Handlers
 - Playlist Menu
+- Hide Mouse Cursor in Fullscreen Mode
 - External HTTP Subtitle Support (Formats: SRT, SUB, IDX)
 - Windowed Mode (Pop Out)
