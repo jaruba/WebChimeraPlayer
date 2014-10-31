@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" href="../favicon.ico">
+    <meta charset="UTF-8">
+	<title>Webchimera Editor</title>
+    
+
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script src="//d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"></script>
+	
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="./wJSNova.1.0.css"/>
+	<script type="text/javascript">
+		var editors = [];
+		var textareas = [];
+		// Hook up ACE editor to all textareas with data-editor attribute
+		function startAce() {
+			$('textarea[data-editor]').each(function () {
+				var textarea = $(this);
+	 
+				textareas.push(textarea);
+	
+				var mode = textarea.data('editor');
+	 
+				var editDiv = $('<div>', {
+					position: 'absolute',
+					width: textarea.width(),
+					height: textarea.height(),
+					'class': textarea.attr('class')
+				}).insertBefore(textarea);
+	 
+				textarea.css('visibility', 'hidden');
+	 
+				var editor = ace.edit(editDiv[0]);
+				editor.renderer.setShowGutter(false);
+				editor.getSession().setValue(textarea.val());
+				editor.getSession().setMode("ace/mode/" + mode);
+				editor.setTheme("ace/theme/idle_fingers");
+				
+				editors.push(editor); 
+			});
+		}
+	</script>
+	<script type="text/javascript" src="./wJSNova.1.0.js"></script>
+	
+	<style>
+		body,html{margin:0px; overflow:hidden;}
+	</style>
+</head>
+<body>
+<form id="editorform" action="http://www.movault.net/webchimera/editor/generator/custom.php" method="post">
+	<div id="JSNova" style="width:100%;height:0px;"></div>
+
+	<script type="text/javascript">		
+		function replaceAll(find, replace, str) {
+		  return str.replace(new RegExp(find, 'g'), replace);
+		}
+		function UrlExists(url) {
+			var http = new XMLHttpRequest();
+			http.open('HEAD', url, false);
+			http.send();
+			return http.status!=404;
+		}
+		var jsn = null;
+		var hash = window.location.hash.substring(1);
+		
+		$(document).ready(function()
+		{
+			$('#JSNova').height($(window).height());
+			jsn = $("#JSNova").wJSNova();
+			jsn.wJSNova('resize');
+			$("div:contains('HTML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val('<div id="player_wrapper"></div>');
+			$.get('http://jaruba.github.io/WebchimeraGUI/' + hash + '.html', function(data) {
+				var datajs = data.substr(data.search("<script>") +9);
+				var onPageJS = datajs.substr(0,datajs.search("</script"));
+				
+				var ChimeraWrapper = '<div id="player_wrapper">' + $(data).filter('#player_wrapper').html() + '</div>';
+
+				while (ChimeraWrapper.indexOf('<param name="qmlsrc" value="') > -1) {
+					var pfind = ChimeraWrapper.substr(ChimeraWrapper.search('<param name="qmlsrc"'));
+					pfind = pfind.substr(0,pfind.search('>') +1);
+					ChimeraWrapper = replaceAll(pfind,'',ChimeraWrapper);
+				}
+
+				ChimeraWrapper = ChimeraWrapper.replace(/^\s*\n/gm,"");
+				
+				$("div:contains('JavaScript')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(onPageJS);
+				$("div:contains('HTML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(ChimeraWrapper);
+				if (UrlExists('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml') === false) hash = "default";
+				$.get('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml', function(data) {
+					$("div:contains('QML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(replaceAll("../images/","http://jaruba.github.io/WebchimeraGUI/images/",data.substr(961)));
+					startAce();
+				});
+			});
+			
+		});
+		
+		$(window).resize(function()
+		{
+			$('#JSNova').height($(window).height());
+			jsn.wJSNova('resize');
+		});
+		
+	</script>
+    </form>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
