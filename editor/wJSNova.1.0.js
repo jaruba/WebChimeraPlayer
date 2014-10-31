@@ -260,7 +260,7 @@ function getUrlVar() {
 			
 //			var jQueryUITheme = '<link rel="stylesheet" type="text/css" href="' + this.jQueryUITheme.val() + '"/>'
 			
-			var result = '<html><head>' + WebchimeraScript + jQuery + jQueryUI + '<style>#player_wrapper { width: 100%; height: 100% } #qmlcode { display: none }</style></head><body>' + html + '<textarea id="qmlcode">' + qml + '</textarea><script type="text/javascript">' + js + ' var objs = document.getElementsByTagName("object"); for(var i = 0; i < objs.length; i++) { alert(document.getElementById(objs[i].id).qml); document.getElementById(objs[i].id).qml = document.getElementById("qmlcode").value; }</script></body></html>';
+			var result = '<html><head>' + WebchimeraScript + jQuery + jQueryUI + '<style>#player_wrapper { width: 100%; height: 100% } #qmlcode { display: none }</style></head><body>' + html + '<textarea id="qmlcode">' + qml + '</textarea><script type="text/javascript">' + js + ' var objs = document.getElementsByTagName("object"); for(var i = 0; i < objs.length; i++) { document.getElementById(objs[i].id).qml = document.getElementById("qmlcode").value; alert(document.getElementById(objs[i].id).qml); }</script></body></html>';
 			
 			this.writeResult(result);
 		},
