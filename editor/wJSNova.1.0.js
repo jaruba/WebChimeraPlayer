@@ -12,6 +12,7 @@
  *
  ******************************************/
 
+<<<<<<< HEAD
 function getUrlVar() {
 	var vars = {};
 	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -20,6 +21,16 @@ function getUrlVar() {
 }
 
 
+=======
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+
+>>>>>>> master
 (function($)
 {
 	$.fn.wJSNova = function(option, settings)
@@ -126,7 +137,11 @@ function getUrlVar() {
 			 ************************************************/
 			var demos = [['Single Video','single'],['Playlist','playlist'],['Duplicate Video 2','duplicate2'],['Whirlwind','whirlwind'],['Multiscreen Demo','multiscreen'],['Duplicate Video','duplicate'],['Fullscreen Zoom','zoom'],['3D Rotate','rotate']];
 			$this.Demoz = $("<select name='demos' onchange='location = \"http://jaruba.github.io/WebchimeraGUI/editor/?demo=\"+this.options[this.selectedIndex].value;' style='width: 100%'></select>");
+<<<<<<< HEAD
 			var hash = getUrlVar();
+=======
+			var hash = getUrlVar()["demo"];
+>>>>>>> master
 			 for (var item = 0; item < demos.length; item++) {
 				 if (demos[item][1] == hash) {
 					$this.Demoz.append('<option value="' + demos[item][1] + '" selected>' + demos[item][0] + '</option>');
