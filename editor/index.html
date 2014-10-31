@@ -62,8 +62,9 @@
 			http.send();
 			return http.status!=404;
 		}
+
 		var jsn = null;
-		var hash = window.location.hash.substring(1);
+		var hash = getUrlVar();
 		
 		$(document).ready(function()
 		{
