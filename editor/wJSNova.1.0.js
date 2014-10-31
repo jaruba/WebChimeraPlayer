@@ -117,7 +117,7 @@
 			 * Sidebar
 			 ************************************************/
 			var demos = [['Single Video','single'],['Playlist','playlist'],['Duplicate Video 2','duplicate2'],['Whirlwind','whirlwind'],['Multiscreen Demo','multiscreen'],['Duplicate Video','duplicate'],['Fullscreen Zoom','zoom'],['3D Rotate','rotate']];
-			$this.Demoz = $("<select name='demos' onchange='window.location.href = \"http://jaruba.github.io/WebchimeraGUI/editor/#\"+this.options[this.selectedIndex].value;' style='width: 100%'></select>");
+			$this.Demoz = $("<select name='demos' onchange='window.location.replace(\"http://jaruba.github.io/WebchimeraGUI/editor/#\"+this.options[this.selectedIndex].value);' style='width: 100%'></select>");
 			var hash = window.location.hash.substring(1);
 			 for (var item = 0; item < demos.length; item++) {
 				 if (demos[item][1] == hash) {
