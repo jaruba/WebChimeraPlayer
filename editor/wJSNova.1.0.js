@@ -12,7 +12,6 @@
  *
  ******************************************/
 
-<<<<<<< HEAD
 function getUrlVar() {
 	var vars = {};
 	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
@@ -21,7 +20,6 @@ function getUrlVar() {
 }
 
 
-=======
 function getUrlVars() {
     var vars = {};
     var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
