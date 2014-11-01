@@ -124,7 +124,7 @@ function getUrlVar() {
 			/************************************************
 			 * Sidebar
 			 ************************************************/
-			var demos = [['Basic (No GUI)', 'basic'],['Single Video','single'],['Playlist','playlist'],['Duplicate Video 2','duplicate2'],['Whirlwind','whirlwind'],['Multiscreen Demo','multiscreen'],['Duplicate Video','duplicate'],['Fullscreen Zoom','zoom'],['3D Rotate','rotate']];
+			var demos = [['Basic (No GUI)', 'basic'],['Single Video','single'],['Playlist','playlist'],['Custom Titles','titles'],['Duplicate Video 2','duplicate2'],['Whirlwind','whirlwind'],['Multiscreen Demo','multiscreen'],['Duplicate Video','duplicate'],['Fullscreen Zoom','zoom'],['3D Rotate','rotate']];
 			$this.Demoz = $("<select name='demos' onchange='location = \"http://jaruba.github.io/WebchimeraGUI/editor/?demo=\"+this.options[this.selectedIndex].value;' style='width: 100%'></select>");
 			var hash = getUrlVar()["demo"];
 			 for (var item = 0; item < demos.length; item++) {
