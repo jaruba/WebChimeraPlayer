@@ -29,6 +29,9 @@ Rectangle {
 	property var laststate: 0;
 	property var ismoving: 1;
 	property var buffering: 0;
+	property var playlistmenu: false;
+	property var pli: 0;
+	property var plstring: "";
 		
 	// Start Function for Toggle Pause
 	function togPause() {
@@ -58,6 +61,21 @@ Rectangle {
 	
 	Component.onCompleted: {
         vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
+							// Adding Playlist Menu Items
+//							plstring = 'import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1;';
+							for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
+								if (vlcPlayer.playlist.items[pli].title.replace("[custom]","").length > 85) {
+									plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","").substr(0,85) +'...';
+								} else {
+									plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
+								}
+								Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: 638; height: 40; color: pitem'+ pli +'.containsMouse ? "#656565" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#e5e5e5" : "#e5e5e5" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: pitem'+ pli +'.containsMouse ? "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#2f2f2f" : "#2f2f2f" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
+							}
+//							toptext.text = plstring;
+//							Qt.createQmlObject(plstring, playmbig, "plmenustr");
+							
+							// End Adding Playlist Menu Items
+
     }
 	
 	// Keypress Event
@@ -74,6 +92,25 @@ Rectangle {
         buftext.text = "Buffering " + percents +"%"; // Announce Buffering Percent
 		buffering = percents; // Set Global Variable "buffering"
     }
+	
+	// Start Function to Scroll Playlist Menu
+	function movePlaylist(mousehint) {
+		if (mousehint <= (playmdrag.height / 2)) {
+			playmdrag.anchors.topMargin = 0;
+			playmbig.anchors.topMargin = 0;
+		} else if (mousehint >= (240 - (playmdrag.height / 2))) {
+			playmdrag.anchors.topMargin = 240 - playmdrag.height;
+			if ((vlcPlayer.playlist.itemCount *40) > 240) {
+				playmbig.anchors.topMargin = 240 - (vlcPlayer.playlist.itemCount *40);
+			}
+		} else {
+			playmdrag.anchors.topMargin = mousehint - (playmdrag.height / 2);
+			playmbig.anchors.topMargin = -(((vlcPlayer.playlist.itemCount * 40) - 240) / ((240 - playmdrag.height) / (mousehint - (playmdrag.height /2))));
+		}
+	}
+	// End Function to Scroll Playlist Menu
+	
+
 	
     id: theview;
     color: "#000000"; // Set Video Background Color
@@ -518,6 +555,38 @@ Rectangle {
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
 			Behavior on opacity { PropertyAnimation { duration: 250} }
 			
+			
+			// Start Open Playlist Button
+            Rectangle {
+				height: 30
+				width: 1
+				color: '#404040'
+			}
+            Rectangle {
+                height: 30
+				width: 59
+				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
+                color: 'transparent'
+                Image {
+                    source: mouseAreaPlaylist.containsMouse ? "../images/playlist_h.png" : "../images/playlist.png"
+                    anchors.centerIn: parent
+					MouseArea {
+					   id: mouseAreaPlaylist
+					   anchors.fill: parent
+					   anchors.margins: 0
+					   hoverEnabled: true
+					}
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: if (playlistmenu === false) {
+						playlistblock.visible = true;
+						playlistmenu = true;
+					} else { playlistblock.visible = false; playlistmenu = false }
+				}
+			}
+			// End Open Playlist Button
+			
 			// Fullscreen Button
             Rectangle {
 				height: 30
@@ -666,6 +735,119 @@ Rectangle {
 		// End Time Chat Bubble
 		// End Toolbar
 
+		// Start Playlist Menu
+		Rectangle {
+			id: playlistblock
+			visible: false
+			anchors.centerIn: parent
+			width: 694
+			height: 284
+			color: "#444444"
+			MouseArea {
+				hoverEnabled: true
+				anchors.fill: parent
+			}
+			Rectangle {
+				anchors.top: parent.top
+				anchors.topMargin: 38
+				anchors.right: parent.right
+				anchors.rightMargin: 6
+				width: 35
+				height: 240
+				color: "transparent"
+				Rectangle {
+					anchors.horizontalCenter: parent.horizontalCenter
+					width: 10
+					height: 240
+					color: "#696969"
+					opacity: playmdrag.height == 240 ? 0.5 : 1
+				}
+				Rectangle {
+					id: playmdrag
+					anchors.top: parent.top
+					anchors.topMargin: 0
+					anchors.left: parent.left
+					anchors.leftMargin: 13
+					width: 10
+					height: (vlcPlayer.playlist.itemCount * 40) < 240 ? 240 : (240 / (vlcPlayer.playlist.itemCount * 40)) * 240
+					opacity: playmdrag.height == 240 ? 0 : 1
+					color: "#e5e5e5"
+				}
+				MouseArea {
+					id: playmdragger
+					anchors.fill: parent
+					onPressed: movePlaylist(mouse.y)
+					onPressAndHold: movePlaylist(mouse.y)
+					onPositionChanged: movePlaylist(mouse.y)
+					onReleased: movePlaylist(mouse.y)
+				}
+			}
+			Rectangle {
+				anchors.centerIn: parent
+				width: 682
+				height: 272
+				color: "transparent"
+				clip: true
+				Rectangle {
+					id: playmbig
+					anchors.top: parent.top
+					anchors.topMargin: 0
+					width: 682
+					height: 272
+					color: "transparent"				
+				}
+	
+	
+	
+	
+				Rectangle {
+					anchors.fill: parent
+					anchors.centerIn: parent
+					width: 683
+					height: 26
+					color: "transparent"
+					RowLayout {
+						spacing: 0
+						anchors.left: parent.left
+						anchors.top: parent.top
+						anchors.topMargin: 0
+						Rectangle {
+							width: 638
+							height: 26
+							color: "#2f2f2f"
+							Text {
+				                anchors.verticalCenter: parent.verticalCenter
+								anchors.left: parent.left
+								anchors.leftMargin: 29
+								text: "Title"
+								font.pointSize: 10
+								color: "#d5d5d5"
+							}
+						}
+						Rectangle {
+							width: 10
+							height: 26
+							color: "transparent"
+						}
+						Image {
+							source: "../images/close-list.png"
+							width: 35
+							height: 26
+							MouseArea {
+								anchors.fill: parent
+								onClicked: {
+									playlistblock.visible = false;
+									playlistmenu = false
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		// End Playlist Menu
+
+
 		// Load All Images (if an image is used in the UI and it is not set here, it will be loaded with a delay when it first appears in the UI)
 		Rectangle {
 			visible: false
@@ -723,9 +905,16 @@ Rectangle {
 			Image {
 				source: "../images/next_h.png"
 			}
+			Image {
+				source: "../images/playlist.png"
+			}
+			Image {
+				source: "../images/playlist_h.png"
+			}
 		}
 		// End Load All Images
 
     }
 	// End Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) [includes Toolbar]
+	
 }
