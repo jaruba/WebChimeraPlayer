@@ -42,12 +42,12 @@ function addPlaylist(playlist, playerid) {
 		 if (Array.isArray(playlist) === true && Array.isArray(playlist[0]) === true) {
 			 // if Playlist has Custom Titles
 			 for (item = 0; item < playlist.length; item++) {
-				  videoelem.playlist.add(playlist[item][0]);
+				  videoelem.playlist.items[item].url = playlist[item][0];
 				  if (typeof playlist[item][1] !== 'undefined' && typeof playlist[item][1] === 'string') videoelem.playlist.items[item].title = playlist[item][1];
 			 }
 			 // end if Playlist has Custom Titles
 		 } else if (Array.isArray(playlist) === true) {
-			 for (item = 0; typeof playlist[item] !== 'undefined'; item++) videoelem.playlist.add(playlist[item]); // if Playlist is Array
+			 for (item = 0; typeof playlist[item] !== 'undefined'; item++) videoelem.playlist.items[item].url = playlist[item]; // if Playlist is Array
 		 }
 	 }
 }
