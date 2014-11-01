@@ -142,12 +142,13 @@ Rectangle {
 		
 		// Draw Progression Bar
         RowLayout {
-			opacity: vlcPlayer.time == 0 ? false : true
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-			anchors.bottomMargin: fullscreen ? ismoving > 5 ? -8 : 30 : parent.containsMouse ? 30 : 0
+            anchors.bottomMargin: fullscreen ? 30 : parent.containsMouse ? 30 : 0
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
 			MouseArea {
 				id: dragpos
 		        hoverEnabled: true
@@ -182,13 +183,14 @@ Rectangle {
         RowLayout {
 			id: movecur
 		    spacing: 0
-			opacity: vlcPlayer.time == 0 ? 0 : 1
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-			anchors.bottomMargin: fullscreen ? ismoving > 5 ? -8 : 30 : parent.containsMouse ? 30 : 0
             anchors.leftMargin: dragging ? dragpos.mouseX -4 :(parent.width - anchors.rightMargin) * vlcPlayer.position
+            anchors.bottomMargin: fullscreen ? 30 : parent.containsMouse ? 30 : 0
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
             Rectangle {
                 Layout.fillWidth: true
                 height: 8
@@ -205,14 +207,16 @@ Rectangle {
 				}
             }
 		}
-		// Top Bar (shows video title)
+		// Top Bar (shows custom video title - if set)
         RowLayout {
+			visible: vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6 ? fullscreen ? vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.indexOf("[custom]") > -1 ? 1 : 0 : 0 : 0
 		    spacing: 0
             anchors.left: parent.left
             anchors.right: parent.right
 			anchors.top: parent.top
-            anchors.topMargin: parent.containsMouse ? spacing : -34
-            Behavior on anchors.topMargin { PropertyAnimation { duration: 250} }
+            anchors.topMargin: spacing
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+            Behavior on opacity { PropertyAnimation { duration: 250} }
             Rectangle {
                 Layout.fillWidth: true
                 height: 34
@@ -224,21 +228,22 @@ Rectangle {
 					anchors.verticalCenter: parent.verticalCenter
 					anchors.left: parent.left;
 					anchors.leftMargin: 14
-					text: vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title;
-					font.pointSize: 11
+					text: vlcPlayer.state == 1 ? vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","") : vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","");
+					font.pointSize: 12
 					color: "#ffffff"
 				}
 			}
 		}
-		// End Top Bar (shows video title)
+		// End Top Bar (shows video title - if set)
         RowLayout {
 		    spacing: 0
-			opacity: vlcPlayer.time == 0 ? 0 : 1
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? ismoving > 5 ? -height -8 : spacing : parent.containsMouse ? spacing : -height
+            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
             Rectangle {
                 Layout.fillWidth: true
                 height: 30
@@ -257,10 +262,11 @@ Rectangle {
         RowLayout {
             id: toolbar
 			spacing: 0
-			opacity: vlcPlayer.time == 0 ? 0 : 1
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? ismoving > 5 ? -height -8 : spacing : parent.containsMouse ? spacing : -height
+            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
 
 			// Start Playlist Previous Button
             Rectangle {
@@ -268,7 +274,7 @@ Rectangle {
                 height: 30
 				width: 59
 				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
-                color: '#2b2b2b'
+                color: 'transparent'
                 Image {
                     source: mouseAreaPrev.containsMouse ? "../images/prev_h.png" : "../images/prev.png"
                     anchors.centerIn: parent
@@ -297,7 +303,7 @@ Rectangle {
             Rectangle {
                 height: 30
                 width: 59
-                color: '#2b2b2b'
+                color: 'transparent'
                 Image {
                     source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play3_h.png" : "../images/replay2_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play3.png" : "../images/replay2.png"
                     anchors.centerIn: parent
@@ -326,7 +332,7 @@ Rectangle {
                 height: 30
 				width: 59
 				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
-                color: '#2b2b2b'
+                color: 'transparent'
                 Image {
                     source: mouseAreaNext.containsMouse ? "../images/next_h.png" : "../images/next.png"
                     anchors.centerIn: parent
@@ -356,7 +362,7 @@ Rectangle {
 				id: mutebut
                 height: 30
                 width: 40
-                color: '#2b2b2b'
+                color: 'transparent'
                 Image {
 					id: muteimg
 					source: vlcPlayer.audio.mute ? mouseAreaMute.containsMouse ? "../images/mute-off5_h.png" : "../images/mute-off2.png" : mouseAreaMute.containsMouse ? "../images/mute-on3_h.png" : "../images/mute-on3.png"
@@ -505,11 +511,12 @@ Rectangle {
 		// Start Right Side Buttons in Toolbar
         RowLayout {
 			spacing: 0
-			opacity: vlcPlayer.time == 0 ? 0 : 1
 			anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? ismoving > 5 ? -height -8 : spacing : parent.containsMouse ? spacing : -height
+            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
 			
 			// Fullscreen Button
             Rectangle {
@@ -520,7 +527,7 @@ Rectangle {
             Rectangle {
                 height: 30
                 width: 59
-                color: '#2b2b2b'
+				color: 'transparent'
                 Image {
 					source: fullscreen ? mouseAreaFS.containsMouse ? "../images/fullscreen2_h.png" : "../images/fullscreen2.png" : mouseAreaFS.containsMouse ? "../images/fullscreen_h.png" : "../images/fullscreen.png"
 					anchors.centerIn: parent
