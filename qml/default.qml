@@ -112,6 +112,12 @@ Rectangle {
         anchors.left: parent.left;
         width: parent.width;
         height: parent.height;
+		// Start Key Event Handlers
+		Keys.onPressed: {
+			if (event.key == Qt.Key_Space) { togPause(); }
+			if (event.key == Qt.Key_Escape) { fullscreen = false; }
+		}
+		// End Key Event Handlers
     }
 	// End Video Layer
 	
@@ -166,11 +172,13 @@ Rectangle {
         anchors.fill: parent
 		onClicked: { if (bottomtab.containsMouse === false) togPause(); } // Toggle Pause if clicked on Surface
 		onPositionChanged: { ismoving = 1; } // Reset Idle Mouse Movement if mouse position has changed
+		// Start Key Event Handlers (Second)
 		focus: true
 		Keys.onPressed: {
 			if (event.key == Qt.Key_Space) { togPause(); }
 			if (event.key == Qt.Key_Escape) { fullscreen = false; }
-		}		
+		}
+		// End Key Event Handlers (Second)
 		
 		// Draw Progression Bar
         RowLayout {
