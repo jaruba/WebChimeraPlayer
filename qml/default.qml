@@ -205,6 +205,32 @@ Rectangle {
 				}
             }
 		}
+		// Top Bar (shows video title)
+        RowLayout {
+		    spacing: 0
+            anchors.left: parent.left
+            anchors.right: parent.right
+			anchors.top: parent.top
+            anchors.topMargin: parent.containsMouse ? spacing : -34
+            Behavior on anchors.topMargin { PropertyAnimation { duration: 250} }
+            Rectangle {
+                Layout.fillWidth: true
+                height: 34
+				color: '#000000'
+				opacity: 0.7
+                anchors.verticalCenter: parent.verticalCenter
+				Text {
+					id: toptext
+					anchors.verticalCenter: parent.verticalCenter
+					anchors.left: parent.left;
+					anchors.leftMargin: 14
+					text: vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title;
+					font.pointSize: 11
+					color: "#ffffff"
+				}
+			}
+		}
+		// End Top Bar (shows video title)
         RowLayout {
 		    spacing: 0
 			opacity: vlcPlayer.time == 0 ? 0 : 1
