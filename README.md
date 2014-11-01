@@ -13,6 +13,8 @@ Webchimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 Current Features
 ==============
 - Playlist Support
+- Custom Video Titles Support
+- Key Event Handlers (space -> pause, esc -> exit fullscreen)
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Streams: HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Audio Formats: MP3, AAC, MPEG3, FLAC, WAV and <a href="http://www.videolan.org/vlc/features.php?cat=audio" target="_blank">more</a>
@@ -21,8 +23,6 @@ Current Features
 
 Upcoming Features
 ==============
-- Key Event Handlers
-- Playlist Menu
 - Hide Mouse Cursor in Fullscreen Mode
 - External HTTP Subtitle Support (Formats: SRT, SUB, IDX)
 - Windowed Mode (Pop Out)
