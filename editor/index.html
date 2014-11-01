@@ -85,7 +85,7 @@
 
 				ChimeraWrapper = ChimeraWrapper.replace(/^\s*\n/gm,"");
 				
-				$("div:contains('JavaScript')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(onPageJS);
+				$("div:contains('JavaScript')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(onPageJS.replace(/^\s*\n/g,""));
 				$("div:contains('HTML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(ChimeraWrapper);
 				if (UrlExists('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml') === false) hash = "default";
 				$.get('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml', function(data) {
