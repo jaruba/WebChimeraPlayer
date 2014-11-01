@@ -241,7 +241,7 @@ Rectangle {
 				id: prevBut
                 height: 30
 				width: 59
-				visible: vlcPlayer.playlist.items.count > 1 ? true : false
+				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
                 color: '#2b2b2b'
                 Image {
                     source: mouseAreaPrev.containsMouse ? "../images/prev_h.png" : "../images/prev.png"
@@ -263,7 +263,7 @@ Rectangle {
 				height: 30
 				width: 1
 				color: '#404040'
-				visible: vlcPlayer.playlist.items.count > 1 ? true : false
+				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 			}
 			// End Playlist Previous Button
 
@@ -299,7 +299,7 @@ Rectangle {
 				id: nextBut
                 height: 30
 				width: 59
-				visible: vlcPlayer.playlist.items.count > 1 ? true : false
+				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
                 color: '#2b2b2b'
                 Image {
                     source: mouseAreaNext.containsMouse ? "../images/next_h.png" : "../images/next.png"
@@ -320,7 +320,7 @@ Rectangle {
 				id: nextBut2
 				height: 30
 				width: 1
-				visible: vlcPlayer.playlist.items.count > 1 ? true : false
+				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 				color: '#404040'
 			}
 			// End Playlist Next Button
@@ -528,7 +528,7 @@ Rectangle {
 			interval: 1; running: vlcPlayer.time > 0 && vlcPlayer.time < 1200 ? true : false; repeat: false
 			onTriggered: {
 				// Show Previous/Next Buttons if Playlist available
-				if (vlcPlayer.playlist.items.count > 1) {
+				if (vlcPlayer.playlist.itemCount > 1) {
 					prevBut.visible = true;
 					nextBut.visible = true;
 					prevBut2.visible = true;
