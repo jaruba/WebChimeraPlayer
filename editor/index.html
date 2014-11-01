@@ -89,7 +89,10 @@
 				$("div:contains('HTML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(ChimeraWrapper);
 				if (UrlExists('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml') === false) hash = "default";
 				$.get('http://jaruba.github.io/WebchimeraGUI/qml/' + hash + '.qml', function(data) {
-					$("div:contains('QML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(replaceAll("../images/","http://jaruba.github.io/WebchimeraGUI/images/",data.substr(943)));
+					var dataqml = replaceAll("../images/","http://jaruba.github.io/WebchimeraGUI/images/",data);
+					dataqml = dataqml.substr(dataqml.search('**/') +3);
+					dataqml = dataqml.replace(/^\s*\n/g,"");
+					$("div:contains('QML')").parent("._wJSNova_box").find("._wJSNova_boxEdit").val(dataqml);
 					startAce();
 				});
 			});
