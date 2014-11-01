@@ -104,7 +104,7 @@ function getUrlVar() {
 			/************************************************
 			 * Menu
 			 ************************************************/
-			var menuButton_run = $('<span class="_wJSNova_menuButton"><i class="glyphicon glyphicon-play"></i>Run</span>').click(function(){$this.run();});
+			var menuButton_run = $('<span id="buttonrun" class="_wJSNova_menuButton"><i class="glyphicon glyphicon-play"></i>Run</span>').click(function(){$this.run();});
 			var menuButton_download = $('<span class="_wJSNova_menuButton"><i class="glyphicon glyphicon-download-alt"></i>Download</span>').click(function(){$this.download();});
 			var menuButton_save = $('<span class="_wJSNova_menuButton"><i class="glyphicon glyphicon-send"></i>Suggest Demo</span>').click(function(){$this.save();});
 			var menuButton_reset = $('<span class="_wJSNova_menuButton"><i class="glyphicon glyphicon-refresh"></i>Reset</span>').click(function(){$this.reset();});
@@ -176,7 +176,7 @@ function getUrlVar() {
 			$this.boxHTML = $('<textarea name="html" class="_wJSNova_boxEdit" data-editor="html"></textarea>');
 			$this.boxQML = $('<textarea name="qml" class="_wJSNova_boxEdit" data-editor="javascript"></textarea>');
 			$this.boxJS = $('<textarea name="js" class="_wJSNova_boxEdit" data-editor="javascript"></textarea>');
-			$this.boxResult = $('<iframe id="iframe" class="_wJSNova_boxEdit" frameBorder="0"></iframe>');
+			$this.boxResult = $('<iframe id="iframe" class="_wJSNova_boxEdit" frameBorder="0" style="z-index: 1"></iframe>');
 			
 			$.each([$this.boxHTML, $this.boxQML, $this.boxJS, $this.boxResult], function(index, item)
 			{
@@ -223,6 +223,7 @@ function getUrlVar() {
 						$('<td class="_wJSNova_box _wJSNova_boxBottom _wJSNova_boxRight"></td>')
 						.append(
 							$('<div class="_wJSNova_boxContainer"></div>')
+							.append('<div id="runcode" onclick="$(\'#runcode\').remove(); $(\'#buttonrun\').trigger(\'click\'); return false;"></div>')
 							.append($this.boxResult)
 							.append('<div class="_wJSNova_boxLabel">Result</div>')
 						)
