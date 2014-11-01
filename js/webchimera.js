@@ -43,7 +43,7 @@ function addPlaylist(playlist, playerid) {
 			 // if Playlist has Custom Titles
 			 for (item = 0; item < playlist.length; item++) {
 				  videoelem.playlist.add(playlist[item][0]);
-				  if (typeof playlist[item][1] !== 'undefined' && typeof playlist[item][1] === 'string') videoelem.playlist.items[item].title = playlist[item][1];
+				  if (typeof playlist[item][1] !== 'undefined' && typeof playlist[item][1] === 'string') videoelem.playlist.items[item].title = "[custom]"+playlist[item][1];
 			 }
 			 // end if Playlist has Custom Titles
 		 } else if (Array.isArray(playlist) === true) {
