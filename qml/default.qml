@@ -741,6 +741,8 @@ Rectangle {
 				hoverEnabled: true
 				anchors.fill: parent
 			}
+			
+			// Start Playlist Menu Scroller
 			Rectangle {
 				anchors.top: parent.top
 				anchors.topMargin: 38
@@ -776,31 +778,39 @@ Rectangle {
 					onReleased: movePlaylist(mouse.y)
 				}
 			}
+			// End Playlist Menu Scroller
+
 			Rectangle {
 				anchors.centerIn: parent
 				width: playlistblock.width < 694 ? (playlistblock.width -12) : 682
 				height: 272
 				color: "transparent"
 				clip: true
+				
+				// Playlist Items Holder
 				Rectangle {
 					id: playmbig
 					anchors.top: parent.top
 					anchors.topMargin: 0
 					width: playlistblock.width < 694 ? (playlistblock.width -12) : 682
 					height: 272
-					color: "transparent"				
+					color: "transparent"
+					// This is where the Playlist Items will be loaded
 				}
+				// Playlist Items Holder
 	
 	
 	
+				// Top Holder (Title + Close Button)
 				Rectangle {
 					anchors.fill: parent
 					anchors.centerIn: parent
 					width: parent.width
 					height: 26
 					color: "transparent"
+					// Top "Title" text Holder
 					Rectangle {
-						width: parent.width -45
+						width: parent.width -44
 						anchors.left: parent.left
 						anchors.leftMargin: 0
 						height: 26
@@ -814,6 +824,9 @@ Rectangle {
 							color: "#d5d5d5"
 						}
 					}
+					// End Top "Title" text Holder
+					
+					// Start Close Playlist Button
 					Image {
 						source: "../images/close-list.png"
                         anchors.right: parent.right
@@ -828,7 +841,9 @@ Rectangle {
 							}
 						}
 					}
-				}	
+					// End Close Playlist Button
+				}
+				// End Top Holder (Title + Close Button)
 			}
 		}
 		// End Playlist Menu
