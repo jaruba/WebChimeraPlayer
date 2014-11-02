@@ -242,6 +242,7 @@ function getUrlVar() {
 		
 		run: function()
 		{
+			if ($('#runcode').length > 0) $('#runcode').remove();
 			for (kl = 0; typeof textareas[kl] !== 'undefined'; kl++) textareas[kl].val(editors[kl].getSession().getValue());
 			var html = this.boxHTML.val();
 			var js = this.boxJS.val();
