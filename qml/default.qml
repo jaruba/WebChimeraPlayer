@@ -116,7 +116,8 @@ Rectangle {
 	Timer {
 		interval: 1000; running: true; repeat: true
 		onTriggered: {
-			ismoving++;
+			// Don't Hide Toolbar if it's Hovered
+			if (dragpos.containsMouse === false) if (bottomtab.containsMouse === false) ismoving++;
 		}
 	}
 	// End Check Mouse Movement
