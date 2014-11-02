@@ -61,20 +61,17 @@ Rectangle {
 	
 	Component.onCompleted: {
         vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
-							// Adding Playlist Menu Items
-//							plstring = 'import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1;';
-							for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
-								if (vlcPlayer.playlist.items[pli].title.replace("[custom]","").length > 85) {
-									plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","").substr(0,85) +'...';
-								} else {
-									plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
-								}
-								Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; clip: true; height: 40; color: pitem'+ pli +'.containsMouse ? "#656565" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#e5e5e5" : "#e5e5e5" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: pitem'+ pli +'.containsMouse ? "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#2f2f2f" : "#2f2f2f" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
-							}
-//							toptext.text = plstring;
-//							Qt.createQmlObject(plstring, playmbig, "plmenustr");
-							
-							// End Adding Playlist Menu Items
+
+		// Adding Playlist Menu Items
+		for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
+			if (vlcPlayer.playlist.items[pli].title.replace("[custom]","").length > 85) {
+				plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","").substr(0,85) +'...';
+			} else {
+				plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
+			}
+			Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
+		}							
+		// End Adding Playlist Menu Items
 
     }
 
@@ -413,6 +410,7 @@ Rectangle {
 					Timer {
 						interval: 1; running: true; repeat: true
 						onTriggered: {
+							// Fix for Playback Freeze Bug
 							if (vlcPlayer.state != 6 && vlcPlayer.state != 7) {
 								lastpos = vlcPlayer.position;
 								if (laststate != vlcPlayer.state) laststate = vlcPlayer.state;
@@ -426,6 +424,7 @@ Rectangle {
 									laststate = vlcPlayer.state;
 								}
 							}
+							// End Fix for Playback Freeze Bug
 						}
 					}
                 }
