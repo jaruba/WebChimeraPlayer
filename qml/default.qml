@@ -768,7 +768,7 @@ Rectangle {
 						anchors.horizontalCenter: parent.horizontalCenter
 						opacity: 0
 						Behavior on opacity { PropertyAnimation { duration: 600} }
-						source: "../images/player_logo_small_h2.png"
+						source: "../images/player_logo_small_h.png"
 					}
 					Text {
 						visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
