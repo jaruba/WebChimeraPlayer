@@ -797,7 +797,7 @@ Rectangle {
 				Rectangle {
 					anchors.fill: parent
 					anchors.centerIn: parent
-					width: playlistblock.width < 694 ? (playlistblock.width -11) : 683
+					width: parent.width
 					height: 26
 					color: "transparent"
 					Rectangle {
@@ -816,7 +816,7 @@ Rectangle {
 						}
 					}
 					Image {
-						source: "http://jaruba.github.io/WebchimeraGUI/images/close-list.png"
+						source: "../images/close-list.png"
                         anchors.right: parent.right
                         anchors.rightMargin: 0
 						width: 35
