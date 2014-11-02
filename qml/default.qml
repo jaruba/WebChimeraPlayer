@@ -161,7 +161,7 @@ Rectangle {
     MouseArea {
         hoverEnabled: true
         anchors.fill: parent
-		onClicked: { if (bottomtab.containsMouse === false) togPause(); } // Toggle Pause if clicked on Surface
+		onClicked: { if (vlcPlayer.state != 1) if (bottomtab.containsMouse === false) togPause(); } // Toggle Pause if clicked on Surface
 		onPositionChanged: { ismoving = 1; } // Reset Idle Mouse Movement if mouse position has changed
 		focus: true
 		Keys.onPressed: {
