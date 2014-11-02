@@ -178,14 +178,30 @@ Rectangle {
 			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
 			Behavior on opacity { PropertyAnimation { duration: 250} }
+			
+			// Start Progress Bar Functionality (Time Chat Bubble, Seek)
 			MouseArea {
 				id: dragpos
 		        hoverEnabled: true
 				anchors.fill: parent
-				onPressed: { dragging = true; var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width); srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2); }
-				onPositionChanged: { var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width); srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2); }
+				onPressed: {
+					dragging = true;
+					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
+					srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
+				}
+				onPositionChanged: {
+					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
+					if (newtime > 0) {
+						if ((Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60) < 0) {
+							// Fix for Negative Seconds Bug
+							srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ "00";
+							// End Fix for Negative Seconds Bug
+						} else {
+							srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
+						}
+					}
+				}
 				onReleased: {
-					
 					if (vlcPlayer.state == 6) {
 						vlcPlayer.playlist.setCurrentItem(lastitem);
 						vlcPlayer.playlist.play();
@@ -194,6 +210,8 @@ Rectangle {
 					dragging = false;
 				}
 			}
+			// End Progress Bar Functionality (Time Chat Bubble, Seek)
+			
             Rectangle {
                 Layout.fillWidth: true
                 height: 8
@@ -702,7 +720,7 @@ Rectangle {
 			anchors.bottom: parent.bottom
 			anchors.bottomMargin: 63
 			anchors.left: parent.left
-			anchors.leftMargin: dragpos.mouseX -31 // Move Time Chat Bubble dependant of Mouse Horizontal Position
+			anchors.leftMargin: dragpos.mouseX < 31 ? 0 : (dragpos.mouseX +31) > theview.width ? (theview.width -62) : (dragpos.mouseX -31) // Move Time Chat Bubble dependant of Mouse Horizontal Position
 			color: 'transparent'
 			
 			// Time Chat Bubble Background Image
