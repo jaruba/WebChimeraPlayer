@@ -69,7 +69,7 @@ Rectangle {
 								} else {
 									plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
 								}
-								Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: 638; height: 40; color: pitem'+ pli +'.containsMouse ? "#656565" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#e5e5e5" : "#e5e5e5" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: pitem'+ pli +'.containsMouse ? "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#2f2f2f" : "#2f2f2f" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
+								Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; color: pitem'+ pli +'.containsMouse ? "#656565" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#e5e5e5" : "#e5e5e5" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: pitem'+ pli +'.containsMouse ? "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? vlcPlayer.state == 1 ? "#2f2f2f" : "#2f2f2f" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
 							}
 //							toptext.text = plstring;
 //							Qt.createQmlObject(plstring, playmbig, "plmenustr");
@@ -735,7 +735,7 @@ Rectangle {
 			id: playlistblock
 			visible: false
 			anchors.centerIn: parent
-			width: 694
+			width: (parent.width * 0.8) < 694 ? (parent.width * 0.8) : 694
 			height: 284
 			color: "#444444"
 			MouseArea {
@@ -779,7 +779,7 @@ Rectangle {
 			}
 			Rectangle {
 				anchors.centerIn: parent
-				width: 682
+				width: playlistblock.width < 694 ? (playlistblock.width -12) : 682
 				height: 272
 				color: "transparent"
 				clip: true
@@ -787,7 +787,7 @@ Rectangle {
 					id: playmbig
 					anchors.top: parent.top
 					anchors.topMargin: 0
-					width: 682
+					width: playlistblock.width < 694 ? (playlistblock.width -12) : 682
 					height: 272
 					color: "transparent"				
 				}
@@ -798,7 +798,7 @@ Rectangle {
 				Rectangle {
 					anchors.fill: parent
 					anchors.centerIn: parent
-					width: 683
+					width: playlistblock.width < 694 ? (playlistblock.width -11) : 683
 					height: 26
 					color: "transparent"
 					RowLayout {
@@ -807,7 +807,7 @@ Rectangle {
 						anchors.top: parent.top
 						anchors.topMargin: 0
 						Rectangle {
-							width: 638
+							width: playlistblock.width < 694 ? (playlistblock.width -56) : 638
 							height: 26
 							color: "#2f2f2f"
 							Text {
@@ -846,66 +846,26 @@ Rectangle {
 		// Load All Images (if an image is used in the UI and it is not set here, it will be loaded with a delay when it first appears in the UI)
 		Rectangle {
 			visible: false
-			Image {
-				source: "../images/fullscreen_h.png"
-			}
-			Image {
-				source: "../images/fullscreen.png"
-			}
-			Image {
-				source: "../images/fullscreen2_h.png"
-			}
-			Image {
-				source: "../images/fullscreen2.png"
-			}
-			Image {
-				source: "../images/pause_h.png"
-			}
-			Image {
-				source: "../images/pause.png"
-			}
-			Image {
-				source: "../images/play3_h.png"
-			}
-			Image {
-				source: "../images/play3.png"
-			}
-			Image {
-				source: "../images/mute-off5_h.png"
-			}
-			Image {
-				source: "../images/mute-off2.png"
-			}
-			Image {
-				source: "../images/mute-on3_h.png"
-			}
-			Image {
-				source: "../images/mute-on3.png"
-			}
-			Image {
-				source: "../images/replay2.png"
-			}
-			Image {
-				source: "../images/replay2_h.png"
-			}
-			Image {
-				source: "../images/prev.png"
-			}
-			Image {
-				source: "../images/prev_h.png"
-			}
-			Image {
-				source: "../images/next.png"
-			}
-			Image {
-				source: "../images/next_h.png"
-			}
-			Image {
-				source: "../images/playlist.png"
-			}
-			Image {
-				source: "../images/playlist_h.png"
-			}
+			Image {	source: "../images/fullscreen_h.png" }
+			Image {	source: "../images/fullscreen.png" }
+			Image {	source: "../images/fullscreen2_h.png" }
+			Image { source: "../images/fullscreen2.png"	}
+			Image {	source: "../images/pause_h.png"	}
+			Image { source: "../images/pause.png" }
+			Image {	source: "../images/play3_h.png"	}
+			Image {	source: "../images/play3.png" }
+			Image {	source: "../images/mute-off5_h.png"	}
+			Image {	source: "../images/mute-off2.png" }
+			Image {	source: "../images/mute-on3_h.png" }
+			Image {	source: "../images/mute-on3.png" }
+			Image {	source: "../images/replay2.png"	}
+			Image {	source: "../images/replay2_h.png" }
+			Image {	source: "../images/prev.png" }
+			Image {	source: "../images/prev_h.png" }
+			Image { source: "../images/next.png" }
+			Image { source: "../images/next_h.png" }
+			Image { source: "../images/playlist.png" }
+			Image { source: "../images/playlist_h.png" }
 		}
 		// End Load All Images
 
