@@ -57,8 +57,7 @@ function addPlaylist(playlist, playerid) {
 function startPlayer(playerid) {
 	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid;  // if no playerid set, default to "webchimera"
     var videoelem = document.getElementById(playerid);
-    videoelem.playlist.setCurrentItem(0); // Set Current Item to first
-    videoelem.playlist.play(); // Play Current Item
+    videoelem.playlist.playItem(0); // Play Current Item
     videoelem.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
 }
 // end function to Start Playback
