@@ -803,11 +803,12 @@ Rectangle {
 					color: "transparent"
 					RowLayout {
 						spacing: 0
+						width: parent.width
 						anchors.left: parent.left
 						anchors.top: parent.top
 						anchors.topMargin: 0
 						Rectangle {
-							width: playlistblock.width < 694 ? (playlistblock.width -56) : 638
+							width: parent.width < 683 ? (parent.width -45) : 638
 							height: 26
 							color: "#2f2f2f"
 							Text {
