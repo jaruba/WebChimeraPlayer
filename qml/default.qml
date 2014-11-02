@@ -37,8 +37,7 @@ Rectangle {
 	function togPause() {
 		if (vlcPlayer.state == 6) {
 		
-			// if playback ended, restart playback
-			vlcPlayer.playlist.playItem(lastitem);
+			vlcPlayer.playlist.playItem(lastitem); // if playback ended, restart playback
 			
 		} else {
 		
@@ -139,7 +138,7 @@ Rectangle {
 		width: 160
 		height: 34
 		anchors.top: parent.top
-		anchors.topMargin: 5
+		anchors.topMargin: 7
 		anchors.horizontalCenter: parent.horizontalCenter
 	}
 	// End Announce Background
@@ -187,20 +186,18 @@ Rectangle {
 				onPressed: {
 					dragging = true;
 					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
-					srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
+					if (newtime > 0) srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
 				}
 				onPositionChanged: {
 					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
-					srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(newtime / 60000) * 60000) / 1000) %60)).slice(-2);
+					if (newtime > 0) srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(newtime / 60000) * 60000) / 1000) %60)).slice(-2);
 				}
 				onReleased: {
 					if (vlcPlayer.state == 6) vlcPlayer.playlist.playItem(lastitem);
 					vlcPlayer.position = (mouse.x -4) / theview.width;
 					dragging = false;
 				}
-			}
-			// End Progress Bar Functionality (Time Chat Bubble, Seek)
-			
+			}			
             Rectangle {
                 Layout.fillWidth: true
                 height: 8
@@ -215,6 +212,7 @@ Rectangle {
                     anchors.bottom: parent.bottom
 				}
             }
+			// End Progress Bar Functionality (Time Chat Bubble, Seek)
 		}
         RowLayout {
 			id: movecur
@@ -736,6 +734,70 @@ Rectangle {
 		// End Time Chat Bubble
 		// End Toolbar
 
+		// Start Loading Screen
+		Rectangle {
+			anchors.fill: parent
+			color: "#000000"
+			visible: vlcPlayer.state < 3 ? true : false
+			// If Playlist is Open Show Top Text
+			Text {
+				visible: playlistmenu
+				anchors.top: parent.top
+				anchors.topMargin: 10
+				anchors.horizontalCenter: parent.horizontalCenter
+				text: "Opening"
+				font.pointSize: 15
+				color: "#fff"
+			}
+			// End If Playlist is Open Show Top Text
+
+			Rectangle {
+				anchors.centerIn: parent
+				width: 1
+				height: 100
+				color: "transparent"
+				Rectangle {
+					Image {
+						anchors.top: parent.top
+						anchors.horizontalCenter: parent.horizontalCenter
+						source: "../images/player_logo_small.png"
+					}
+					Image {
+						id: playerlogo
+						anchors.top: parent.top
+						anchors.horizontalCenter: parent.horizontalCenter
+						opacity: 0
+						Behavior on opacity { PropertyAnimation { duration: 600} }
+						source: "../images/player_logo_small_h2.png"
+					}
+					Text {
+						visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+						anchors.top: parent.top
+						anchors.topMargin: 88
+						anchors.horizontalCenter: parent.horizontalCenter
+						text: "Loading Resource"
+						font.pointSize: 13
+						color: "#fff"
+					}
+				}
+			}
+		}
+
+		// Start Loading Logo Fade Effect
+		Timer {
+			interval: 700; running: true; repeat: true
+			onTriggered: {
+				if (playerlogo.opacity == 1) {
+					playerlogo.opacity = 0;
+				} else {
+					playerlogo.opacity = 1;
+				}
+			}
+		}
+		// End Loading Logo Fade Effect
+
+		// End Loading Screen
+
 		// Start Playlist Menu
 		Rectangle {
 			id: playlistblock
@@ -794,7 +856,7 @@ Rectangle {
 				color: "transparent"
 				clip: true
 				
-				// Playlist Items Holder
+				// Start Playlist Items Holder
 				Rectangle {
 					id: playmbig
 					anchors.top: parent.top
@@ -804,7 +866,7 @@ Rectangle {
 					color: "transparent"
 					// This is where the Playlist Items will be loaded
 				}
-				// Playlist Items Holder
+				// End Playlist Items Holder
 	
 	
 	
@@ -854,8 +916,7 @@ Rectangle {
 			}
 		}
 		// End Playlist Menu
-
-
+		
 		// Load All Images (if an image is used in the UI and it is not set here, it will be loaded with a delay when it first appears in the UI)
 		Rectangle {
 			visible: false
