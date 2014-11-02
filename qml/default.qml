@@ -794,51 +794,42 @@ Rectangle {
 	
 	
 	
-	
 				Rectangle {
 					anchors.fill: parent
 					anchors.centerIn: parent
 					width: playlistblock.width < 694 ? (playlistblock.width -11) : 683
 					height: 26
 					color: "transparent"
-					RowLayout {
-						spacing: 0
-						width: parent.width
+					Rectangle {
+						width: parent.width -45
 						anchors.left: parent.left
-						anchors.top: parent.top
-						anchors.topMargin: 0
-						Rectangle {
-							width: parent.width < 683 ? (parent.width -45) : 638
-							height: 26
-							color: "#2f2f2f"
-							Text {
-				                anchors.verticalCenter: parent.verticalCenter
-								anchors.left: parent.left
-								anchors.leftMargin: 29
-								text: "Title"
-								font.pointSize: 10
-								color: "#d5d5d5"
-							}
+						anchors.leftMargin: 0
+						height: 26
+						color: "#2f2f2f"
+						Text {
+                            anchors.verticalCenter: parent.verticalCenter
+							anchors.left: parent.left
+							anchors.leftMargin: 29
+							text: "Title"
+							font.pointSize: 10
+							color: "#d5d5d5"
 						}
-						Rectangle {
-							width: 10
-							height: 26
-							color: "transparent"
-						}
-						Image {
-							source: "../images/close-list.png"
-							width: 35
-							height: 26
-							MouseArea {
-								anchors.fill: parent
-								onClicked: {
-									playlistblock.visible = false;
-									playlistmenu = false
-								}
+					}
+					Image {
+						source: "http://jaruba.github.io/WebchimeraGUI/images/close-list.png"
+                        anchors.right: parent.right
+                        anchors.rightMargin: 0
+						width: 35
+						height: 26
+						MouseArea {
+							anchors.fill: parent
+							onClicked: {
+								playlistblock.visible = false;
+								playlistmenu = false
 							}
 						}
 					}
-				}
+				}	
 			}
 		}
 		// End Playlist Menu
