@@ -803,6 +803,7 @@ Rectangle {
 					color: "transparent"
 					RowLayout {
 						spacing: 0
+						width: parent.width
 						anchors.left: parent.left
 						anchors.top: parent.top
 						anchors.topMargin: 0
