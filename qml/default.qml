@@ -192,15 +192,7 @@ Rectangle {
 				}
 				onPositionChanged: {
 					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
-					if (newtime > 0) {
-						if ((Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60) < 0) {
-							// Fix for Negative Seconds Bug
-							srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ "00";
-							// End Fix for Negative Seconds Bug
-						} else {
-							srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
-						}
-					}
+					srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(newtime / 60000) * 60000) / 1000) %60)).slice(-2);
 				}
 				onReleased: {
 					if (vlcPlayer.state == 6) {
@@ -255,6 +247,29 @@ Rectangle {
 				}
             }
 		}
+        RowLayout {
+		    spacing: 0
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
+			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+            Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
+			Behavior on opacity { PropertyAnimation { duration: 250} }
+            Rectangle {
+                Layout.fillWidth: true
+                height: 30
+				color: '#2b2b2b'
+                anchors.verticalCenter: parent.verticalCenter
+				MouseArea {
+					id: bottomtab
+					hoverEnabled: true
+					anchors.fill: parent
+				}
+			}
+		}
+		// End Draw Progress Bar
+
 		// Top Bar (shows custom video title - if set)
         RowLayout {
 			visible: vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6 ? fullscreen ? vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.indexOf("[custom]") > -1 ? 1 : 0 : 0 : 0
@@ -283,28 +298,6 @@ Rectangle {
 			}
 		}
 		// End Top Bar (shows video title - if set)
-        RowLayout {
-		    spacing: 0
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
-			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
-            Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
-			Behavior on opacity { PropertyAnimation { duration: 250} }
-            Rectangle {
-                Layout.fillWidth: true
-                height: 30
-				color: '#2b2b2b'
-                anchors.verticalCenter: parent.verticalCenter
-				MouseArea {
-					id: bottomtab
-					hoverEnabled: true
-					anchors.fill: parent
-				}
-			}
-		}
-		// End Draw Progression Bar
 		
 		// Draw Toolbar
         RowLayout {
