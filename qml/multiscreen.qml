@@ -52,7 +52,9 @@ Rectangle {
 	function togPause() {
 		if (vlcPlayer.state == 6) {
 		
-			vlcPlayer.playlist.playItem(lastitem); // if playback ended, restart playback
+			// if playback ended, restart playback
+			vlcPlayer.playlist.setCurrentItem(lastitem)
+			vlcPlayer.playlist.play();
 			
 		} else {
 		
@@ -210,7 +212,10 @@ Rectangle {
 					if (newtime > 0) srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(newtime / 60000) * 60000) / 1000) %60)).slice(-2);
 				}
 				onReleased: {
-					if (vlcPlayer.state == 6) vlcPlayer.playlist.playItem(lastitem);
+					if (vlcPlayer.state == 6) {
+						vlcPlayer.playlist.setCurrentItem(lastitem)
+						vlcPlayer.playlist.play();
+					}
 					vlcPlayer.position = (mouse.x -4) / theview.width;
 					dragging = false;
 				}
@@ -447,7 +452,8 @@ Rectangle {
 							} else {
 								if (laststate >= 0 && laststate <= 4) {
 									if (lastpos < 0.95) {
-										vlcPlayer.playlist.playItem(lastitem);
+										vlcPlayer.playlist.setCurrentItem(lastitem)
+										vlcPlayer.playlist.play();
 										vlcPlayer.position = lastpos;
 									}
 									laststate = vlcPlayer.state;
