@@ -255,7 +255,7 @@ Rectangle {
 		}
 	}
 	Timer {
-		interval: 0; running: (vlcPlayer.time > 5400 && vlcPlayer.time < 5600) ? true : false ; repeat: false
+		interval: 0; running: (vlcPlayer.time > 5400 && vlcPlayer.time < 5700) ? true : false ; repeat: false
 		onTriggered: {
 			widtheffect.duration = 300;
 			heighteffect.duration = 300;
@@ -304,8 +304,8 @@ Rectangle {
 			widtheffect.duration = 1500;
 			heighteffect.duration = 1500;
 			
-			thesurface.width = parent.width * 1;
-			thesurface.height = parent.height * 1;
+			thesurface.width = parent.width;
+			thesurface.height = parent.height;
 		}
 	}
 	
@@ -315,8 +315,8 @@ Rectangle {
 			widtheffect.duration = 13000;
 			heighteffect.duration = 13000;
 			
-			thesurface.width = parent.width * 0;
-			thesurface.height = parent.height * 0;
+			thesurface.width = 0;
+			thesurface.height = 0;
 		}
 	}
 
@@ -457,7 +457,7 @@ Rectangle {
 						heighteffect.duration = Math.round(3000 - resizetime);
 						thesurface.width = mousesurface.width * 0.7;
 						thesurface.height = mousesurface.height * 0.7;
-					} else if (resizetime > 5600 && resizetime < 10000) {
+					} else if (resizetime > 5700 && resizetime < 10000) {
 						thesurface.width = mousesurface.width * 1.5;
 						thesurface.height = mousesurface.height * 1.5;
 					} else if (resizetime > 29000 && resizetime < 31300) {
