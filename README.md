@@ -14,6 +14,7 @@ Webchimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 
 Current Features
 ==============
+- External HTTP Subtitle Support (Formats: SRT, SUB)
 - Playlist Support
 - Custom Video Titles Support
 - Key Event Handlers (space -> pause, esc -> exit fullscreen)
@@ -26,5 +27,4 @@ Current Features
 Upcoming Features
 ==============
 - Hide Mouse Cursor in Fullscreen Mode
-- External HTTP Subtitle Support (Formats: SRT, SUB, IDX)
 - Windowed Mode (Pop Out)
