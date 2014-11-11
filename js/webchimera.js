@@ -61,3 +61,12 @@ function startPlayer(playerid) {
     videoelem.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
 }
 // end function to Start Playback
+
+// function to Start Playback
+function startSubtitle(suburl) {
+//	if (typeof suburl !== "undefined") {
+	    var videoelem = document.getElementById("webchimera");
+		videoelem.emitJsMessage("[start-subtitle]"+suburl);
+//	}
+}
+// end function to Start Playback
