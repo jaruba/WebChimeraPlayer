@@ -1,11 +1,11 @@
 Webchimera Player
 ==============
 
-An Open Source Webchimera Player
+An Open Source <a href="https://www.webchimera.org/" target="_blank">WebChimera</a> Player
 
-To use Webchimera Player you need to install the lattest version of <a href="http://sourceforge.net/projects/webchimera/" target="_blank">Webchimera</a> (<a href="https://github.com/RSATom/WebChimera" target="_blank">Github</a>) on your PC.
+To use WebChimera Player you need to install the lattest version of <a href="http://sourceforge.net/projects/webchimera/" target="_blank">WebChimera</a> (<a href="https://github.com/RSATom/WebChimera" target="_blank">Github</a>) on your PC.
 
-Webchimera is a VLC Web Plugin based on FireBreath that offers the possibility of using <a href="http://qt-project.org/" target="_blank">QT QML</a> to build complex User Interfaces for the Web Player.
+WebChimera is a VLC Web Plugin based on FireBreath that offers the possibility of using <a href="http://qt-project.org/" target="_blank">QT QML</a> to build complex User Interfaces for the Web Player.
 
 <b>Make sure to view the <a href="http://www.webchimera.org/demos/" target="_blank">Demo Page</a></b>
 
