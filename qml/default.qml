@@ -188,7 +188,6 @@ Rectangle {
 	
 	// Start Function to Scroll Playlist Menu
 	function movePlaylist(mousehint) {
-		gotjsmessage.text = "Got JS Message 2";
 		if (mousehint <= (playmdrag.height / 2)) {
 			playmdrag.anchors.topMargin = 0;
 			playmbig.anchors.topMargin = 0;

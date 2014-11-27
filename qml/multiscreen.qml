@@ -15,7 +15,7 @@ Rectangle {
 	property var pli: 0;
 	property var plstring: "";
 	property var currentSubtitle: -2;
-	property var subtitles: { };
+	property var subtitles: { }
 	
 	// Variables Needed for Multiscreen Demo
 	
@@ -208,7 +208,6 @@ Rectangle {
 	
 	// Start Function to Scroll Playlist Menu
 	function movePlaylist(mousehint) {
-		gotjsmessage.text = "Got JS Message 2";
 		if (mousehint <= (playmdrag.height / 2)) {
 			playmdrag.anchors.topMargin = 0;
 			playmbig.anchors.topMargin = 0;
