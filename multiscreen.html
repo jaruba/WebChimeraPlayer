@@ -17,6 +17,7 @@
 
 <div id="page_title"><h1>Multiscreen Demo</h1><span id="page_desc"><br>Click on a Video!</span></div>
 
+
 <div id="player_wrapper" style="background-color: #000">
 <object id="webchimera1" type="application/x-chimera-plugin" width="49%" height="49%" style="margin-left: 5px; margin-top: 2px">
 <param name="qmlsrc" value="qml/multiscreen.qml" />
@@ -31,17 +32,14 @@
 <param name="qmlsrc" value="qml/multiscreen.qml" />
 </object>
 </div>
-<div id="buttons"><span onclick="window.location.href = 'http://jaruba.github.io/WebchimeraGUI/editor/?demo=multiscreen'" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i><span>Edit Demo</span></span><span onclick="window.location.href = 'http://www.movault.net/webchimera/download-demo.php?package=multiscreen'" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i><span>Download</span></span></div>
 
 <script src="js/webchimera.js" type="text/javascript"></script>
 <script>
-// add the playlist or video to the player, possible values are: addPlaylist(playlist, playerid) [if no playerid is set, it will default to "webchimera"]
-addPlaylist("http://www.youtube.com/watch?v=YpKEgEjry8s","webchimera1");
-addPlaylist("http://www.youtube.com/watch?v=KAY76HXaMjU","webchimera2");
-addPlaylist("http://www.youtube.com/watch?v=RSY75mIIpB0","webchimera3");
-addPlaylist("http://www.youtube.com/watch?v=b-_53i63DfY","webchimera4");
+addPlaylist("http://archive.org/download/FREEWARE2001/FREEWARE2001_256kb.mp4","webchimera1");
+addPlaylist("http://archive.org/download/CrayonDragonAnAnimatedShortFilmByTonikoPantoja/Crayon%20Dragon%20-%20An%20animated%20short%20film%20by%20Toniko%20Pantoja.mp4","webchimera2");
+addPlaylist("http://archive.org/download/CartoonClassics/Krazy_Kat_-_Keeping_Up_With_Krazy.mp4","webchimera3");
+addPlaylist("http://archive.org/download/CartoonClassics/Mel-O-Toons__Peter_and_the_Wolf.mp4","webchimera4");
 
-// start the player, possible values are: startPlayer(playerid) [if no playerid is set, it will default to "webchimera"]
 startPlayer("webchimera1");
 startPlayer("webchimera2");
 startPlayer("webchimera3");

@@ -18,23 +18,19 @@
 <div id="page_title"><h1>External Subtitle Demo</h1></div>
 
 <div id="player_wrapper"></div>
-<div id="buttons"><span onclick="startSubtitle('http://www.movault.net/webchimera/sub/the_last_belle_2011_eng.srt');" class="btn btn-success"><i class="glyphicon glyphicon-plus"></i><span>Edit Demo</span></span><span onclick="window.location.href = 'http://www.movault.net/webchimera/download-demo.php?package=external_subtitle'" class="btn btn-primary"><i class="glyphicon glyphicon-download-alt"></i><span>Download</span></span></div>
 
 <script src="js/webchimera.js" type="text/javascript"></script>
 <script>
-addPlayer("player_wrapper","qml/default.qml"); // add the player to "player_wrapper" div, possible values are: addPlayer(targetdiv,qmlsource,playerid)
-// * if no qmlsource (path to qml file) is set, it will default to latest Webchimera Player QML
-// * if no playerid is set, it will default to "webchimera"
+addPlayer("player_wrapper","qml/default.qml");
 
-// declare Video to Play, can also be Array of Videos to Play (see Playlist Demo) or Multidimensional Array to also set Custom Title to Videos (see Custom Titles Demo)
 myplaylist = "http://www.youtube.com/watch?v=ja1sjfnfjg0";
 
-addPlaylist(myplaylist); // add the playlist to the player, possible values are: addPlaylist(playlist, playerid) [if no playerid is set, it will default to "webchimera"]
+addPlaylist(myplaylist);
 
-startPlayer(); // start the player, possible values are: startPlayer(playerid) [if no playerid is set, it will default to "webchimera"]
+startPlayer();
 
 // Wait 5 seconds (for plugin to load) then load subtitle
-setTimeout(function() { startSubtitle("http://jaruba.github.io/WebchimeraGUI/sub/the_last_belle_2011_eng.srt"); },5000);
+setTimeout(function() { startSubtitle("http://www.webchimera.org/sub/the_last_belle_2011_eng.srt"); },5000);
 
 </script>
 
