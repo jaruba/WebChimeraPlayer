@@ -1,21 +1,3 @@
-/*****************************************************************************
-* Copyright (c) 2014 Sergey Radionov <rsatom_gmail.com>
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU Lesser General Public License as published by
-* the Free Software Foundation; either version 2.1 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU Lesser General Public License for more details.
-*
-* You should have received a copy of the GNU Lesser General Public License
-* along with this program; if not, write to the Free Software Foundation,
-* Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
-*****************************************************************************/
-
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
 import QmlVlc 0.1
@@ -60,6 +42,24 @@ Rectangle {
 		}
 	}
 	// End Function for Toggle Pause
+	
+	// Start Functions to Get Time and Video Length (format "00:00:00")
+	function getTime(t) {
+		var tempHour = ("0" + Math.floor(t / 3600000)).slice(-2);
+		var tempMinute = ("0" + (Math.floor(t / 60000) %60)).slice(-2);
+		var tempSecond = ("0" + (Math.floor((t - Math.floor(vlcPlayer.time / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
+		if (tempSecond == -1) tempSecond =  "00";
+		return tempHour + ":" + tempMinute + ":" + tempSecond;
+	}
+
+	function getLength() {
+		var tempHour = (("0" + Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000)).slice(-2));
+		var tempMinute = (("0" + (Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) %60)).slice(-2));
+		var tempSecond = ("0" + (Math.floor((vlcPlayer.time * (1 / vlcPlayer.position) - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000) * 3600000 - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) * 60000) / 1000) %60)).slice(-2);
+		if (tempSecond == -1) tempSecond =  "00";
+		return tempHour + ":" + tempMinute + ":" + tempSecond;
+	}
+	// End Function to Get Time and Video Length (format "00:00:00")
 	
 	// Start Functions Required for External Subtitles
 	function toSeconds(t) {
@@ -175,7 +175,7 @@ Rectangle {
 			} else {
 				plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
 			}
-			Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 30; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
+			Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
 		}							
 		// End Adding Playlist Menu Items
 
@@ -302,6 +302,7 @@ Rectangle {
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
     MouseArea {
 		id: mousesurface
+		cursorShape: vlcPlayer.time == 0 ? Qt.ArrowCursor : fullscreen ? ismoving > 5 ? Qt.BlankCursor : Qt.ArrowCursor : Qt.ArrowCursor
         hoverEnabled: true
         anchors.fill: parent
 		onClicked: { if (vlcPlayer.state != 1) if (bottomtab.containsMouse === false) togPause(); } // Toggle Pause if clicked on Surface
@@ -325,16 +326,17 @@ Rectangle {
 			// Start Progress Bar Functionality (Time Chat Bubble, Seek)
 			MouseArea {
 				id: dragpos
+				cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
 		        hoverEnabled: true
 				anchors.fill: parent
 				onPressed: {
 					dragging = true;
 					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
-					if (newtime > 0) srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
+					if (newtime > 0) srctime.text = getTime(newtime);
 				}
 				onPositionChanged: {
 					var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouse.x -4) / theview.width);
-					if (newtime > 0) srctime.text = (("0" + Math.floor(newtime / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(newtime / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((newtime - Math.floor(newtime / 3600000) * 3600000 - Math.floor(newtime / 60000) * 60000) / 1000) %60)).slice(-2);
+					if (newtime > 0) srctime.text = getTime(newtime);
 				}
 				onReleased: {
 					if (vlcPlayer.state == 6) {
@@ -468,6 +470,7 @@ Rectangle {
 					}
                 }
                 MouseArea {
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     anchors.fill: parent
                     onClicked: vlcPlayer.playlist.prev()
                 }
@@ -497,6 +500,7 @@ Rectangle {
 					}
                 }
                 MouseArea {
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     anchors.fill: parent					
                     onClicked: togPause()
                 }
@@ -526,6 +530,7 @@ Rectangle {
 					}
                 }
                 MouseArea {
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     anchors.fill: parent
                     onClicked: vlcPlayer.playlist.next();
                 }
@@ -583,6 +588,7 @@ Rectangle {
                 }
 				MouseArea {
 				   id: mouseAreaMute
+				   cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
 				   anchors.fill: parent
 				   anchors.margins: 0
 				   hoverEnabled: true
@@ -624,6 +630,7 @@ Rectangle {
 				}
 				MouseArea {
 					id: mouseAreaVol
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
 					anchors.fill: parent
 					anchors.left: parent.left
 					onPressAndHold: { if (mouse.x > 0 && mouse.x < 116) { moveposa.width = mouse.x -2; movecura.anchors.leftMargin = mouse.x -2; } else if (mouse.x <= 0) { moveposa.width = 0; movecura.anchors.leftMargin = 0; } else if (mouse.x >= 116) { moveposa.width = 120; movecura.anchors.leftMargin = 116; } }
@@ -683,7 +690,7 @@ Rectangle {
 				id: showtime
 				anchors.left: mutebut.right
 				anchors.leftMargin: mouseAreaMute.containsMouse ? 131 : mouseAreaVl.containsMouse ? 131 : 0
-				text: "   "+ (("0" + Math.floor(vlcPlayer.time / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(vlcPlayer.time / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((vlcPlayer.time - Math.floor(vlcPlayer.time / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2) +" / "+ (("0" + Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000)).slice(-2)) +":"+ (("0" + (Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) %60)).slice(-2)) +":"+ ("0" + (Math.floor((vlcPlayer.time * (1 / vlcPlayer.position) - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000) * 3600000 - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) * 60000) / 1000) %60)).slice(-2)
+				text: "   "+ getTime(vlcPlayer.time) +" / "+ getLength();
 				font.pointSize: 9
 				color: "#9a9a9a"
 	            Behavior on anchors.leftMargin { PropertyAnimation { duration: 250} }
@@ -726,6 +733,7 @@ Rectangle {
                 }
                 MouseArea {
                     anchors.fill: parent
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     onClicked: if (playlistmenu === false) {
 						playlistblock.visible = true;
 						playlistmenu = true;
@@ -755,6 +763,7 @@ Rectangle {
 					}
 				}
                 MouseArea {
+					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     anchors.fill: parent
                     onClicked: toggleFullscreen()
                 }
@@ -1038,7 +1047,7 @@ Rectangle {
 						Text {
                             anchors.verticalCenter: parent.verticalCenter
 							anchors.left: parent.left
-							anchors.leftMargin: 29
+							anchors.leftMargin: 12
 							text: "Title"
 							font.pointSize: 10
 							color: "#d5d5d5"
@@ -1055,6 +1064,7 @@ Rectangle {
 						height: 26
 						MouseArea {
 							anchors.fill: parent
+							cursorShape: Qt.PointingHandCursor
 							onClicked: {
 								playlistblock.visible = false;
 								playlistmenu = false
