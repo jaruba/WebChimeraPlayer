@@ -1,4 +1,4 @@
-Webchimera Player
+WebChimera Player
 ==============
 
 An Open Source <a href="https://www.webchimera.org/" target="_blank">WebChimera</a> Player
