@@ -1,7 +1,7 @@
 WebChimera Player
 ==============
 
-An Open Source <a href="https://www.webchimera.org/" target="_blank">WebChimera Player</a>
+An Open Source <b><a href="https://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
 
 To use WebChimera Player you need to install the lattest version of <a href="http://sourceforge.net/projects/webchimera/" target="_blank">WebChimera</a> (<a href="https://github.com/RSATom/WebChimera" target="_blank">Github</a>) on your PC.
 
