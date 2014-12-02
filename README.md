@@ -9,7 +9,7 @@ WebChimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 
 <b>Make sure to check out the <a href="http://www.webchimera.org/demos/" target="_blank">Demos</a></b>
 
-<b>And the <a href="http://www.webchimera.org/editor/default_skin" target="_blank">Online Editor</a></b>
+<b>And the <a href="http://editor.webchimera.org/default_skin" target="_blank">Online Editor</a></b>
 
 
 Current Features
