@@ -60,7 +60,7 @@ Rectangle {
 		if (vlcPlayer.state == 6) {
 		
 			// if playback ended, restart playback
-			vlcPlayer.playlist.setCurrentItem(lastitem)
+			vlcPlayer.playlist.currentItem = lastitem
 			vlcPlayer.playlist.play();
 			
 		} else {
@@ -380,7 +380,7 @@ Rectangle {
 				}
 				onReleased: {
 					if (vlcPlayer.state == 6) {
-						vlcPlayer.playlist.setCurrentItem(lastitem)
+						vlcPlayer.playlist.currentItem = lastitem
 						vlcPlayer.playlist.play();
 					}
 					vlcPlayer.position = (mouse.x -4) / theview.width;
@@ -622,7 +622,7 @@ Rectangle {
 							} else {
 								if (laststate >= 0 && laststate <= 4) {
 									if (lastpos < 0.95) {
-										vlcPlayer.playlist.setCurrentItem(lastitem)
+										vlcPlayer.playlist.currentItem = lastitem
 										vlcPlayer.playlist.play();
 										vlcPlayer.position = lastpos;
 									}
