@@ -20,7 +20,7 @@ if (typeof Array.isArray === 'undefined') {
 // end backward compatibility isArray
 
 function addPlayer(targetdiv,qmlsource,playerid) {
-	qmlsource = (typeof qmlsource === "undefined") ? "http://jaruba.github.io/WebchimeraGUI/qml/default.qml" : qmlsource; // if no qmlsource set, default to latest Webchimera Player Default QML
+	qmlsource = (typeof qmlsource === "undefined") ? "http://www.webchimera.org/qml/default.qml" : qmlsource; // if no qmlsource set, default to latest Webchimera Player Default QML
 	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
 
 	var playerbody = "";
