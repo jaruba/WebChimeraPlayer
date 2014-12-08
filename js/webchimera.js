@@ -125,7 +125,9 @@ function getFromUrl(urlstring, playerid) {
 				} else {
 					newdata += thisline;
 				}
+				console.log("newdata: "+newdata);
 				remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
+				
 			}
 
 			newdata += remainingdata;
