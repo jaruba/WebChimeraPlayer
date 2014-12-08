@@ -1,6 +1,7 @@
 // if page on local machine, add warning
 var websiteishttps = 0;
 var globalplayerid = "webchimera";
+var globalurlstring = " ";
 var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML File cannot be loaded from your Local Machine! Upload the Demo on a Web server to see it working correctly.</div></div>';
 
 switch(window.location.protocol) {
@@ -22,6 +23,7 @@ function getFromUrl(urlstring, playerid) {
 	console.log("url string: "+urlstring);
 	console.log("playerid: "+playerid);
 	globalplayerid = playerid;
+	globalurlstring = urlstring;
 
 	var xmlhttp;
 	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -34,9 +36,36 @@ function getFromUrl(urlstring, playerid) {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			videoelem = document.getElementById(globalplayerid);
 			var responsedata = xmlhttp.responseText;
+			
+			// get direct path to qml file
 			var currenturl = window.location.href;
-			currenturl = currenturl.substring(0,currenturl.lastIndexOf("/"));
-			console.log(currenturl);			
+			currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") -1);
+			if (globalurlstring.substring(0, 4) != "http") {
+				if (globalurlstring.substring(0, 1) == "/") globalurlstring = globalurlstring.substring(1);
+				if (globalurlstring.substring(0, 2) == "./") globalurlstring = globalurlstring.substring(2);
+				while (globalurlstring.substring(0, 3) == "../") {
+					globalurlstring = globalurlstring.substring(3);
+					currenturl = currenturl.substring(0,currenturl.length -1);
+					currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") -1);
+				}
+				currenturl = currenturl + globalurlstring;
+			}
+			// end get direct path to qml file
+			console.log(currenturl);
+			
+			// parse qml source and change all image sources to their direct http path (if required)
+
+			var findsource = " ";
+			var remainingdata = responsedata;
+			var newdata = "";
+			
+			if (remainingdata.indexOf('source:') > 0) {
+				remainingdata = remainingdata.substring(0,remainingdata.indexOf('source:'));
+				console.log(remainingdata);
+			}
+
+			// end parse qml source and change all image sources to their direct http path (if required)
+
 			
 			videoelem.qml = xmlhttp.responseText;
 		}
