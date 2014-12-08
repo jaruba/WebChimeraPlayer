@@ -46,7 +46,12 @@ function getFromUrl(urlstring, playerid) {
 				while (globalurlstring.substring(0, 3) == "../") {
 					globalurlstring = globalurlstring.substring(3);
 					currenturl = currenturl.substring(0,currenturl.length -1);
-					currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") -1);
+					currenturl = currenturl.substring(0,currenturl.lastIndexOf("/"))+"/";
+				}
+				if (globalurlstring.indexOf("/") > -1) {
+					globalurlstring = globalurlstring.substring(0,globalurlstring.lastIndexOf("/"));
+				} else {
+					globalurlstring = "";
 				}
 				currenturl = currenturl + globalurlstring;
 			}
