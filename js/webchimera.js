@@ -69,13 +69,17 @@ function getFromUrl(urlstring, playerid) {
 				remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
 				if (thisline.indexOf("vlcPlayer") == -1) {
-					if (thisline.indexOf('"') > -1) {
+					while (thisline.indexOf('"') > -1) {
 						
 						var thisimage = thisline.substring(thisline.indexOf('"'));
-
+						
 						newdata += thisline.substring(0,thisline.indexOf('"'));
 						
 						var newimage = thisimage.substring(1);
+						thisline = newimage.substring(newimage.indexOf('"'));
+						
+						console.log("thisline: "+thisline);
+
 						newimage = newimage.substring(0,newimage.indexOf('"'));
 
 						if (newimage.substring(0, 1) == "/") newimage = newimage.substring(1);
@@ -88,6 +92,10 @@ function getFromUrl(urlstring, playerid) {
 						}
 						
 						newimage = tempcurrenturl + newimage;
+						
+						newdata += newimage + '"';
+						
+						
 
 						console.log(newimage);
 						
