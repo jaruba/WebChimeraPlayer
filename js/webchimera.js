@@ -60,14 +60,22 @@ function getFromUrl(urlstring, playerid) {
 			var newdata = "";
 			
 			while (remainingdata.indexOf('source:') > -1) {
-				newdata = remainingdata.substring(0,remainingdata.indexOf('source:'));
+				newdata += remainingdata.substring(0,remainingdata.indexOf('source:'));
 				remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
 				if (thisline.indexOf("vlcPlayer") == -1) {
 					if (thisline.indexOf('"') > -1) {
 						
 						var thisimage = thisline.substring(thisline.indexOf('"'));
-						console.log(thisimage);
+
+						newdata += thisline.substring(0,thisline.indexOf('"'));
+
+						thisimage = thisimage.substring(1);
+						
+						var newimage = thisimage.substring(1);
+						newimage = thisimage.substring(0,thisline.indexOf('"') -1);
+
+						console.log(newimage);
 						
 						remainingdata = " ";
 					}
