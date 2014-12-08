@@ -59,11 +59,23 @@ function getFromUrl(urlstring, playerid) {
 			var remainingdata = responsedata;
 			var newdata = "";
 			
-			if (remainingdata.indexOf('source:') > 0) {
+			while (remainingdata.indexOf('source:') > -1) {
 				newdata = remainingdata.substring(0,remainingdata.indexOf('source:'));
 				remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
+				if (thisline.indexOf("vlcPlayer") == -1) {
+					if (thisline.indexOf('"') > -1) {
+						
+						var thisimage = thisline.substring(thisline.indexOf('"'));
+						console.log(thisimage);
+						
+						remainingdata = " ";
+					}
 				console.log(thisline);
+				} else {
+					newdata += thisline;
+					remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
+				}
 			}
 
 			// end parse qml source and change all image sources to their direct http path (if required)
