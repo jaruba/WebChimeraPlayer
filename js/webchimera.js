@@ -54,6 +54,7 @@ function getFromUrl(urlstring, playerid) {
 					globalurlstring = "";
 				}
 				currenturl = currenturl + globalurlstring;
+				if (currenturl.indexOf("https://") > -1) currenturl = currenturl.replace("https://","http://"); // Remove this once webchimera handles ssl links
 			}
 			// end get direct path to qml file
 			
@@ -89,19 +90,13 @@ function getFromUrl(urlstring, playerid) {
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
 				if (thisline.indexOf("vlcPlayer") == -1) checkvlc = 1;
 				if (thisline.indexOf("vlcPlayer.") == -1) checkvlc = 0;
-					
 				if (checkvlc == 0) {
 					while (thisline.indexOf('"') > -1) {
-						
 						var thisimage = thisline.substring(thisline.indexOf('"'));
-						
 						newdata += thisline.substring(0,thisline.indexOf('"') +1);
-						
 						var newimage = thisimage.substring(1);
 						thisline = newimage.substring(newimage.indexOf('"') +1);
-						
 						newimage = newimage.substring(0,newimage.indexOf('"'));
-
 						if (newimage.substring(0, 1) == "/") newimage = newimage.substring(1);
 						if (newimage.substring(0, 2) == "./") newimage = newimage.substring(2);
 						var tempcurrenturl = currenturl;
@@ -110,23 +105,15 @@ function getFromUrl(urlstring, playerid) {
 							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/"));
 							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/") +1);
 						}
-						
 						newimage = tempcurrenturl + newimage;
-						
 						newdata += newimage + '"';
-						
 					}
 					newdata += thisline;
-					
 				} else {
 					newdata += thisline;
 				}
 				remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
-				
 			}
-
-			console.log("newdata: "+newdata);
-
 			newdata += remainingdata;
 
 			// end parse qml source and change all image sources to their direct http path (if required)
@@ -135,6 +122,8 @@ function getFromUrl(urlstring, playerid) {
 			videoelem.qml = newdata;
 		}
 	}
+	
+	if (urlstring.indexOf("https://") > -1) urlstring = urlstring.replace("https://","http://");  // Remove this once webchimera handles ssl links
 	xmlhttp.open("GET", urlstring, true);
 	xmlhttp.send();
 }
@@ -154,13 +143,13 @@ function addPlayer(targetdiv,qmlsource,playerid) {
 
 	var playerbody = "";
 	playerbody += '<object id="' + playerid + '" type="application/x-chimera-plugin" width="100%" height="100%">';
-	if (websiteishttps == 1) {
+	if (websiteishttps == 1) {  // Remove this once webchimera handles ssl links
 		// if QML Source is using SSL
 		setTimeout(getFromUrl(qmlsource,playerid),10); // Load QML File as String with JavaScript
 		playerbody += '<param name="qmlsrc" value="" />';
 		// End if QML Source is using SSL
 	} else {
-		if (qmlsource.substring(0, 7) != "http://") {
+		if (qmlsource.substring(0, 7) == "https://") {  // Remove this once webchimera handles ssl links
 			// if QML Source is using SSL
 			setTimeout(getFromUrl(qmlsource,playerid),10); // Load QML File as String with JavaScript
 			playerbody += '<param name="qmlsrc" value="" />';
