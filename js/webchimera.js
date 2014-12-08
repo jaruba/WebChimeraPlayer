@@ -56,7 +56,6 @@ function getFromUrl(urlstring, playerid) {
 				currenturl = currenturl + globalurlstring;
 			}
 			// end get direct path to qml file
-			console.log(currenturl);
 			
 			// parse qml source and change all image sources to their direct http path (if required)
 
@@ -69,7 +68,7 @@ function getFromUrl(urlstring, playerid) {
 				var sourcevar2 = remainingdata.indexOf('.source');
 				
 				if (sourcevar1 > -1 && sourcevar2 > -1) {
-					if (remainingdata.indexOf('source:') < remainingdata.indexOf('.source')) {
+					if (sourcevar1 < sourcevar2) {
 						newdata += remainingdata.substring(0,remainingdata.indexOf('source:'));
 						remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
 					} else {
@@ -97,8 +96,6 @@ function getFromUrl(urlstring, playerid) {
 						var newimage = thisimage.substring(1);
 						thisline = newimage.substring(newimage.indexOf('"') +1);
 						
-						console.log("thisline: "+thisline);
-
 						newimage = newimage.substring(0,newimage.indexOf('"'));
 
 						if (newimage.substring(0, 1) == "/") newimage = newimage.substring(1);
@@ -114,21 +111,17 @@ function getFromUrl(urlstring, playerid) {
 						
 						newdata += newimage + '"';
 						
-						
-
-						console.log(newimage);
-						
 					}
 					newdata += thisline;
 					
-					console.log(thisline);
 				} else {
 					newdata += thisline;
 				}
-				console.log("newdata: "+newdata);
 				remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
 				
 			}
+
+			console.log("newdata: "+newdata);
 
 			newdata += remainingdata;
 
