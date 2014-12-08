@@ -1,8 +1,11 @@
 // if page on local machine, add warning
+var websiteishttps = 0;
 var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML File cannot be loaded from your Local Machine! Upload the Demo on a Web server to see it working correctly.</div></div>';
 switch(window.location.protocol) {
    case 'http:': break;
-   case 'https:': break;
+   case 'https:':
+     websiteishttps = 0;
+	 break;
    case 'file:':
      document.body.innerHTML += localwarning;
      break;
@@ -10,6 +13,28 @@ switch(window.location.protocol) {
      document.body.innerHTML += localwarning;
 }
 // end if page on local machine, add warning
+
+// function to Load QML File in Javascript and send the QML String to WebChimera
+function getFromUrl(urlstring, playerid) {
+	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
+	var videoelem = document.getElementById(playerid);
+
+	var xmlhttp;
+	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	}
+	else { // code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			videoelem.qml = xmlhttp.responseText;
+		}
+	}
+	xmlhttp.open("GET", urlstring, true);
+	xmlhttp.send();
+}
+// End function to Load QML File in Javascript and send the QML String to WebChimera
 
 // only implement if no native isArray implementation is available (for backward compatibility with old browsers)
 if (typeof Array.isArray === 'undefined') {
@@ -25,10 +50,23 @@ function addPlayer(targetdiv,qmlsource,playerid) {
 
 	var playerbody = "";
 	playerbody += '<object id="' + playerid + '" type="application/x-chimera-plugin" width="100%" height="100%">';
-	playerbody += '<param name="qmlsrc" value="' + qmlsource + '" />';
+	if (websiteishttps == 1) {
+		// if QML Source is using SSL
+		setTimeout(getFromUrl(qmlsource,playerid),10); // Load QML File as String with JavaScript
+		playerbody += '<param name="qmlsrc" value="" />';
+		// End if QML Source is using SSL
+	} else {
+		if (playlist.substring(0, 7) != "http://") {
+			// if QML Source is using SSL
+			setTimeout(getFromUrl(qmlsource,playerid),10); // Load QML File as String with JavaScript
+			playerbody += '<param name="qmlsrc" value="" />';
+			// End if QML Source is using SSL
+		} else {
+			playerbody += '<param name="qmlsrc" value="' + qmlsource + '" />'; // if QML Source is not using SSL
+		}
+	}
 	playerbody += '</object>';
 	document.getElementById(targetdiv).innerHTML = playerbody;
-//	container.appendChild(embed);
 	
 }
 
@@ -37,7 +75,7 @@ function addPlaylist(playlist, playerid) {
 	 playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
      var videoelem = document.getElementById(playerid);
 	 if (typeof playlist === 'string') {
-		 videoelem.playlist.add(playlist); // if Playlist has one Element
+		videoelem.playlist.add(playlist); // if Playlist has one Element
 	 } else {
 		 if (Array.isArray(playlist) === true && Array.isArray(playlist[0]) === true) {
 			 // if Playlist has Custom Titles
@@ -64,9 +102,7 @@ function startPlayer(playerid) {
 
 // function to Start Playback
 function startSubtitle(suburl) {
-//	if (typeof suburl !== "undefined") {
-	    var videoelem = document.getElementById("webchimera");
-		videoelem.emitJsMessage("[start-subtitle]"+suburl);
-//	}
+	var videoelem = document.getElementById("webchimera");
+	videoelem.emitJsMessage("[start-subtitle]"+suburl);
 }
 // end function to Start Playback
