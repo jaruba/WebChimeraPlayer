@@ -5,7 +5,7 @@ var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML
 switch(window.location.protocol) {
    case 'http:': break;
    case 'https:':
-     websiteishttps = 0;
+     websiteishttps = 1;
 	 break;
    case 'file:':
      document.body.innerHTML += localwarning;
@@ -18,6 +18,8 @@ switch(window.location.protocol) {
 // function to Load QML File in Javascript and send the QML String to WebChimera
 function getFromUrl(urlstring, playerid) {
 	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
+	console.log("url string: "+urlstring);
+	console.log("playerid: "+playerid);
 	globalvideoelem = document.getElementById(playerid);
 
 	var xmlhttp;
