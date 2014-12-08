@@ -56,7 +56,7 @@ function addPlayer(targetdiv,qmlsource,playerid) {
 		playerbody += '<param name="qmlsrc" value="" />';
 		// End if QML Source is using SSL
 	} else {
-		if (playlist.substring(0, 7) != "http://") {
+		if (qmlsource.substring(0, 7) != "http://") {
 			// if QML Source is using SSL
 			setTimeout(getFromUrl(qmlsource,playerid),10); // Load QML File as String with JavaScript
 			playerbody += '<param name="qmlsrc" value="" />';
