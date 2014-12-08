@@ -60,8 +60,10 @@ function getFromUrl(urlstring, playerid) {
 			var newdata = "";
 			
 			if (remainingdata.indexOf('source:') > 0) {
-				remainingdata = remainingdata.substring(0,remainingdata.indexOf('source:'));
-				console.log(remainingdata);
+				newdata = remainingdata.substring(0,remainingdata.indexOf('source:'));
+				remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
+				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
+				console.log(thisline);
 			}
 
 			// end parse qml source and change all image sources to their direct http path (if required)
