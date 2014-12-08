@@ -120,11 +120,12 @@ function getFromUrl(urlstring, playerid) {
 						
 					}
 					newdata += thisline;
-				console.log(thisline);
+					
+					console.log(thisline);
 				} else {
 					newdata += thisline;
-					remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
 				}
+				remainingdata = remainingdata.substring(remainingdata.indexOf('\n'));
 			}
 
 			newdata += remainingdata;
