@@ -20,8 +20,6 @@ switch(window.location.protocol) {
 // function to Load QML File in Javascript and send the QML String to WebChimera
 function getFromUrl(urlstring, playerid) {
 	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
-	console.log("url string: "+urlstring);
-	console.log("playerid: "+playerid);
 	globalplayerid = playerid;
 	globalurlstring = urlstring;
 
