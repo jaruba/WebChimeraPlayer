@@ -73,7 +73,7 @@ function getFromUrl(urlstring, playerid) {
 						thisimage = thisimage.substring(1);
 						
 						var newimage = thisimage.substring(1);
-						newimage = thisimage.substring(0,thisline.indexOf('"') -1);
+						newimage = newimage.substring(0,newimage.indexOf('"') -1);
 
 						console.log(newimage);
 						
