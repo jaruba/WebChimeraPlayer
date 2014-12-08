@@ -39,17 +39,17 @@ function getFromUrl(urlstring, playerid) {
 			
 			// get direct path to qml file
 			var currenturl = window.location.href;
-			currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") -1);
+			currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") +1);
 			if (globalurlstring.substring(0, 4) != "http") {
 				if (globalurlstring.substring(0, 1) == "/") globalurlstring = globalurlstring.substring(1);
 				if (globalurlstring.substring(0, 2) == "./") globalurlstring = globalurlstring.substring(2);
 				while (globalurlstring.substring(0, 3) == "../") {
 					globalurlstring = globalurlstring.substring(3);
 					currenturl = currenturl.substring(0,currenturl.length -1);
-					currenturl = currenturl.substring(0,currenturl.lastIndexOf("/"))+"/";
+					currenturl = currenturl.substring(0,currenturl.lastIndexOf("/") +1);
 				}
 				if (globalurlstring.indexOf("/") > -1) {
-					globalurlstring = globalurlstring.substring(0,globalurlstring.lastIndexOf("/"));
+					globalurlstring = globalurlstring.substring(0,globalurlstring.lastIndexOf("/") +1);
 				} else {
 					globalurlstring = "";
 				}
