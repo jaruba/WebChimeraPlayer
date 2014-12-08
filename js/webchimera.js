@@ -85,8 +85,8 @@ function getFromUrl(urlstring, playerid) {
 						var tempcurrenturl = currenturl;
 						while (newimage.substring(0, 3) == "../") {
 							newimage = newimage.substring(3);
-							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.length -1);
-							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/") -1);
+							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/"));
+							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/") +1);
 						}
 						
 						newimage = tempcurrenturl + newimage;
