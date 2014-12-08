@@ -1,5 +1,6 @@
 // if page on local machine, add warning
 var websiteishttps = 0;
+var globalvideoelem = "";
 var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML File cannot be loaded from your Local Machine! Upload the Demo on a Web server to see it working correctly.</div></div>';
 switch(window.location.protocol) {
    case 'http:': break;
@@ -17,7 +18,7 @@ switch(window.location.protocol) {
 // function to Load QML File in Javascript and send the QML String to WebChimera
 function getFromUrl(urlstring, playerid) {
 	playerid = (typeof playerid === "undefined") ? "webchimera" : playerid; // if no playerid set, default to "webchimera"
-	var videoelem = document.getElementById(playerid);
+	globalvideoelem = document.getElementById(playerid);
 
 	var xmlhttp;
 	if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -28,7 +29,7 @@ function getFromUrl(urlstring, playerid) {
 	}
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			videoelem.qml = xmlhttp.responseText;
+			globalvideoelem.qml = xmlhttp.responseText;
 		}
 	}
 	xmlhttp.open("GET", urlstring, true);
