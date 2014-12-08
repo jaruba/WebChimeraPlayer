@@ -73,7 +73,18 @@ function getFromUrl(urlstring, playerid) {
 						thisimage = thisimage.substring(1);
 						
 						var newimage = thisimage.substring(1);
-						newimage = newimage.substring(0,newimage.indexOf('"') -1);
+						newimage = newimage.substring(0,newimage.indexOf('"'));
+
+						if (newimage.substring(0, 1) == "/") newimage = newimage.substring(1);
+						if (newimage.substring(0, 2) == "./") newimage = newimage.substring(2);
+						var tempcurrenturl = currenturl;
+						while (newimage.substring(0, 3) == "../") {
+							newimage = newimage.substring(3);
+							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.length -1);
+							tempcurrenturl = tempcurrenturl.substring(0,tempcurrenturl.lastIndexOf("/") -1);
+						}
+						
+						newimage = tempcurrenturl + newimage;
 
 						console.log(newimage);
 						
