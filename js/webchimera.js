@@ -64,9 +64,28 @@ function getFromUrl(urlstring, playerid) {
 			var remainingdata = responsedata;
 			var newdata = "";
 			
-			while (remainingdata.indexOf('source:') > -1) {
-				newdata += remainingdata.substring(0,remainingdata.indexOf('source:'));
-				remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
+			while (remainingdata.indexOf('source:') > -1 || remainingdata.indexOf('.source') > -1) {
+				var sourcevar1 = remainingdata.indexOf('source:');
+				var sourcevar2 = remainingdata.indexOf('.source');
+				
+				if (sourcevar1 > -1 && sourcevar2 > -1) {
+					if (remainingdata.indexOf('source:') < remainingdata.indexOf('.source')) {
+						newdata += remainingdata.substring(0,remainingdata.indexOf('source:'));
+						remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
+					} else {
+						newdata += remainingdata.substring(0,remainingdata.indexOf('.source'));
+						remainingdata = remainingdata.substring(remainingdata.indexOf('.source'));
+					}
+				} else {
+					if (sourcevar1 > -1) {
+						newdata += remainingdata.substring(0,remainingdata.indexOf('source:'));
+						remainingdata = remainingdata.substring(remainingdata.indexOf('source:'));
+					}
+					if (sourcevar2 > -1) {
+						newdata += remainingdata.substring(0,remainingdata.indexOf('.source'));
+						remainingdata = remainingdata.substring(remainingdata.indexOf('.source'));
+					}
+				}
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
 				if (thisline.indexOf("vlcPlayer") == -1) {
 					while (thisline.indexOf('"') > -1) {
@@ -76,7 +95,7 @@ function getFromUrl(urlstring, playerid) {
 						newdata += thisline.substring(0,thisline.indexOf('"'));
 						
 						var newimage = thisimage.substring(1);
-						thisline = newimage.substring(newimage.indexOf('"'));
+						thisline = newimage.substring(newimage.indexOf('"') +1);
 						
 						console.log("thisline: "+thisline);
 
@@ -99,8 +118,8 @@ function getFromUrl(urlstring, playerid) {
 
 						console.log(newimage);
 						
-						remainingdata = " ";
 					}
+					newdata += thisline;
 				console.log(thisline);
 				} else {
 					newdata += thisline;
@@ -108,10 +127,12 @@ function getFromUrl(urlstring, playerid) {
 				}
 			}
 
+			newdata += remainingdata;
+
 			// end parse qml source and change all image sources to their direct http path (if required)
 
 			
-			videoelem.qml = xmlhttp.responseText;
+			videoelem.qml = newdata;
 		}
 	}
 	xmlhttp.open("GET", urlstring, true);
