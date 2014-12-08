@@ -66,6 +66,7 @@ function getFromUrl(urlstring, playerid) {
 			while (remainingdata.indexOf('source:') > -1 || remainingdata.indexOf('.source') > -1) {
 				var sourcevar1 = remainingdata.indexOf('source:');
 				var sourcevar2 = remainingdata.indexOf('.source');
+				var checkvlc = 0;
 				
 				if (sourcevar1 > -1 && sourcevar2 > -1) {
 					if (sourcevar1 < sourcevar2) {
@@ -86,7 +87,10 @@ function getFromUrl(urlstring, playerid) {
 					}
 				}
 				var thisline = remainingdata.substring(0,remainingdata.indexOf('\n'));
-				if (thisline.indexOf("vlcPlayer") == -1) {
+				if (thisline.indexOf("vlcPlayer") == -1) checkvlc = 1;
+				if (thisline.indexOf("vlcPlayer.") == -1) checkvlc = 0;
+					
+				if (checkvlc == 0) {
 					while (thisline.indexOf('"') > -1) {
 						
 						var thisimage = thisline.substring(thisline.indexOf('"'));
