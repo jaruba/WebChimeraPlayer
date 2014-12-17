@@ -16,21 +16,40 @@
 
 <div id="page_title"><h1>JS Mouse Events Demo</h1></div>
 
-<div id="player_wrapper">
+<div id="player_wrapper" style="background: #292929">
 <div style="height: 10%"><span id="textbox" style="display:block; padding:5px; background: #ecebeb; color: #333">Mouse Events</span></div>
 <div id="wrapper" style="height: 90%"></div>
 </div>
 
 <script src="js/webchimera.js" type="text/javascript"></script>
 <script>
-// create player
-wjs("#wrapper").addPlayer("qml/default.qml", "webchimera",{ autoplay: 1 });
+// create player with Mouse Events enabled
+wjs("#wrapper").addPlayer("qml/default.qml", "webchimera", { mouseevents: 1, autoplay: 1 });
 
-// declare array of video urls
-myplaylist = ["http://archive.org/download/CrayonDragonAnAnimatedShortFilmByTonikoPantoja/Crayon%20Dragon%20-%20An%20animated%20short%20film%20by%20Toniko%20Pantoja.mp4","http://archive.org/download/CartoonClassics/Krazy_Kat_-_Keeping_Up_With_Krazy.mp4","http://archive.org/download/CartoonClassics/Mel-O-Toons__Peter_and_the_Wolf.mp4"];
+// add video url
+wjs("#webchimera").addPlaylist("http://archive.org/download/CrayonDragonAnAnimatedShortFilmByTonikoPantoja/Crayon%20Dragon%20-%20An%20animated%20short%20film%20by%20Toniko%20Pantoja.mp4");
 
-// add the playlist to the player
-wjs("#webchimera").addPlaylist(myplaylist);
+// event callback function for QML Message
+function handleQmlEvents(event) {
+
+    // change text from "textbox" with event values
+    var span = document.getElementById("textbox");
+    	
+	var QMLobj = JSON.parse(event);
+	if (QMLobj["type"] == "mouseMove") {
+	    span.innerHTML = "Mouse Moved - X: " + QMLobj["x"] + " ; Y: " + QMLobj["y"];
+	} else if (QMLobj["type"] == "mouseDoubleClick") {
+	    span.innerHTML = "Mouse Double Clicked (on Video Surface)";
+	} else if (QMLobj["type"] == "mouseRightClick") {
+	    span.innerHTML = "Mouse Right Clicked (on Video Surface)";
+	} else if (QMLobj["type"] == "mouseLeftClick") {
+	    span.innerHTML = "Mouse Left Clicked (on Video Surface)";
+	}
+    return;
+}
+
+// register QML Message callback
+wjs("#webchimera").catchEvent("QmlMessage", handleQmlEvents);
 </script>
 
 </body>
