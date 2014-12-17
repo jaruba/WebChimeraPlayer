@@ -29,18 +29,48 @@ Rectangle {
 	property var laststate: 0;
 	property var ismoving: 1;
 	property var buffering: 0;
+    property var clicks: 1;
+    property var releases: 0;
 	property var playlistmenu: false;
 	property var pli: 0;
 	property var plstring: "";
 	property var currentSubtitle: -2;
 	property var subtitles: { }
+    property var multiscreen: 0;
+	property var mouseevents: 0;
+	
+	
+	// Variable for Volume Fix (if volume is 0% at start set to 40%)
+	property var firstvolume: 1;
+	
+	// Variables Needed for Multiscreen
+	
+	property var firsttime: 1;
+	
+	// End Variables Needed for Multiscreen
+	
+	// Start Multiscreen - Functions
+	function gobig() {
+		clicks++; // Fix for Missing Clicks
+		if (vlcPlayer.state != 1) if (bottomtab.containsMouse === false) togFullscreen();
+		if (firsttime == 2)	vlcPlayer.toggleMute();
+		if (firsttime == 1) {
+			vlcPlayer.volume = 90;
+			firsttime = 2;
+		}
+	}
+	function isbig() {
+		clicks++; // Fix for Missing Clicks
+		if (bottomtab.containsMouse === false) togPause();
+	}
+	// End Multiscreen - Functions
 		
 	// Start Function for Toggle Pause
 	function togPause() {
 		if (vlcPlayer.state == 6) {
-		
+				
 			// if playback ended, restart playback
-			vlcPlayer.playlist.currentItem = lastitem
+			vlcPlayer.playlist.currentItem = lastitem;
 			vlcPlayer.playlist.play();
 			
 		} else {
@@ -60,21 +90,43 @@ Rectangle {
 		}
 	}
 	// End Function for Toggle Pause
+
+	// Start Function for Toggle Fullscreen
+	function togFullscreen() {
+		ismoving = 1;
+		toggleFullscreen();
+	}
+	// End Function for Toggle Fullscreen
+
 	
 	// Start Functions to Get Time and Video Length (format "00:00:00")
 	function getTime(t) {
 		var tempHour = ("0" + Math.floor(t / 3600000)).slice(-2);
 		var tempMinute = ("0" + (Math.floor(t / 60000) %60)).slice(-2);
 		var tempSecond = ("0" + (Math.floor((t - Math.floor(vlcPlayer.time / 3600000) * 3600000 - Math.floor(vlcPlayer.time / 60000) * 60000) / 1000) %60)).slice(-2);
-		if (tempSecond == -1) tempSecond =  "00";
+		
+		// Quick Fix for Seconds Bug
+		var prevMinute = ("0" + (Math.floor(vlcPlayer.time / 60000) %60)).slice(-2);
+		if (tempMinute < prevMinute) {
+			if (tempSecond < 0) {
+				tempSecond = ("5" + (10 - (tempSecond * (-1)))).slice(-2);
+			} else {
+				tempSecond = ("0" + (60 - tempSecond)).slice(-2);
+			}
+		} else {
+			if (tempSecond < 0) tempSecond =  "00";
+		}
+		if (tempSecond == 60) tempSecond =  "00";
+		// End Quick Fix for Seconds Bug
+		
 		return tempHour + ":" + tempMinute + ":" + tempSecond;
 	}
-
+	
 	function getLength() {
 		var tempHour = (("0" + Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000)).slice(-2));
 		var tempMinute = (("0" + (Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) %60)).slice(-2));
 		var tempSecond = ("0" + (Math.floor((vlcPlayer.time * (1 / vlcPlayer.position) - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 3600000) * 3600000 - Math.floor(vlcPlayer.time * (1 / vlcPlayer.position) / 60000) * 60000) / 1000) %60)).slice(-2);
-		if (tempSecond == -1) tempSecond =  "00";
+		if (tempSecond < 0) tempSecond =  "00";
 		return tempHour + ":" + tempMinute + ":" + tempSecond;
 	}
 	// End Function to Get Time and Video Length (format "00:00:00")
@@ -124,6 +176,7 @@ Rectangle {
 							for (j=3; j<st.length; j++) {
 								t = t + '\n'+st[j];
 							}
+
 						  }
 						  subtitles[is] = {i:is, o: os, t: t};
 						}
@@ -174,18 +227,84 @@ Rectangle {
 		}
 	}
 	// End Functions Required for External Subtitles
+
+	// Load M3U Playlist
+	function playM3U(m3uElement) {
+		var xhr = new XMLHttpRequest;
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState == 4) {
+
+				var m3udata = xhr.responseText;
+				
+				var extension = m3uElement.split('.').pop();
+				if (extension.toLowerCase() == "m3u") {
+					m3udata = m3udata.replace(/\r\n|\r|\n/g, '\n');
+					
+					m3udata = strip(m3udata);
+					var m3udatay = m3udata.split('\n');
 	
+					var s = 0;
+					var st = "";
+					var itemnr = 0;
+                    vlcPlayer.playlist.removeItem(0);
+					for (s = 1; s < m3udatay.length; s++) {
+						if (m3udatay[s].charAt(0) == "#") {
+							// get video source title
+							st = m3udatay[s].split(',');
+							st.shift();
+							st = st.join(',');
+							// end get video source title
+						} else {
+							vlcPlayer.playlist.add(m3udatay[s]);
+							if (st !== 'undefined' && typeof st === 'string') vlcPlayer.playlist.items[itemnr].title = "[custom]"+st;
+							st = "";
+							itemnr++;
+						}
+					}
+                    if (s > 3) {
+                    	// Adding Playlist Menu Items
+                		for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
+                			if (vlcPlayer.playlist.items[pli].title.replace("[custom]","").length > 85) {
+                				plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","").substr(0,85) +'...';
+                			} else {
+                				plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
+                			}
+                			Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; height: 40; MouseArea { id: pitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: vlcPlayer.playlist.playItem('+ pli +'); } Rectangle { width: playlistblock.width < 694 ? (playlistblock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#656565" : "#e5e5e5" : pitem'+ pli +'.containsMouse ? "#656565" : "#444444"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : vlcPlayer.playlist.currentItem == '+ pli +' ? pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : pitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', playmbig, 'plmenustr' +pli);
+                		}			
+                		// End Adding Playlist Menu Items
+                        playlistButton.visible = 1;
+                    }
+                    vlcPlayer.play();
+				}
+			}
+		}
+        xhr.open("get", m3uElement);
+        xhr.setRequestHeader("Content-Encoding", "UTF-8");
+        xhr.send();
+	}
+	// End Load M3U Playlist
+
 	// Check On Page JS Message	
 	function onMessage( message ) {
 		// Get Subtitle URL and Play Subtitle
 		if (message.indexOf("[start-subtitle]") > -1) playSubtitles(message.replace("[start-subtitle]",""));
+		// Load M3U Playlist URL
+		if (message.indexOf("[load-m3u]") > -1) playM3U(message.replace("[load-m3u]",""));
+		// Set Multiscreen
+		if (message.indexOf("[set-multiscreen]") > -1) multiscreen = 1;
+		// Set Mouse Events
+		if (message.indexOf("[set-mouse-events]") > -1) mouseevents = 1;
+		// Autoplay
+		if (message.indexOf("[autoplay]") > -1) vlcPlayer.playlist.playItem(0);
 	}
 	// End Check On Page JS Message
 	
 	Component.onCompleted: {
         vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
         plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
-
+		
+		fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
+		
 		// Adding Playlist Menu Items
 		for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
 			if (vlcPlayer.playlist.items[pli].title.replace("[custom]","").length > 85) {
@@ -200,7 +319,7 @@ Rectangle {
     }
 
     function onBuffering( percents ) {
-        buftext.text = "Buffering " + percents +"%"; // Announce Buffering Percent
+		buftext.text = "Buffering " + percents +"%"; // Announce Buffering Percent
 		buffering = percents; // Set Global Variable "buffering"
     }
 	
@@ -322,12 +441,100 @@ Rectangle {
 		cursorShape: vlcPlayer.time == 0 ? Qt.ArrowCursor : fullscreen ? ismoving > 5 ? Qt.BlankCursor : Qt.ArrowCursor : Qt.ArrowCursor
         hoverEnabled: true
         anchors.fill: parent
-		onClicked: { if (vlcPlayer.state != 1) if (bottomtab.containsMouse === false) togPause(); } // Toggle Pause if clicked on Surface
-		onPositionChanged: { ismoving = 1; } // Reset Idle Mouse Movement if mouse position has changed
+		acceptedButtons: Qt.LeftButton | Qt.RightButton
+		onClicked: {
+            if (bottomtab.containsMouse === false) {
+			var sendjsdata = {};
+
+				if (mouse.button == Qt.RightButton) {
+					// JavaScript Mouse Events Demo
+					if (mouseevents == 1) {
+						sendjsdata["type"] = "mouseRightClick";
+						fireQmlMessage(JSON.stringify(sendjsdata));
+					}
+				} else {
+					if (multiscreen == 0) {
+						if (vlcPlayer.state != 1) isbig(); // Toggle Pause if clicked on Surface
+						if (mouseevents == 1) {
+							// JavaScript Mouse Events Demo
+							sendjsdata["type"] = "mouseLeftClick";
+							fireQmlMessage(JSON.stringify(sendjsdata));
+						}
+					} else {
+						if (fullscreen) {
+							isbig();
+						} else {
+							gobig();
+						}
+					}
+				}
+            }
+		}
+		onReleased: {
+			// Start Fix for Missing Clicks
+			releases++;
+			if (!fullscreen) if (clicks < releases) {
+				clicks = releases;
+				if (multiscreen == 1) {
+					if (fullscreen) {
+						isbig();
+					} else {
+						gobig();
+					}
+				} else {
+					isbig();
+				}
+			}
+			// End Fix for Missing Clicks
+		}
+		onDoubleClicked: {
+			if (mouseevents == 1) {
+				// JavaScript Mouse Events Demo
+				if (vlcPlayer.state != 1) if (bottomtab.containsMouse === false) if (mouse.button == Qt.LeftButton) {
+					var sendjsdata = {};
+					sendjsdata["type"] = "mouseDoubleClick";
+					
+					fireQmlMessage(JSON.stringify(sendjsdata));
+				}
+			}
+			var doit = 0;
+			if (multiscreen == 0) doit = 1;
+			if (fullscreen) if (multiscreen == 1) doit = 1;
+			if (doit == 1) {
+
+				// Start Fix for Missing Clicks
+				clicks++;
+				releases = clicks;
+				// End Fix for Missing Clicks
+				
+				if (vlcPlayer.state == 4) togPause();
+				gobigpause = false;
+				gobigplay = false;
+				pausetog.visible = false;
+				playtog.visible = false;
+				togFullscreen();
+			}
+		}
+		onPositionChanged: {
+            ismoving = 1;  // Reset Idle Mouse Movement if mouse position has changed
+			
+			if (mouseevents == 1) {
+				// JavaScript Mouse Events Demo
+				var sendjsdata = {};
+				sendjsdata["type"] = "mouseMove";
+				sendjsdata["x"] = mouse.x;
+				sendjsdata["y"] = mouse.y;
+				
+				fireQmlMessage(JSON.stringify(sendjsdata));
+			}
+    	}
 		focus: true
 		Keys.onPressed: {
 			if (event.key == Qt.Key_Space) { togPause(); }
-			if (event.key == Qt.Key_Escape) { fullscreen = false; }
+			if (event.key == Qt.Key_Escape) {
+				fullscreen = false;
+				if (multiscreen == 1) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
+			}
 		}		
 		
 		// Draw Progression Bar
@@ -335,8 +542,8 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? 30 : parent.containsMouse ? 30 : 0
-			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+            anchors.bottomMargin: multiscreen == 1 ? fullscreen ? 30 : -8 : fullscreen ? 30 : parent.containsMouse ? 30 : 0 // Multiscreen - Edit
+			opacity: multiscreen == 1 ? fullscreen ? vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1 : 0 : vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1 // Multiscreen - Edit
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
 			Behavior on opacity { PropertyAnimation { duration: 250} }
 			
@@ -357,7 +564,7 @@ Rectangle {
 				}
 				onReleased: {
 					if (vlcPlayer.state == 6) {
-						vlcPlayer.playlist.currentItem = lastitem
+						vlcPlayer.playlist.currentItem = lastitem;
 						vlcPlayer.playlist.play();
 					}
 					vlcPlayer.position = (mouse.x -4) / theview.width;
@@ -387,8 +594,12 @@ Rectangle {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.leftMargin: dragging ? dragpos.mouseX -4 :(parent.width - anchors.rightMargin) * vlcPlayer.position
-            anchors.bottomMargin: fullscreen ? 30 : parent.containsMouse ? 30 : 0
-			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+			
+			// Start Multiscreen - Edit
+            anchors.bottomMargin: multiscreen == 1 ? fullscreen ? 30 : -8 : fullscreen ? 30 : parent.containsMouse ? 30 : 0
+			opacity: multiscreen == 1 ? fullscreen ? vlcPlayer.time == 0 ? 0 : ismoving > 5 ? 0 : 1 : 0 : vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+			// End Multiscreen - Edit
+
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
 			Behavior on opacity { PropertyAnimation { duration: 250} }
             Rectangle {
@@ -412,8 +623,12 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
-			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+
+			// Start Multiscreen - Edit
+            anchors.bottomMargin: multiscreen == 1 ? fullscreen ? spacing : -height : fullscreen ? spacing : parent.containsMouse ? spacing : -height
+			opacity: multiscreen == 1 ? fullscreen ? vlcPlayer.time == 0 ? 0 : ismoving > 5 ? 0 : 1 : 0 : vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
+			// End Multiscreen - Edit
+
             Behavior on anchors.bottomMargin { PropertyAnimation { duration: 250} }
 			Behavior on opacity { PropertyAnimation { duration: 250} }
             Rectangle {
@@ -463,6 +678,7 @@ Rectangle {
         RowLayout {
             id: toolbar
 			spacing: 0
+			visible: multiscreen == 1 ? fullscreen ? 1 : 0 : 1 // Multiscreen - Edit
             anchors.bottom: parent.bottom
             anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
 			opacity: vlcPlayer.time == 0 ? 0 : fullscreen ? ismoving > 5 ? 0 : 1 : 1
@@ -577,6 +793,14 @@ Rectangle {
 					Timer {
 						interval: 1; running: vlcPlayer.state == 3 && vlcPlayer.time > 0 ? true : false; repeat: false
 						onTriggered: {
+						
+							// if volume is 0%, set to 40%
+							if (multiscreen == 0 && firstvolume == 1) {
+								if (vlcPlayer.volume == 0) vlcPlayer.volume = 80;
+								firstvolume = 2;
+							}
+							// end if volume is 0%, set to 40%
+
 							movecura.anchors.leftMargin = (parent.width - anchors.leftMargin - anchors.rightMargin) * (vlcPlayer.volume /60);
 							moveposa.width = (parent.width - anchors.leftMargin - anchors.rightMargin) * (vlcPlayer.volume /60);
 							lastitem = vlcPlayer.playlist.currentItem;
@@ -592,7 +816,7 @@ Rectangle {
 							} else {
 								if (laststate >= 0 && laststate <= 4) {
 									if (lastpos < 0.95) {
-										vlcPlayer.playlist.currentItem = lastitem
+										vlcPlayer.playlist.currentItem = lastitem;
 										vlcPlayer.playlist.play();
 										vlcPlayer.position = lastpos;
 									}
@@ -719,6 +943,7 @@ Rectangle {
 		// Start Right Side Buttons in Toolbar
         RowLayout {
 			spacing: 0
+			visible: multiscreen ? fullscreen ? 1 : 0 : 1 // Multiscreen - Edit
 			anchors.right: parent.right
             anchors.bottom: parent.bottom
             anchors.bottomMargin: fullscreen ? spacing : parent.containsMouse ? spacing : -height
@@ -734,6 +959,7 @@ Rectangle {
 				color: '#404040'
 			}
             Rectangle {
+                id: playlistButton
                 height: 30
 				width: 59
 				visible: vlcPlayer.playlist.itemCount > 1 ? true : false
@@ -782,7 +1008,10 @@ Rectangle {
                 MouseArea {
 					cursorShape: toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape
                     anchors.fill: parent
-                    onClicked: toggleFullscreen()
+                    onClicked: {
+						togFullscreen();
+						if (multiscreen == 1) vlcPlayer.toggleMute(); // Multiscreen - Edit
+					}
                 }
             }
 			// End Fullscreen Button
@@ -797,7 +1026,16 @@ Rectangle {
 			}
 		}
 		// End Set Mute Button State
-						
+
+		// Start Multiscreen - Set Mute on Start
+		Timer {
+			interval: 1; running: multiscreen == 1 ? vlcPlayer.time > 0 && vlcPlayer.time < 2000 ? true : false : false; repeat: false
+			onTriggered: {
+				if (firsttime == 1) if (vlcPlayer.volume > 0) vlcPlayer.volume = 0;
+			}
+		}
+		// End Multiscreen - Set Mute on Start
+
 		// When Playback Starts
 		Timer {
 			interval: 1; running: vlcPlayer.time > 0 && vlcPlayer.time < 1200 ? true : false; repeat: false
@@ -928,7 +1166,7 @@ Rectangle {
 			Rectangle {
 				anchors.centerIn: parent
 				width: 1
-				height: 100
+				height: multiscreen == 1 ? fullscreen ? 100 : 76 : 100 // Required for Multiscreen
 				color: "transparent"
 				Rectangle {
 					Image {
@@ -945,7 +1183,7 @@ Rectangle {
 						source: "../images/player_logo_small_h.png"
 					}
 					Text {
-						visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+						visible: multiscreen == 1 ? fullscreen ? vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false : false : vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false // Required for Multiscreen
 						anchors.top: parent.top
 						anchors.topMargin: 88
 						anchors.horizontalCenter: parent.horizontalCenter
@@ -1058,6 +1296,7 @@ Rectangle {
 					Rectangle {
 						width: parent.width -44
 						anchors.left: parent.left
+
 						anchors.leftMargin: 0
 						height: 26
 						color: "#2f2f2f"
