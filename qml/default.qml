@@ -723,7 +723,7 @@ Rectangle {
                 width: 59
                 color: 'transparent'
                 Image {
-                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play_h.png" : "../images/replay2_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play.png" : "../images/replay2.png"
+                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play_h.png" : "../images/replay_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play.png" : "../images/replay.png"
                     anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaPlay
