@@ -437,9 +437,9 @@ Rectangle {
 		color: 'transparent'
 		opacity: 0
 		anchors.right: parent.right
-		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +23 : volumebox.paintedWidth +24
+		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +38 : volumebox.paintedWidth +24
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 27 : 26
+		anchors.topMargin: fullscreen ? 42 : 26
         Behavior on opacity { PropertyAnimation { id: volShadowTextEffect; duration: 500} }
 		Text {
 			horizontalAlignment: Text.AlignHRight
@@ -459,9 +459,9 @@ Rectangle {
 		visible: true
 		color: 'transparent'
 		anchors.right: parent.right
-		anchors.rightMargin: volumebox.paintedWidth +25
+		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +40 : volumebox.paintedWidth +25
 		anchors.top: parent.top
-		anchors.topMargin: 25
+		anchors.topMargin: fullscreen ? 40 : 25
 		opacity: 0
 		Behavior on opacity { PropertyAnimation { id: volTextEffect; duration: 0 } }
 		Text {
@@ -490,18 +490,47 @@ Rectangle {
 
 	
 	// Announcement Text (Opening, Buffering, etc.)
-	Text {
-		id: buftext
+	Rectangle {
 		visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+		color: 'transparent'
+		width: fullscreen ? parent.width -4 : parent.width -2
 		anchors.top: parent.top
-		anchors.topMargin: 10
+		anchors.topMargin: fullscreen ? 37 : 11
 		anchors.horizontalCenter: parent.horizontalCenter
-		text: ""
-		font.pointSize: 15
-		color: "#fff"
-		style: Text.Outline
-		styleColor: "#000000"
-		font.weight: Font.DemiBold
+		Text {
+			visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+			anchors.horizontalCenter: parent.horizontalCenter
+			text: buftext.text
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : (mousesurface.height * 0.037) < 17 ? 17 : mousesurface.height * 0.037
+			color: "#000000"
+			style: Text.Outline
+			styleColor: "#000000"
+			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Semibold"
+			smooth: true
+			opacity: 0.5
+		}
+	}
+	Rectangle {
+		visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+		color: 'transparent'
+		width: parent.width
+		anchors.top: parent.top
+		anchors.topMargin: fullscreen ? 35 : 10
+		anchors.horizontalCenter: parent.horizontalCenter
+		Text {
+			id: buftext
+			visible: vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false
+			anchors.horizontalCenter: parent.horizontalCenter
+			text: ""
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : (mousesurface.height * 0.037) < 17 ? 17 : mousesurface.height * 0.037
+			color: "#ffffff"
+			style: Text.Outline
+			styleColor: "#000000"
+			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Semibold"
+			smooth: true
+		}
 	}
 	// End Announce Text
 	
@@ -815,7 +844,7 @@ Rectangle {
                 width: 59
                 color: 'transparent'
                 Image {
-                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play_h.png" : "../images/replay_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play.png" : "../images/replay.png"
+                    source: mouseAreaPlay.containsMouse ? vlcPlayer.playing ? "../images/pause_h.png" : vlcPlayer.state != 6 ? "../images/play_h.png" : "../images/replay2_h.png" : vlcPlayer.playing ?"../images/pause.png" :  vlcPlayer.state != 6 ? "../images/play.png" : "../images/replay2.png"
                     anchors.centerIn: parent
 					MouseArea {
 					   id: mouseAreaPlay
