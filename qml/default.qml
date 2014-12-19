@@ -38,6 +38,7 @@ Rectangle {
 	property var subtitles: { }
     property var multiscreen: 0;
 	property var mouseevents: 0;
+	property var timervolume: 0;
 	
 	
 	// Variable for Volume Fix (if volume is 0% at start set to 40%)
@@ -48,6 +49,15 @@ Rectangle {
 	property var firsttime: 1;
 	
 	// End Variables Needed for Multiscreen
+	
+	
+	FontLoader {
+        source: "../fonts/SourceSansPro-Regular.otf"
+    }
+	FontLoader {
+        source: "../fonts/SourceSansPro-Semibold.otf"
+    }
+	
 	
 	// Start Multiscreen - Functions
 	function gobig() {
@@ -388,11 +398,12 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 			horizontalAlignment: Text.AlignHCenter
 			text: subtitlebox.text
-			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.038
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.04
 			color: "#000000"
 			style: Text.Outline
 			styleColor: "#000000"
 			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Semibold"
 			smooth: true
 			opacity: 0.5
 		}
@@ -409,15 +420,74 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 			horizontalAlignment: Text.AlignHCenter
 			text: ""
-			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.038
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.04
 			color: "#ffffff"
 			style: Text.Outline
 			styleColor: "#000000"
 			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Semibold"
 			smooth: true
 		}
 	}
 	// End Start Subtitle Text Box
+
+	// Start Volume Text Box
+	Rectangle {
+		id: volumeBoxShadow
+		color: 'transparent'
+		opacity: 0
+		anchors.right: parent.right
+		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +23 : volumebox.paintedWidth +24
+		anchors.top: parent.top
+		anchors.topMargin: fullscreen ? 27 : 26
+        Behavior on opacity { PropertyAnimation { id: volShadowTextEffect; duration: 500} }
+		Text {
+			horizontalAlignment: Text.AlignHRight
+			text: volumebox.text
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.045
+			color: "#000000"
+			style: Text.Outline
+			styleColor: "#000000"
+			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Regular"
+			smooth: true
+			opacity: 0.5
+            Behavior on visible { PropertyAnimation { duration: 0} }
+		}
+	}
+	Rectangle {
+		visible: true
+		color: 'transparent'
+		anchors.right: parent.right
+		anchors.rightMargin: volumebox.paintedWidth +25
+		anchors.top: parent.top
+		anchors.topMargin: 25
+		opacity: 0
+		Behavior on opacity { PropertyAnimation { id: volTextEffect; duration: 0 } }
+		Text {
+			id: volumebox
+			horizontalAlignment: Text.AlignHRight
+			text: ""
+			font.pointSize: fullscreen ? mousesurface.height * 0.035 : mousesurface.height * 0.045
+			color: "#ffffff"
+			style: Text.Outline
+			styleColor: "#000000"
+			font.weight: Font.DemiBold
+			font.family: "Source Sans Pro Regular"
+			smooth: true
+		}
+	}
+	Timer {
+		interval: 3000; running: timervolume == 1 ? true : false; repeat: false
+		onTriggered: {
+			volShadowTextEffect.duration = 150;
+			volumeBoxShadow.opacity = 0;
+			volumebox.parent.opacity = 0;
+			timervolume = 0;
+		}
+	}
+	// End Volume Text Box
+
 	
 	// Announcement Text (Opening, Buffering, etc.)
 	Text {
@@ -528,6 +598,28 @@ Rectangle {
 				fireQmlMessage(JSON.stringify(sendjsdata));
 			}
     	}
+		onWheel: {
+			// Change Volume on Mouse Scroll
+			if (wheel.angleDelta.y > 0 && vlcPlayer.volume < 200) {
+				var curvolume = vlcPlayer.volume +8;
+				if (curvolume > 200) curvolume = 200;
+			}
+			if (wheel.angleDelta.y < 0 && vlcPlayer.volume > 0) {
+				var curvolume = vlcPlayer.volume -8;
+				if (curvolume < 0) curvolume = 0;
+			}
+			vlcPlayer.volume = curvolume;
+			volumebox.text = "Volume " + (Math.round((250 * (curvolume /200))/10) *5) + "%";
+			volShadowTextEffect.duration = 1;
+			volTextEffect.duration = 0;
+			volumebox.parent.opacity = 1;
+			volumeBoxShadow.opacity = 1;
+			volTextEffect.duration = 300;
+			movecura.anchors.leftMargin = 116 * (vlcPlayer.volume /200);
+			moveposa.width = 120 * (vlcPlayer.volume /200);
+			timervolume = 1;
+			// End Change Volume on Mouse Scroll
+		}
 		focus: true
 		Keys.onPressed: {
 			if (event.key == Qt.Key_Space) { togPause(); }
