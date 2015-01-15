@@ -4,6 +4,7 @@ import QmlVlc 0.1
 Rectangle {
 	property alias fontColor: toptext.color
 	property alias backgroundColor: topBarBackground.color
+	property alias isVisible: topBarBackground.visible
 	
 	anchors.fill: parent
 	color: "transparent"
@@ -17,7 +18,7 @@ Rectangle {
 		Behavior on opacity { PropertyAnimation { duration: 250} }
 	}
 	Rectangle {
-		visible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? fullscreen ? true : false : false
+		visible: topBarBackground.visible
 		width: parent.width
 		height: 34
 		color: 'transparent'
