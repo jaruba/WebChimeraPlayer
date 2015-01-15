@@ -1,0 +1,45 @@
+import QtQuick 2.1
+import QmlVlc 0.1
+import "./" as Loader
+
+Rectangle {
+	property alias volColor: backgroundColors.volColor
+	property alias volume: moveposa.width
+	property alias linesColor: heatScale.linesColor
+	property alias linesOpacity: heatScale.linesOpacity
+	property alias backgroundColor: root.color
+
+	width: 120
+	height: parent.height
+	color: "transparent"
+
+	Loader.VolumeHeatScale { id: heatScale }
+
+	Rectangle {
+		id: root
+		width: 120
+		height: 8
+		anchors.verticalCenter: parent.verticalCenter
+		Rectangle {
+			id: moveposa
+			clip: true
+			width: (vlcPlayer.volume /200) * (parent.width - movecura.width)
+			anchors.top: parent.top
+			anchors.left: parent.left
+			anchors.bottom: parent.bottom
+			
+			Loader.VolumeHeatColors { id: backgroundColors } // Draw Volume Heat Background Colors
+			
+		}
+		Rectangle {
+			id: movecura
+			color: '#ffffff'
+			width: 4
+			height: 14
+			anchors.verticalCenter: parent.verticalCenter
+			anchors.left: parent.left
+			anchors.leftMargin: moveposa.width
+		}
+	
+	}
+}

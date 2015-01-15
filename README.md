@@ -14,18 +14,21 @@ WebChimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 
 Current Features
 ==============
+- <a href="http://wiki.webchimera.org/index.php?title=WebChimera_Player_JavaScript_API" target="_blank">JavaScript API</a>
+- <a href="http://wiki.webchimera.org/index.php?title=WebChimera_Player_QML_API" target="_blank">QML API</a>
+- <a href="http://wiki.webchimera.org/index.php?title=WebChimera_Player_Skinning" target="_blank">Skinning</a>
+- <a href="http://wiki.webchimera.org/index.php?title=WebChimera_Player_Hotkeys" target="_blank">Hotkeys and Mouse Actions</a>
 - External HTTP Subtitle Support (Formats: SRT, SUB)
-- Playlist Support
+- Playlist Support (JavaScript or M3U File)
 - Custom Video Titles Support
-- Key Events (Space -> Pause, Esc -> Exit Fullscreen)
-- UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> <i>loaded from a HTTP source</i>
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
-- Supported Streams: HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
+- Supported Streams: RTMP, RTSP, HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Audio Formats: MP3, AAC, MPEG3, FLAC, WAV and <a href="http://www.videolan.org/vlc/features.php?cat=audio" target="_blank">more</a>
 
 
 Upcoming Features
 ==============
 - Advanced Playlist Menu (drag and drop, skip)
+- Context Menu
 - Internal Video Subtitle and Audio Track Support
 - Windowed Mode (Pop Out)
