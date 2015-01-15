@@ -17,7 +17,7 @@ Current Features
 - External HTTP Subtitle Support (Formats: SRT, SUB)
 - Playlist Support (JavaScript or M3U File)
 - Custom Video Titles Support
-- Hotkeys (Space -> Pause, Esc -> Exit Fullscreen)
+- <a href="http://wiki.webchimera.org/index.php?title=WebChimera_Player_Hotkeys" target="_blank">Hotkeys and Mouse Actions</a>
 - UI / Skin Fully Editable in <a href="http://qt-project.org/" target="_blank">QT QML</a> <i>loaded from a HTTP source</i>
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Streams: RTMP, RTSP, HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
@@ -26,7 +26,6 @@ Current Features
 
 Upcoming Features
 ==============
-- Mouse Wheel Volume Control
 - Advanced Playlist Menu (drag and drop, skip)
 - Internal Video Subtitle and Audio Track Support
 - Windowed Mode (Pop Out)
