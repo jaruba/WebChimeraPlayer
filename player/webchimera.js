@@ -164,17 +164,27 @@ var wjs = function(context) {
 						onloadsettings += key;
 					}
 				} else if (key == "buffer") {
+					if (onloadsettings.length > 0) onloadsettings += "|";
+					onloadsettings += "[caching]" + qmlsettings[key];
 					didbuffer = 1;
 					playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
 				} else {
-					if (key == "network-caching") var didbuffer = 1;
+					if (key == "network-caching") {
+						var didbuffer = 1;
+						if (onloadsettings.length > 0) onloadsettings += "|";
+						onloadsettings += "[caching]" + qmlsettings[key];
+					}
 					playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';
 				}
 			}
 		}
 		
 		// default buffer is 10 seconds (10000 milliseconds)
-		if (didbuffer == 0) playerbody += '<param name="network-caching" value="10000" />';
+		if (didbuffer == 0) {
+			if (onloadsettings.length > 0) onloadsettings += "|";
+			onloadsettings += "[caching]10000";
+			playerbody += '<param name="network-caching" value="10000" />';
+		}
 
 			
 		playerbody += '</object>';
@@ -200,12 +210,13 @@ var wjs = function(context) {
 		 if (typeof playlist === 'string') {
 			 this.videoelem.playlist.add(playlist); // if Playlist has one Element
 		 } else {
-			 if (Array.isArray(playlist) === true && Array.isArray(playlist[0]) === true) {
+			 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 				 // if Playlist has Custom Titles
 				 var item = 0;
 				 for (item = 0; item < playlist.length; item++) {
-					  this.videoelem.playlist.add(playlist[item][0]);
-					  if (typeof playlist[item][1] !== 'undefined' && typeof playlist[item][1] === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item][1];
+					  this.videoelem.playlist.add(playlist[item].url);
+					  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item].title;
+					  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') this.videoelem.playlist.items[item].setting = "[art]"+playlist[item].art;
 				 }
 				 // end if Playlist has Custom Titles
 			 } else if (Array.isArray(playlist) === true) {
