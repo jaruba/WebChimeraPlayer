@@ -26,6 +26,7 @@ Current Features
 
 Upcoming Features
 ==============
-- Advanced Playlist Menu (drag and drop, skip)
 - Internal Video Subtitle and Audio Track Support
+- Context Menu
+- Advanced Playlist Menu (drag and drop, skip)
 - Windowed Mode (Pop Out)
