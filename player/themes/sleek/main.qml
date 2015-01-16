@@ -199,9 +199,9 @@ Rectangle {
 					Loader.VolumeHeatGraphics {
 						id: volheat
 						backgroundColor: UI.colors.volumeHeat.background
-						volLow: UI.colors.volumeHeat.color.low
-						volMed: UI.colors.volumeHeat.color.medium
-						volHigh: UI.colors.volumeHeat.color.high
+						volLow: UI.colors.volumeHeat.gradient.low
+						volMed: UI.colors.volumeHeat.gradient.medium
+						volHigh: UI.colors.volumeHeat.gradient.high
 					}
 	
 				}
