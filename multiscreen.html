@@ -29,10 +29,10 @@
 <script src="player/webchimera.js" type="text/javascript"></script>
 <script>
 // create players with Multiscreen enabled
-wjs("#wrapper1").addPlayer("sleek", "webchimera1",{ multiscreen: 1, autoplay: 1 });
-wjs("#wrapper2").addPlayer("sleek", "webchimera2",{ multiscreen: 1, autoplay: 1 });
-wjs("#wrapper3").addPlayer("sleek", "webchimera3",{ multiscreen: 1, autoplay: 1 });
-wjs("#wrapper4").addPlayer("sleek", "webchimera4",{ multiscreen: 1, autoplay: 1 });
+wjs("#wrapper1").addPlayer({ id: "webchimera1", theme: "sleek", multiscreen: 1, autoplay: 1 });
+wjs("#wrapper2").addPlayer({ id: "webchimera2", theme: "sleek", multiscreen: 1, autoplay: 1 });
+wjs("#wrapper3").addPlayer({ id: "webchimera3", theme: "sleek", multiscreen: 1, autoplay: 1 });
+wjs("#wrapper4").addPlayer({ id: "webchimera4", theme: "sleek", multiscreen: 1, autoplay: 1 });
 
 // add the playlist items to the players
 wjs("#webchimera1").addPlaylist("http://www.youtube.com/watch?v=YpKEgEjry8s");
