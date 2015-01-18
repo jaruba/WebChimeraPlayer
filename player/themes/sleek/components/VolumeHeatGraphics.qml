@@ -3,17 +3,15 @@ import QmlVlc 0.1
 import "./" as Loader
 
 Rectangle {
-	property alias volColor: backgroundColors.volColor
+	property alias volLow: backgroundColors.volLow
+	property alias volMed: backgroundColors.volMed
+	property alias volHigh: backgroundColors.volHigh
 	property alias volume: moveposa.width
-	property alias linesColor: heatScale.linesColor
-	property alias linesOpacity: heatScale.linesOpacity
 	property alias backgroundColor: root.color
 
 	width: 120
 	height: parent.height
 	color: "transparent"
-
-	Loader.VolumeHeatScale { id: heatScale }
 
 	Rectangle {
 		id: root

@@ -15,7 +15,10 @@ var settings = {
 		borderVisible: true,
 		buttonWidth: 59,
 		buttonMuteWidth: 40
-	}
+	},
+	cache: false, // If cache progress bar is visible or not
+	titleBar: "fullscreen", // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
+	buttonGlow: false // if button icons should glow when hovered
 }
 
 var icon = {
@@ -70,7 +73,7 @@ var colors = {
 	fontShadow: "#000000",
 
 	// Top Title Bar Colors
-	topBar: {
+	titleBar: {
 		background: "#000000",
 		font: "#cbcbcb"
 	},
@@ -80,6 +83,7 @@ var colors = {
 		background: "#262626",
 		viewed: "#08758F",
 		position: "#e5e5e5",
+		cache: "#3e3e3e"
 	},
 
 	// Appears when hovering over progress bar
@@ -122,8 +126,11 @@ var colors = {
 	
 	volumeHeat: {
 		background: "#696969",
-		color: "#E77607",
-		smallLines: "#4f4f4f"
+		gradient: {
+			low: "#E7A307",
+			medium: "#E77607",
+			high: "#E72107"
+		}
 	}
 	
 }
