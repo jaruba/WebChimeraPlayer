@@ -117,15 +117,11 @@ wjs.init.prototype.qmlLoaded = function(action) {
 	
 };
 
-wjs.init.prototype.addPlayer = function(qmlsource,newid,qmlsettings) {
-	if (IsJsonString(newid) === true) {
-		qmlsettings = newid;
-	}
-	if (IsJsonString(qmlsource) === true) {
-		qmlsettings = qmlsource;
-		qmlsource = "http://www.webchimera.org/player/themes/retro/main.qml";
-	}
-	qmlsource = (typeof qmlsource === "undefined") ? "http://www.webchimera.org/player/themes/retro/main.qml" : qmlsource; // if no qmlsource set, default to latest Webchimera Player Default QML
+wjs.init.prototype.addPlayer = function(qmlsettings) {
+
+	newid = (typeof qmlsettings["id"] === "undefined") ? "webchimera" : qmlsettings["id"]; // if no id set, default to "webchimera"
+
+	qmlsource = (typeof qmlsettings["theme"] === "undefined") ? "http://www.webchimera.org/player/themes/retro/main.qml" : qmlsettings["theme"]; // if no qmlsource set, default to latest Webchimera Player Default QML
 	
 	var playerbody = "";
 	if (typeof newid === 'string') {
@@ -175,7 +171,7 @@ wjs.init.prototype.addPlayer = function(qmlsource,newid,qmlsettings) {
 					if (onloadsettings.length > 0) onloadsettings += "|";
 					onloadsettings += "[caching]" + qmlsettings[key];
 				}
-				playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';
+				if (key != "id" && key != "theme") playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';
 			}
 		}
 	}
@@ -209,15 +205,40 @@ wjs.init.prototype.addPlayer = function(qmlsource,newid,qmlsettings) {
 // function to add playlist items
 wjs.init.prototype.addPlaylist = function(playlist) {
 	 if (typeof playlist === 'string') {
-		 this.videoelem.playlist.add(playlist); // if Playlist has one Element
+		 var re = /(?:\.([^.]+))?$/;
+		 var ext = re.exec(playlist)[1];
+		 if (typeof ext !== 'undefined' && ext == "m3u") {
+			 wjs(this.context).qmlLoaded(function() {
+				// load m3u playlist
+				wjs(this.context).loadM3U(playlist);
+			});
+		 } else {
+			 this.videoelem.playlist.add(playlist); // if Playlist has one Element
+		 }
 	 } else {
 		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 			 // if Playlist has Custom Titles
 			 var item = 0;
+			 var playerSettings = "";
 			 for (item = 0; item < playlist.length; item++) {
 				  this.videoelem.playlist.add(playlist[item].url);
 				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item].title;
-				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') this.videoelem.playlist.items[item].setting = "[art]"+playlist[item].art;
+				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') {
+					  if (playerSettings) {
+						  playerSettings += "[|][art]"+playlist[item].art;
+					  } else var playerSettings = "[art]"+playlist[item].art;
+				  }
+				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') {
+					  if (playerSettings) {
+						  playerSettings += "[|][aspectRatio]"+playlist[item].aspectRatio;
+					  } else var playerSettings = "[aspectRatio]"+playlist[item].aspectRatio;
+				  }
+				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') {
+					  if (playerSettings) {
+						  playerSettings += "[|][crop]"+playlist[item].crop;
+					  } else var playerSettings = "[crop]"+playlist[item].crop;
+				  }
+				 if (playerSettings) this.videoelem.playlist.items[item].setting = playerSettings;
 			 }
 			 // end if Playlist has Custom Titles
 		 } else if (Array.isArray(playlist) === true) {

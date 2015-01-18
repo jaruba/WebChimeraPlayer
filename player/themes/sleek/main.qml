@@ -39,10 +39,12 @@ Rectangle {
 	property var timervolume: 0;
 	property var glyphsLoaded: false;
 	property var firsttime: 1;
+	property var firstvolume: 1;
 	property var caching: 0;
 	property var lastTime: 0;
 	property var buttonNormalColor: UI.colors.toolbar.button;
 	property var buttonHoverColor: UI.colors.toolbar.buttonHover;
+
 	
     id: theview;
     color: UI.colors.videoBackground; // Set Video Background Color
@@ -177,7 +179,7 @@ Rectangle {
 				// Start Mute Button
 				Loader.ToolbarButton {
 					id: mutebut
-					icon: glyphsLoaded ? vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high : ""
+					icon: glyphsLoaded ? vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high : ""
 					iconSize: fullscreen ? 17 : 16
 					width: UI.settings.toolbar.buttonMuteWidth
 					glow: UI.settings.buttonGlow
@@ -189,7 +191,7 @@ Rectangle {
 				
 				// Start Volume Control
 				Loader.VolumeHeat {
-					
+									
 					Loader.VolumeHeatMouse {
 						id: volumeMouse
 						onPressAndHold: Wjs.hoverVolume(mouseX,mouseY)
@@ -208,8 +210,9 @@ Rectangle {
 				// End Volume Control
 
 				Loader.ToolbarBorder {
+					id: volumeBorder
 					anchors.left: mutebut.right
-					anchors.leftMargin: mutebut.hover.containsMouse ? 130 : volumeMouse.dragger.containsMouse ? 130 : 0
+					anchors.leftMargin: firstvolume == 1 ? 0 : mutebut.hover.containsMouse ? 130 : volumeMouse.dragger.containsMouse ? 130 : 0
 					color: UI.colors.toolbar.border
 					visible: UI.settings.toolbar.borderVisible
 					Behavior on anchors.leftMargin { PropertyAnimation { duration: 250 } }

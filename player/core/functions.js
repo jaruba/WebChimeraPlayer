@@ -36,9 +36,6 @@ var pauseAfterBuffer = 0;
 var prevtime = 0;
 // End Required for jump to seconds (while paused)
 
-var firstvolume = 1; // Variable for Volume Fix (if volume is 0% at start set to 40%)
-
-
 // END REGISTER GLOBAL VARIABLES
 
 // add startsWith function to the String prototype
@@ -88,9 +85,9 @@ function onTime( seconds ) {
 	// If volume is 0%, set to 40%
 	if (multiscreen == 0 && firstvolume == 1) {
 		if (vlcPlayer.volume == 0) vlcPlayer.volume = 80;
-		firstvolume = 2;
 		volheat.volume = (vlcPlayer.volume /200) * (volheat.width -4);
 	}
+	if (firstvolume == 1) firstvolume = 2;
 	// End If volume is 0%, set to 40%
 
 	// if mute parameter set to true, mute on start	
@@ -155,14 +152,67 @@ function onTime( seconds ) {
 function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.indexOf("[art]") == 0) {
-			videoSource.visible = false;
-			artwork.source = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.replace("[art]","");
-			artwork.visible = true;
+		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.indexOf("[|]") > -1) {
+			var resources = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.split("[|]");
 		} else {
-			artwork.source = "";
-			artwork.visible = false;
-			videoSource.visible = true;			
+			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.length > 0) {
+				var resources = [];
+				resources[0] = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting;
+			}
+		}
+		if (typeof resources !== 'undefined' && Array.isArray(resources) === true) {
+			var item = 0;
+			for (item = 0; typeof resources[item] !== 'undefined'; item++) {
+				if (resources[item].indexOf("[art]") == 0) {
+					videoSource.visible = false;
+					artwork.source = resources[item].replace("[art]","");
+					artwork.visible = true;
+				} else {
+					artwork.source = "";
+					artwork.visible = false;
+					videoSource.visible = true;			
+				}
+				if (resources[item].indexOf("[aspectRatio]") == 0) {
+					var kl = 0;
+					for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == resources[item].replace("[aspectRatio]","")) {
+						vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl];
+						if (vlcPlayer.video.aspectRatio == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+						} else {
+							changeAspect(vlcPlayer.video.aspectRatio,"ratio");
+						}
+						break;
+					}
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+				}
+				if (resources[item].indexOf("[crop]") == 0) {
+					var kl = 0;
+					for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == resources[item].replace("[crop]","")) {
+						vlcPlayer.video.crop = UI.core.crops[kl];
+						if (vlcPlayer.video.crop == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+							vlcPlayer.video.crop = UI.core.crops[0];
+						} else {
+							changeAspect(vlcPlayer.video.crop,"crop");
+						}
+						break;
+					}
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					vlcPlayer.video.crop = UI.core.crops[0];
+				}
+				
+			}
 		}
 	}
 		
@@ -257,7 +307,7 @@ function fadeLogo() {
 
 // Refresh Mute Icon
 function refreshMuteIcon() {
-	mutebut.icon = vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high
+	mutebut.icon = vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high
 }
 // End Refresh Mute Icon
 
