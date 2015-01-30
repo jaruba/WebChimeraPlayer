@@ -84,6 +84,24 @@ Rectangle {
 	}
 	// End Top Right Text Box
 		
+	// Draw Play Icon (appears in center of screen when Toggle Pause)
+	Loader.BigPlayIcon {
+		id: playtog
+		color: UI.colors.bigIconBackground
+		icon: UI.icon.bigPlay
+		iconColor: UI.colors.bigIcon
+	}
+	// End Draw Play Icon (appears in center of screen when Toggle Pause)
+	
+	// Draw Pause Icon (appears in center of screen when Toggle Pause)
+	Loader.BigPauseIcon {
+		id: pausetog
+		color: UI.colors.bigIconBackground
+		icon: UI.icon.bigPause
+		iconColor: UI.colors.bigIcon
+	}
+	// End Draw Pause Icon (appears in center of screen when Toggle Pause)
+		
 	// Start Loading Screen
 	Loader.SplashScreen {
 		id: splashScreen
@@ -298,24 +316,6 @@ Rectangle {
 			onReleased: Wjs.progressReleased(mouseX,mouseY);
 		}
 		// End Draw Progress Bar
-
-		// Draw Play Icon (appears in center of screen when Toggle Pause)
-		Loader.BigPlayIcon {
-			id: playtog
-			color: UI.colors.bigIconBackground
-			icon: UI.icon.bigPlay
-			iconColor: UI.colors.bigIcon
-		}
-		// End Draw Play Icon (appears in center of screen when Toggle Pause)
-		
-		// Draw Pause Icon (appears in center of screen when Toggle Pause)
-		Loader.BigPauseIcon {
-			id: pausetog
-			color: UI.colors.bigIconBackground
-			icon: UI.icon.bigPause
-			iconColor: UI.colors.bigIcon
-		}
-		// End Draw Pause Icon (appears in center of screen when Toggle Pause)
 		
 		// Start Playlist Menu
 		Loader.Menu {
