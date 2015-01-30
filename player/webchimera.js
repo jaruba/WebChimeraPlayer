@@ -262,6 +262,12 @@ wjs.init.prototype.startSubtitle = function(suburl) {
 };
 // end function to Start External Subtitle
 
+// function to Clear External Subtitle
+wjs.init.prototype.clearSubtitle = function() {
+	this.videoelem.emitJsMessage("[clear-subtitle]");
+};
+// end function to Clear External Subtitle
+
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.videoelem.emitJsMessage("[load-m3u]"+M3Uurl);
