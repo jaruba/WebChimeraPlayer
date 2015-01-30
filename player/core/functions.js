@@ -265,7 +265,7 @@ function onQmlLoaded() {
 // Start Check On Page JS Message	
 function onMessage( message ) {
 	if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
-	if (message.startsWith("[clear-subtitle]")) clearSubtitles();
+	if (message.startsWith("[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
 	if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 	if (message.startsWith("[[caching]")) caching = message.replace("[[caching]","").replace("]",""); // Get network-caching parameter
 
@@ -775,6 +775,7 @@ function playSubtitles(subtitleElement) {
 	xhr.send();
 }
 // End External Subtitles (SRT, SUB)
+
 
 // Start Clear External Subtitles (SRT, SUB)
 function clearSubtitles() {
