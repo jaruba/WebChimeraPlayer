@@ -273,6 +273,17 @@ Rectangle {
 			// End Right Side Buttons in Toolbar
 		}
 		// End Draw Toolbar
+		
+		// Draw Time Bubble (visible when hovering over Progress Bar)
+		Loader.TimeBubble {
+			id: timeBubble
+			fontColor: UI.colors.timeBubble.font
+			backgroundIcon: glyphsLoaded ? timeBubble.srctime.length > 5 ? UI.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : UI.icon.timeBubble.small : ""
+			backgroundColor: UI.colors.timeBubble.background
+			backgroundBorder: UI.colors.timeBubble.border
+			backgroundOpacity: 0.9
+		}
+		// End Time Bubble
 
 		// Draw Progression Bar
         Loader.ProgressBar {
@@ -306,17 +317,6 @@ Rectangle {
 		}
 		// End Draw Pause Icon (appears in center of screen when Toggle Pause)
 		
-		// Draw Time Bubble (visible when hovering over Progress Bar)
-		Loader.TimeBubble {
-			id: timeBubble
-			fontColor: UI.colors.timeBubble.font
-			backgroundIcon: glyphsLoaded ? timeBubble.srctime.length > 5 ? UI.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : UI.icon.timeBubble.small : ""
-			backgroundColor: UI.colors.timeBubble.background
-			backgroundBorder: UI.colors.timeBubble.border
-			backgroundOpacity: 0.9
-		}
-		// End Time Bubble
-
 		// Start Playlist Menu
 		Loader.Menu {
 			id: playlistblock
