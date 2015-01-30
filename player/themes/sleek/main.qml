@@ -179,7 +179,7 @@ Rectangle {
 				// Start Mute Button
 				Loader.ToolbarButton {
 					id: mutebut
-					icon: glyphsLoaded ? vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high : ""
+					icon: glyphsLoaded ? vlcPlayer.state == 0 ? UI.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high : ""
 					iconSize: fullscreen ? 17 : 16
 					width: UI.settings.toolbar.buttonMuteWidth
 					glow: UI.settings.buttonGlow
