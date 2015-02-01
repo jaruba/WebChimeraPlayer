@@ -264,7 +264,7 @@ Rectangle {
 					iconSize: fullscreen ? 18 : 17
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 					glow: UI.settings.buttonGlow
-					onButtonClicked: Wjs.togglePlaylist();
+					onButtonClicked: Wjs.toggleSubtitles();
 				}
 				// End Open Subtitle Menu Button
 				
