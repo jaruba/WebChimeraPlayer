@@ -10,8 +10,8 @@ Rectangle {
 	color: "transparent"
 	property var subPlaying: 0;
 
-	property var currentSubtitle = -2;
-	property var subtitles = [];
+	property var currentSubtitle: -2;
+	property var subtitles: [];
 
 	// Start External Subtitles (SRT, SUB)
 	function strip(s) {
