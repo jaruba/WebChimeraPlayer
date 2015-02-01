@@ -25,8 +25,6 @@ var lastItem = 0;
 var tempSecond = 0;
 var pli = 0;
 var plstring = "";
-var currentSubtitle = -2;
-var subtitles = [];
 var oldRatioWidth = 0;
 var oldRatioHeight = 0;
 
@@ -135,27 +133,6 @@ function onTime( seconds ) {
 		if (progressBar.dragpos.containsMouse === false && toolbarBackground.bottomtab.containsMouse === false && playButton.hover.containsMouse === false && prevBut.hover.containsMouse === false && nextBut.hover.containsMouse === false && fullscreenButton.hover.containsMouse === false && playlistButton.hover.containsMouse === false && mutebut.hover.containsMouse === false && volumeMouse.dragger.containsMouse === false && volumeMouse.hover.containsMouse === false) ismoving++;
 	}
 	// End if mouse is moving above the Video Surface increase "ismoving"
-	
-	// Start show subtitle text (external subtitles)
-	if (currentSubtitle > -2) {
-		var subtitle = -1;
-		
-		var os = 0;
-		for (os in subtitles) {
-			if (os > (seconds / 1000)) break;
-			subtitle = os;
-		}
-		
-		if (subtitle > 0) {
-			if(subtitle != currentSubtitle) {
-				subtitlebox.changeText = subtitles[subtitle].t;
-				currentSubtitle = subtitle;
-			} else if (subtitles[subtitle].o < (seconds / 1000)) {
-				subtitlebox.changeText = "";
-			}
-		}
-	}
-	// End show subtitle text (external subtitles)
 }
 // End on Current Time Changed
 
@@ -585,19 +562,6 @@ function getLength() {
 	}
 }
 // End Get Video Length in seconds
-
-
-// Start Convert Time to Seconds (needed for External Subtitles)
-function toSeconds(t) {
-	var s = 0.0
-	if (t) {
-		var p = t.split(':');
-		var i = 0;
-		for (i=0;i<p.length;i++) s = s * 60 + parseFloat(p[i].replace(',', '.'))
-	}
-	return s;
-}
-// End Convert Time to Seconds (needed for External Subtitles)
 
 // END TIME RELATED FUNCTIONS
 

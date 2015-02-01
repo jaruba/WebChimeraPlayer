@@ -10,10 +10,26 @@ Rectangle {
 	color: "transparent"
 	property var subPlaying: 0;
 
+	property var currentSubtitle = -2;
+	property var subtitles = [];
+
 	// Start External Subtitles (SRT, SUB)
 	function strip(s) {
 		return s.replace(/^\s+|\s+$/g,"");
 	}
+	
+	// Start Convert Time to Seconds (needed for External Subtitles)
+	function toSeconds(t) {
+		var s = 0.0
+		if (t) {
+			var p = t.split(':');
+			var i = 0;
+			for (i=0;i<p.length;i++) s = s * 60 + parseFloat(p[i].replace(',', '.'))
+		}
+		return s;
+	}
+	// End Convert Time to Seconds (needed for External Subtitles)
+	
 	function playSubtitles(subtitleElement) {
 		if (typeof(currentSubtitle) != "undefined") currentSubtitle = -1;
 		if (typeof(subtitles) != "undefined") if (subtitles.length) subtitles = {};
@@ -106,5 +122,34 @@ Rectangle {
 		totalSubs = pli;
 		// End Adding Subtitle Menu Items
 	}
+	
+	 Connections {
+		 target: vlcPlayer
+		 onMediaPlayerTimeChanged: {
+			// Start show subtitle text (external subtitles)
+			if (currentSubtitle > -2) {
+				var subtitle = -1;
+				
+				var os = 0;
+				for (os in subtitles) {
+					if (os > (seconds / 1000)) break;
+					subtitle = os;
+				}
+				
+				if (subtitle > 0) {
+					if(subtitle != currentSubtitle) {
+						subtitlebox.changeText = subtitles[subtitle].t;
+						currentSubtitle = subtitle;
+					} else if (subtitles[subtitle].o < (seconds / 1000)) {
+						subtitlebox.changeText = "";
+					}
+				}
+			}
+			// End show subtitle text (external subtitles)
+		 }
+		 onMediaPlayerPaused: mess.text = "paused"
+		 onjsMessage: mess.text = "message recieved"
+	}
+	
 	// This is where the Subtitle Items will be loaded
 }
