@@ -48,6 +48,13 @@ Rectangle {
 	}
 	// End Convert Time to Seconds (needed for External Subtitles)
 	
+	function utf8_encode(s) {
+		for(var c, i = -1, l = (s = s.split("")).length, o = String.fromCharCode; ++i < l;
+            s[i] = (c = s[i].charCodeAt(o)) >= 127 ? o(0xc0 | (c >>> 6)) + o(0x80 | (c & 0x3f)) : s[i]
+        );
+        return s.join("");
+	}
+	
 	function playSubtitles(subtitleElement) {
 		if (typeof(currentSubtitle) != "undefined") currentSubtitle = -1;
 		if (typeof(subtitles) != "undefined") if (subtitles.length) subtitles = {};
@@ -62,7 +69,7 @@ Rectangle {
 				if (extension.toLowerCase() == "srt") {
 				
 					// convert string to utf-8
-					srt = unescape(encodeURIComponent(srt));
+					srt = utf8_encode(srt);
 					
 					srt = srt.replace(/\r\n|\r|\n/g, '\n');
 					
