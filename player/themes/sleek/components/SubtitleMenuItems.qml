@@ -20,7 +20,7 @@ Rectangle {
 		if (subtitlemenu === false) {
 			if (playlistmenu === true) {
 				playlistblock.visible = false;
-				playilistmenu = false;
+				playlistmenu = false;
 			}
 			subMenublock.visible = true;
 			subtitlemenu = true;
