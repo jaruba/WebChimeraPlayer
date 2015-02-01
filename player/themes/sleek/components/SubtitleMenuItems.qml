@@ -147,8 +147,6 @@ Rectangle {
 			}
 			// End show subtitle text (external subtitles)
 		 }
-		 onMediaPlayerPaused: mess.text = "paused"
-		 onjsMessage: mess.text = "message recieved"
 	}
 	
 	// This is where the Subtitle Items will be loaded
