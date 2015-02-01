@@ -141,6 +141,7 @@ function onTime( seconds ) {
 function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
+		subMenu.clearSubtitles();
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) var itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 		if (typeof itemSettings !== 'undefined') {
 			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
