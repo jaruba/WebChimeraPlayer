@@ -148,6 +148,8 @@ function onState() {
 		subMenu.clearAll();
 		subButton.visible = false;
 		// end remove previous subtitles
+		
+		var itemSettings = {};
 
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 		if (typeof itemSettings !== 'undefined') {
