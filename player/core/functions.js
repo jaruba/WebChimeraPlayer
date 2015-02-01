@@ -190,8 +190,6 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			var arr = itemSettings.switches.filter(function(x){return x.hasOwnProperty('dpid'); });
-			alert(arr.length); // number of objects
 			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
