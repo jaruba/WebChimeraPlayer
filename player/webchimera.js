@@ -210,10 +210,7 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 				  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
 				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
 				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
-				  if (playerSettings) {
-					  console.log(item + "||" + JSON.stringify(playerSettings));
-					  this.videoelem.playlist.items[item].setting = JSON.stringify(playerSettings);
-				  }
+				  if (playerSettings) this.videoelem.playlist.items[item].setting = JSON.stringify(playerSettings);
 			 }
 			 // end if Playlist has Custom Titles
 		 } else if (Array.isArray(playlist) === true) {

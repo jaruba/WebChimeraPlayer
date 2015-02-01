@@ -197,7 +197,7 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
+			if (typeof itemSettings.subtitles !== 'undefined') {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
 			}
