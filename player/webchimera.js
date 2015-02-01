@@ -202,9 +202,8 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 			 // if Playlist has Custom Titles
 			 var item = 0;
-			 delete playerSettings;
-			 var playerSettings = {};
 			 for (item = 0; item < playlist.length; item++) {
+				  var playerSettings = {};
 				  this.videoelem.playlist.add(playlist[item].url);
 				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item].title;
 				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
