@@ -202,7 +202,6 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 			 // if Playlist has Custom Titles
 			 var item = 0;
-			 delete playerSettings;
 			 var playerSettings = {};
 			 for (item = 0; item < playlist.length; item++) {
 				  this.videoelem.playlist.add(playlist[item].url);
