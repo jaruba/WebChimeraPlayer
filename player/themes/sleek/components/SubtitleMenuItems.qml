@@ -126,6 +126,8 @@ Rectangle {
 		
 		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subItems[pli].destroy();
 	
+		clearSubtitles();
+		subPlaying = 0;
 		subItems = [];
 		totalSubs = 0;
 	
