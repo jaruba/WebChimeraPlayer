@@ -60,6 +60,10 @@ Rectangle {
 				
 				var extension = subtitleElement.split('.').pop();
 				if (extension.toLowerCase() == "srt") {
+				
+					// convert string to utf-8
+					srt = unescape(encodeURIComponent(srt));
+					
 					srt = srt.replace(/\r\n|\r|\n/g, '\n');
 					
 					srt = strip(srt);
