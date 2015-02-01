@@ -122,7 +122,7 @@ Rectangle {
 		// Remove Old Subtitle Menu Items
 		var pli = 0;
 		
-		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) Qt.createQmlObject('import QtQuick 2.1; Rectangle { Component.onCompleted: { dstitem'+ pli +'.destroy(); } }');
+		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) Qt.createQmlObject('import QtQuick 2.1; Rectangle { Component.onCompleted: { dstitem'+ pli +'.destroy(); } }', root);
 	
 		totalSubs = 0;
 	
