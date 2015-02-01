@@ -12,7 +12,8 @@ Rectangle {
 
 	property var currentSubtitle: -2;
 	property var subtitles: [];
-	property var subItems: [];
+	
+	var subItems = [];
 
 	// Start Toggle Subtitle Menu (open/close)
 	function toggleSubtitles() {
