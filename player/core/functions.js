@@ -212,6 +212,13 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
+			if (typeof itemSettings.subtitles !== 'undefined') {
+				subMenu.addSubtitleItems(itemSettings.subtitles);
+				subButton.visible = true;
+			} else {
+				subButton.visible = false;
+				totalSubs = 0;
+			}
 		}
 	}
 		
@@ -391,6 +398,10 @@ function isbig() {
 // Start Toggle Playlist Menu (open/close)
 function togglePlaylist() {
 	if (playlistmenu === false) {
+		if (subtitlemenu === true) {
+			subMenublock.visible = false;
+			subtitlemenu = false;
+		}
 		playlistblock.visible = true;
 		playlistmenu = true;
 	} else {
@@ -399,6 +410,22 @@ function togglePlaylist() {
 	}
 }
 // End Toggle Playlist Menu (open/close)
+
+// Start Toggle Subtitle Menu (open/close)
+function toggleSubtitles() {
+	if (subtitlemenu === false) {
+		if (playlistmenu === true) {
+			playlistblock.visible = false;
+			playilistmenu = false;
+		}
+		subMenublock.visible = true;
+		subtitlemenu = true;
+	} else {
+		subMenublock.visible = false;
+		subtitlemenu = false;
+	}
+}
+// End Toggle Subtitle Menu (open/close)
 
 // Start Toggle Mute
 function toggleMute() {
@@ -487,12 +514,12 @@ function moveSubMenu(mousehint) {
 		subMenu.anchors.topMargin = 0;
 	} else if (mousehint >= (240 - (subMenuScroll.dragger.height / 2))) {
 		subMenuScroll.dragger.anchors.topMargin = 240 - subMenuScroll.dragger.height;
-		if ((vlcPlayer.subMenu.itemCount *40) > 240) {
-			subMenu.anchors.topMargin = 240 - (vlcPlayer.playlist.itemCount *40);
+		if ((totalSubs *40) > 240) {
+			subMenu.anchors.topMargin = 240 - (totalSubs *40);
 		}
 	} else {
 		subMenuScroll.dragger.anchors.topMargin = mousehint - (subMenuScroll.dragger.height / 2);
-		subMenu.anchors.topMargin = -(((vlcPlayer.playlist.itemCount * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (subMenuScroll.dragger.height /2))));
+		subMenu.anchors.topMargin = -(((totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (totalSubs.dragger.height /2))));
 	}
 }
 // End Scroll Subtitle Menu
