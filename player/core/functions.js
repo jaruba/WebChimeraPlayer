@@ -46,6 +46,18 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 // End add startsWith function to the String prototype
 
+// add isJson function to the String prototype
+if (typeof String.prototype.isJson != 'function') {
+	 String.prototype.isJson = function (){
+		try {
+			JSON.parse(this);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	}
+}
+// end add isJson function to the String prototype
 
 // START CORE FUNCTIONS
 
@@ -152,66 +164,60 @@ function onTime( seconds ) {
 function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.indexOf("[|]") > -1) {
-			var resources = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.split("[|]");
-		} else {
-			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.length > 0) {
-				var resources = [];
-				resources[0] = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting;
+		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) var itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+		if (typeof itemSettings !== 'undefined') {
+			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
+				videoSource.visible = false;
+				artwork.source = itemSettings.art;
+				artwork.visible = true;
+			} else {
+				artwork.source = "";
+				artwork.visible = false;
+				videoSource.visible = true;			
 			}
-		}
-		if (typeof resources !== 'undefined' && Array.isArray(resources) === true) {
-			var item = 0;
-			for (item = 0; typeof resources[item] !== 'undefined'; item++) {
-				if (resources[item].indexOf("[art]") == 0) {
-					videoSource.visible = false;
-					artwork.source = resources[item].replace("[art]","");
-					artwork.visible = true;
-				} else {
-					artwork.source = "";
-					artwork.visible = false;
-					videoSource.visible = true;			
+			if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
+				var kl = 0;
+				for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == itemSettings.aspectRatio) {
+					UI.core.curAspect = UI.core.aspectRatios[kl];
+					if (UI.core.curAspect == "Default") {
+						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+						videoSource.width = videoSource.parent.width;
+						videoSource.height = videoSource.parent.height;
+					} else changeAspect(UI.core.curAspect,"ratio");
+					break;
 				}
-				if (resources[item].indexOf("[aspectRatio]") == 0) {
-					var kl = 0;
-					for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == resources[item].replace("[aspectRatio]","")) {
-						vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl];
-						if (vlcPlayer.video.aspectRatio == "Default") {
-							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-							videoSource.width = videoSource.parent.width;
-							videoSource.height = videoSource.parent.height;
-						} else {
-							changeAspect(vlcPlayer.video.aspectRatio,"ratio");
-						}
-						break;
+			} else if (vlcPlayer.playlist.currentItem > 0) {
+				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+				videoSource.width = videoSource.parent.width;
+				videoSource.height = videoSource.parent.height;
+				UI.core.curAspect = UI.core.aspectRatios[0];
+			}
+			if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
+				var kl = 0;
+				for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == itemSettings.crop) {
+					UI.core.curCrop = UI.core.crops[kl];
+					if (UI.core.curCrop == "Default") {
+						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+						videoSource.width = videoSource.parent.width;
+						videoSource.height = videoSource.parent.height;
+						UI.core.curCrop = UI.core.crops[0];
+					} else {
+						changeAspect(UI.core.curCrop,"crop");
 					}
-				} else if (vlcPlayer.playlist.currentItem > 0) {
-					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-					videoSource.width = videoSource.parent.width;
-					videoSource.height = videoSource.parent.height;
-					vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+					break;
 				}
-				if (resources[item].indexOf("[crop]") == 0) {
-					var kl = 0;
-					for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == resources[item].replace("[crop]","")) {
-						vlcPlayer.video.crop = UI.core.crops[kl];
-						if (vlcPlayer.video.crop == "Default") {
-							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-							videoSource.width = videoSource.parent.width;
-							videoSource.height = videoSource.parent.height;
-							vlcPlayer.video.crop = UI.core.crops[0];
-						} else {
-							changeAspect(vlcPlayer.video.crop,"crop");
-						}
-						break;
-					}
-				} else if (vlcPlayer.playlist.currentItem > 0) {
-					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-					videoSource.width = videoSource.parent.width;
-					videoSource.height = videoSource.parent.height;
-					vlcPlayer.video.crop = UI.core.crops[0];
-				}
-				
+			} else if (vlcPlayer.playlist.currentItem > 0) {
+				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+				videoSource.width = videoSource.parent.width;
+				videoSource.height = videoSource.parent.height;
+				UI.core.curCrop = UI.core.crops[0];
+			}
+			if (typeof itemSettings.subtitles !== 'undefined') {
+				subMenu.addSubtitleItems(itemSettings.subtitles);
+				subButton.visible = true;
+			} else {
+				subButton.visible = false;
+				totalSubs = 0;
 			}
 		}
 	}
@@ -246,8 +252,8 @@ function onState() {
 
 // Start on QML Loaded
 function onQmlLoaded() {
-	vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
-	vlcPlayer.video.crop = UI.core.crops[0];
+	UI.core.curAspect = UI.core.aspectRatios[0];
+	UI.core.curCrop = UI.core.crops[0];
 
 	vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
 	vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
@@ -255,7 +261,7 @@ function onQmlLoaded() {
 	
 	plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 	
-	fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded	
+	fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
 
 	playlist.addPlaylistItems();
 }
@@ -264,20 +270,30 @@ function onQmlLoaded() {
 
 // Start Check On Page JS Message	
 function onMessage( message ) {
-	if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
-	if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
-	if (message.startsWith("[[caching]")) caching = message.replace("[[caching]","").replace("]",""); // Get network-caching parameter
-
-	// Set Multiscreen
-	if (message == "[multiscreen]") {
-		multiscreen = 1;
-		automute = 1;
+	if (message.isJson()) {
+		var jsonMessage = JSON.parse(message);
+		if (jsonMessage["settings"] === true) {
+			if (jsonMessage["caching"]) caching = jsonMessage["caching"]; // Get network-caching parameter
+			if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) UI.core.mouseevents = 1; // Set Mouse Events
+			if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) vlcPlayer.playlist.playItem(0); // Autoplay
+			if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) autoloop = 1; // Autoloop
+			if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) automute = 1; // Automute
+			if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) allowfullscreen = 0; // Allowfullscreen
+			if (jsonMessage["multiscreen"] == 1 || jsonMessage["multiscreen"] === true) {
+				multiscreen = 1;
+				automute = 1;
+			}
+			if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") setTitleBar = jsonMessage["titleBar"];
+			if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) setCache = true;
+		}
+	} else {
+		if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
+		if (message.startsWith("[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
+		if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 	}
-	if (message == "[mouseevents]") UI.core.mouseevents = 1; // Set Mouse Events
-	if (message == "[autoplay]" || message == "[autostart]") vlcPlayer.playlist.playItem(0); // Autoplay
-	if (message == "[autoloop]" || message == "[loop]") autoloop = 1; // Autoloop
-	if (message == "[mute]") automute = 1; // Automute
-	if (message == "[allowfullscreen]") allowfullscreen = 0; // Allowfullscreen
+	
+	
+	
 }
 // End Check On Page JS Message
 
@@ -307,7 +323,7 @@ function fadeLogo() {
 
 // Refresh Mute Icon
 function refreshMuteIcon() {
-	mutebut.icon = vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high
+	mutebut.icon = vlcPlayer.state == 0 ? UI.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? UI.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? UI.icon.mute : vlcPlayer.volume == 0 ? UI.icon.mute : vlcPlayer.volume <= 30 ? UI.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? UI.icon.volume.medium : UI.icon.volume.high
 }
 // End Refresh Mute Icon
 
@@ -382,6 +398,10 @@ function isbig() {
 // Start Toggle Playlist Menu (open/close)
 function togglePlaylist() {
 	if (playlistmenu === false) {
+		if (subtitlemenu === true) {
+			subMenublock.visible = false;
+			subtitlemenu = false;
+		}
 		playlistblock.visible = true;
 		playlistmenu = true;
 	} else {
@@ -390,6 +410,22 @@ function togglePlaylist() {
 	}
 }
 // End Toggle Playlist Menu (open/close)
+
+// Start Toggle Subtitle Menu (open/close)
+function toggleSubtitles() {
+	if (subtitlemenu === false) {
+		if (playlistmenu === true) {
+			playlistblock.visible = false;
+			playilistmenu = false;
+		}
+		subMenublock.visible = true;
+		subtitlemenu = true;
+	} else {
+		subMenublock.visible = false;
+		subtitlemenu = false;
+	}
+}
+// End Toggle Subtitle Menu (open/close)
 
 // Start Toggle Mute
 function toggleMute() {
@@ -470,6 +506,23 @@ function movePlaylist(mousehint) {
 	}
 }
 // End Scroll Playlist Menu
+
+// Start Scroll Subtitle Menu
+function moveSubMenu(mousehint) {
+	if (mousehint <= (subMenuScroll.dragger.height / 2)) {
+		subMenuScroll.dragger.anchors.topMargin = 0;
+		subMenu.anchors.topMargin = 0;
+	} else if (mousehint >= (240 - (subMenuScroll.dragger.height / 2))) {
+		subMenuScroll.dragger.anchors.topMargin = 240 - subMenuScroll.dragger.height;
+		if ((totalSubs *40) > 240) {
+			subMenu.anchors.topMargin = 240 - (totalSubs *40);
+		}
+	} else {
+		subMenuScroll.dragger.anchors.topMargin = mousehint - (subMenuScroll.dragger.height / 2);
+		subMenu.anchors.topMargin = -(((totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (totalSubs.dragger.height /2))));
+	}
+}
+// End Scroll Subtitle Menu
 
 
 // Start Change Volume to New Volume (difference from current volume)
@@ -774,6 +827,15 @@ function playSubtitles(subtitleElement) {
 	xhr.send();
 }
 // End External Subtitles (SRT, SUB)
+
+
+// Start Clear External Subtitles (SRT, SUB)
+function clearSubtitles() {
+	subtitlebox.changeText = "";
+	currentSubtitle = -2;
+	subtitles = [];
+}
+// End Clear External Subtitles (SRT, SUB)
 
 
 // Load M3U Playlist

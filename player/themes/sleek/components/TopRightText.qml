@@ -20,7 +20,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +38 : volumebox.paintedWidth +24
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 39 : 12
+		anchors.topMargin: fullscreen ? 37 : topText.isVisible ? 26 : 11
         Behavior on opacity { PropertyAnimation { id: shadowTextEffect; duration: 500 } }
 		Text {
 			id: volumeBoxShadow
@@ -43,7 +43,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +40 : volumebox.paintedWidth +25
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 37 : 11
+		anchors.topMargin: fullscreen ? 35 : topText.isVisible ? 24 : 10
 		opacity: 0
 		Behavior on opacity { PropertyAnimation { id: volTextEffect; duration: 0 } }
 		Text {

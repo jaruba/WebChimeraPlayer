@@ -79,38 +79,38 @@ function Keys(event) {
 	}
 	if (event.key == Qt.Key_A) {
 		var kl = 0;
-		for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == vlcPlayer.video.aspectRatio) {
+		for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == UI.core.curAspect) {
 			if (typeof UI.core.aspectRatios[kl+1] !== 'undefined') {
-				vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl+1];
-			} else vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+				UI.core.curAspect = UI.core.aspectRatios[kl+1];
+			} else UI.core.curAspect = UI.core.aspectRatios[0];
 			
-			if (vlcPlayer.video.aspectRatio == "Default") {
+			if (UI.core.curAspect == "Default") {
 				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 				videoSource.width = videoSource.parent.width;
 				videoSource.height = videoSource.parent.height;
 			} else {
-				Wjs.changeAspect(vlcPlayer.video.aspectRatio,"ratio");
+				Wjs.changeAspect(UI.core.curAspect,"ratio");
 			}
 			
-			Wjs.setText("Aspect Ratio: " + vlcPlayer.video.aspectRatio);
+			Wjs.setText("Aspect Ratio: " + UI.core.curAspect);
 			break;
 		}
 	}
 	if (event.key == Qt.Key_C) {
 		var kl = 0;
-		for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == vlcPlayer.video.crop) {
+		for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == UI.core.curCrop) {
 			if (typeof UI.core.crops[kl+1] !== 'undefined') {
-				vlcPlayer.video.crop = UI.core.crops[kl+1];
-			} else vlcPlayer.video.crop = UI.core.crops[0];
-			if (vlcPlayer.video.crop == "Default") {
+				UI.core.curCrop = UI.core.crops[kl+1];
+			} else UI.core.curCrop = UI.core.crops[0];
+			if (UI.core.curCrop == "Default") {
 				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 				videoSource.width = videoSource.parent.width;
 				videoSource.height = videoSource.parent.height;
 			} else {
-				Wjs.changeAspect(vlcPlayer.video.crop,"crop");
+				Wjs.changeAspect(UI.core.curCrop,"crop");
 			}
 			
-			Wjs.setText("Crop: " + vlcPlayer.video.crop);
+			Wjs.setText("Crop: " + UI.core.curCrop);
 			break;
 		}
 	}

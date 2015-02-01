@@ -13,7 +13,7 @@ Rectangle {
 		color: 'transparent'
 		width: fullscreen ? parent.width -4 : parent.width -2
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 37 : 11
+		anchors.topMargin: fullscreen ? 37 : topText.isVisible ? 26 : 11
 		anchors.horizontalCenter: parent.horizontalCenter
 		Text {
 			id: bufshadow
@@ -34,7 +34,7 @@ Rectangle {
 		color: 'transparent'
 		width: parent.width
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 35 : 10
+		anchors.topMargin: fullscreen ? 35 : topText.isVisible ? 24 : 10
 		anchors.horizontalCenter: parent.horizontalCenter
 		Text {
 			id: buftext
