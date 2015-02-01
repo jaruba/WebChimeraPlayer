@@ -145,14 +145,8 @@ function onState() {
 		// remove previous subtitles
 		subMenublock.visible = false;
 		subtitlemenu = false;
-		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subMenu.subItems[pli].destroy();
-
-		subMenu.clearSubtitles();
-		subMenu.subPlaying = 0;
-		subMenu.subItems = [];
-
+		subMenu.clearAll();
 		subButton.visible = false;
-		totalSubs = 0;
 		// end remove previous subtitles
 
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) var itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
