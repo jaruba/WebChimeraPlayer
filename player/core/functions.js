@@ -287,8 +287,8 @@ function onMessage( message ) {
 			if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) setCache = true;
 		}
 	} else {
-		if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
-		if (message.startsWith("[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
+		if (message.startsWith("[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
+		if (message.startsWith("[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 		if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 	}
 	
@@ -761,82 +761,7 @@ function changeAspect(newaspect,newtype) {
 
 // START FUNCTIONS FOR EXTERNAL FILE SUPPORT (SRT, SUB, M3U)
 
-// Start External Subtitles (SRT, SUB)
-function strip(s) {
-	return s.replace(/^\s+|\s+$/g,"");
-}
-function playSubtitles(subtitleElement) {
-	if (typeof(currentSubtitle) != "undefined") currentSubtitle = -1;
-	if (typeof(subtitles) != "undefined") if (subtitles.length) subtitles = {};
-	var xhr = new XMLHttpRequest;
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4) {
-
-			var srt = xhr.responseText;
-			subtitles = {};
-			
-			var extension = subtitleElement.split('.').pop();
-			if (extension.toLowerCase() == "srt") {
-				srt = srt.replace(/\r\n|\r|\n/g, '\n');
-				
-				srt = strip(srt);
-				var srty = srt.split('\n\n');
-
-				var s = 0;
-				for (s = 0; s < srty.length; s++) {
-					var st = srty[s].split('\n');
-					if (st.length >=2) {
-				
-					  var n = st[0];
-					  var is = Math.round(toSeconds(strip(st[1].split(' --> ')[0])));
-					  var os = Math.round(toSeconds(strip(st[1].split(' --> ')[1])));
-					  var t = st[2];
-					  
-					  if( st.length > 2) {
-						var j = 3;
-						for (j=3; j<st.length; j++) {
-							t = t + '\n'+st[j];
-						}
-
-					  }
-					  subtitles[is] = {i:is, o: os, t: t};
-					}
-				}
-			} else if (extension.toLowerCase() == "sub") {
-				srt = srt.replace(/\r\n|\r|\n/g, '\n');
-				
-				srt = strip(srt);
-				var srty = srt.split('\n');
-
-				var s = 0;
-				for (s = 0; s < srty.length; s++) {
-					var st = srty[s].split('}{');
-					if (st.length >=2) {
-					  var is = Math.round(st[0].substr(1) /10);
-					  var os = Math.round(st[1].split('}')[0] /10);
-					  var t = st[1].split('}')[1].replace('|', '\n');
-					  if (is != 1 && os != 1) subtitles[is] = {i:is, o: os, t: t};
-					}
-				}
-			}
-			currentSubtitle = -1;
-		}
-	}
-	xhr.open("get", subtitleElement);
-	xhr.setRequestHeader("Content-Encoding", "UTF-8");
-	xhr.send();
-}
-// End External Subtitles (SRT, SUB)
-
-
-// Start Clear External Subtitles (SRT, SUB)
-function clearSubtitles() {
-	subtitlebox.changeText = "";
-	currentSubtitle = -2;
-	subtitles = [];
-}
-// End Clear External Subtitles (SRT, SUB)
-
+// EXTERNAL SUBTITLE FUNCTIONS MOVED TO "themes/sleek/components/SubtitleMenuItems.qml" (can be called with "subMenu." prefix)
 
 // Load M3U Playlist
 function playM3U(m3uElement) {
