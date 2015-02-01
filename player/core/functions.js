@@ -194,6 +194,14 @@ function onState() {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
 			} else {
+				subMenublock.visible = false;
+				subtitlemenu = false;
+				if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subItems[pli].destroy();
+	
+				subMenu.clearSubtitles();
+				subMenu.subPlaying = 0;
+				subMenu.subItems = [];
+
 				subButton.visible = false;
 				totalSubs = 0;
 			}
