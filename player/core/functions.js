@@ -154,7 +154,8 @@ function onState() {
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) {
 			var itemSettings = {};
 			delete itemSettings.subtitles;
-			setText(JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting).subtitles);
+			var testJson = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+			setText(testJson.subtitles);
 			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 		}
 		if (typeof itemSettings !== 'undefined') {
