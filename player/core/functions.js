@@ -202,7 +202,7 @@ function onState() {
 			}
 			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
-				setText("hello");
+				setText(JSON.stringify(itemSettings.subtitles));
 				subButton.visible = true;
 			}
 		}
