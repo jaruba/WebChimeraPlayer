@@ -164,66 +164,53 @@ function onTime( seconds ) {
 function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.indexOf("[|]") > -1) {
-			var resources = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.split("[|]");
-		} else {
-			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting.length > 0) {
-				var resources = [];
-				resources[0] = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting;
+		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) var itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+		if (typeof itemSettings !== 'undefined') {
+			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
+				videoSource.visible = false;
+				artwork.source = itemSettings.art;
+				artwork.visible = true;
+			} else {
+				artwork.source = "";
+				artwork.visible = false;
+				videoSource.visible = true;			
 			}
-		}
-		if (typeof resources !== 'undefined' && Array.isArray(resources) === true) {
-			var item = 0;
-			for (item = 0; typeof resources[item] !== 'undefined'; item++) {
-				if (resources[item].indexOf("[art]") == 0) {
-					videoSource.visible = false;
-					artwork.source = resources[item].replace("[art]","");
-					artwork.visible = true;
-				} else {
-					artwork.source = "";
-					artwork.visible = false;
-					videoSource.visible = true;			
+			if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
+				var kl = 0;
+				for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == itemSettings.aspectRatio) {
+					vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl];
+					if (vlcPlayer.video.aspectRatio == "Default") {
+						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+						videoSource.width = videoSource.parent.width;
+						videoSource.height = videoSource.parent.height;
+					} else changeAspect(vlcPlayer.video.aspectRatio,"ratio");
+					break;
 				}
-				if (resources[item].indexOf("[aspectRatio]") == 0) {
-					var kl = 0;
-					for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == resources[item].replace("[aspectRatio]","")) {
-						vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl];
-						if (vlcPlayer.video.aspectRatio == "Default") {
-							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-							videoSource.width = videoSource.parent.width;
-							videoSource.height = videoSource.parent.height;
-						} else {
-							changeAspect(vlcPlayer.video.aspectRatio,"ratio");
-						}
-						break;
+			} else if (vlcPlayer.playlist.currentItem > 0) {
+				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+				videoSource.width = videoSource.parent.width;
+				videoSource.height = videoSource.parent.height;
+				vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+			}
+			if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
+				var kl = 0;
+				for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == itemSettings.crop) {
+					vlcPlayer.video.crop = UI.core.crops[kl];
+					if (vlcPlayer.video.crop == "Default") {
+						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+						videoSource.width = videoSource.parent.width;
+						videoSource.height = videoSource.parent.height;
+						vlcPlayer.video.crop = UI.core.crops[0];
+					} else {
+						changeAspect(vlcPlayer.video.crop,"crop");
 					}
-				} else if (vlcPlayer.playlist.currentItem > 0) {
-					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-					videoSource.width = videoSource.parent.width;
-					videoSource.height = videoSource.parent.height;
-					vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+					break;
 				}
-				if (resources[item].indexOf("[crop]") == 0) {
-					var kl = 0;
-					for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == resources[item].replace("[crop]","")) {
-						vlcPlayer.video.crop = UI.core.crops[kl];
-						if (vlcPlayer.video.crop == "Default") {
-							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-							videoSource.width = videoSource.parent.width;
-							videoSource.height = videoSource.parent.height;
-							vlcPlayer.video.crop = UI.core.crops[0];
-						} else {
-							changeAspect(vlcPlayer.video.crop,"crop");
-						}
-						break;
-					}
-				} else if (vlcPlayer.playlist.currentItem > 0) {
-					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-					videoSource.width = videoSource.parent.width;
-					videoSource.height = videoSource.parent.height;
-					vlcPlayer.video.crop = UI.core.crops[0];
-				}
-				
+			} else if (vlcPlayer.playlist.currentItem > 0) {
+				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+				videoSource.width = videoSource.parent.width;
+				videoSource.height = videoSource.parent.height;
+				vlcPlayer.video.crop = UI.core.crops[0];
 			}
 		}
 	}
@@ -267,7 +254,7 @@ function onQmlLoaded() {
 	
 	plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 	
-	fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded	
+	fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
 
 	playlist.addPlaylistItems();
 }
@@ -492,6 +479,23 @@ function movePlaylist(mousehint) {
 	}
 }
 // End Scroll Playlist Menu
+
+// Start Scroll Subtitle Menu
+function moveSubMenu(mousehint) {
+	if (mousehint <= (subMenuScroll.dragger.height / 2)) {
+		subMenuScroll.dragger.anchors.topMargin = 0;
+		subMenu.anchors.topMargin = 0;
+	} else if (mousehint >= (240 - (subMenuScroll.dragger.height / 2))) {
+		subMenuScroll.dragger.anchors.topMargin = 240 - subMenuScroll.dragger.height;
+		if ((vlcPlayer.subMenu.itemCount *40) > 240) {
+			subMenu.anchors.topMargin = 240 - (vlcPlayer.playlist.itemCount *40);
+		}
+	} else {
+		subMenuScroll.dragger.anchors.topMargin = mousehint - (subMenuScroll.dragger.height / 2);
+		subMenu.anchors.topMargin = -(((vlcPlayer.playlist.itemCount * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (subMenuScroll.dragger.height /2))));
+	}
+}
+// End Scroll Subtitle Menu
 
 
 // Start Change Volume to New Volume (difference from current volume)

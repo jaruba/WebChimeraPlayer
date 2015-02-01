@@ -202,26 +202,15 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 			 // if Playlist has Custom Titles
 			 var item = 0;
-			 var playerSettings = "";
+			 var playerSettings = {};
 			 for (item = 0; item < playlist.length; item++) {
 				  this.videoelem.playlist.add(playlist[item].url);
 				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item].title;
-				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') {
-					  if (playerSettings) {
-						  playerSettings += "[|][art]"+playlist[item].art;
-					  } else var playerSettings = "[art]"+playlist[item].art;
-				  }
-				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') {
-					  if (playerSettings) {
-						  playerSettings += "[|][aspectRatio]"+playlist[item].aspectRatio;
-					  } else var playerSettings = "[aspectRatio]"+playlist[item].aspectRatio;
-				  }
-				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') {
-					  if (playerSettings) {
-						  playerSettings += "[|][crop]"+playlist[item].crop;
-					  } else var playerSettings = "[crop]"+playlist[item].crop;
-				  }
-				 if (playerSettings) this.videoelem.playlist.items[item].setting = playerSettings;
+				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
+				  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
+				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
+				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
+				  if (playerSettings) this.videoelem.playlist.items[item].setting = JSON.stringify(playerSettings);
 			 }
 			 // end if Playlist has Custom Titles
 		 } else if (Array.isArray(playlist) === true) {
