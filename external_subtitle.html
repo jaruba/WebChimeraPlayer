@@ -24,12 +24,17 @@
 wjs("#player_wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
 
 // add video url with an external subtitle
-wjs("#webchimera").addPlaylist({
+myplaylist = [];
+
+myplaylist.push({
 	url: "http://www.youtube.com/watch?v=ja1sjfnfjg0",
 	subtitles: {
 		"English": "http://www.webchimera.org/sub/the_last_belle_2011_eng.srt"
 	}
 });
+
+// add the playlist to the player
+wjs("#webchimera").addPlaylist(myplaylist);
 </script>
 
 </body>
