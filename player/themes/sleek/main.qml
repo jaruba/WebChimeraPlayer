@@ -79,14 +79,6 @@ Rectangle {
 		fontShadow: UI.colors.fontShadow
 	}
 	// End Top Center Text Box
-
-	// Start Top Right Text Box
-	Loader.TopRightText {
-		id: volumebox
-		fontColor: UI.colors.font
-		fontShadow: UI.colors.fontShadow
-	}
-	// End Top Right Text Box
 		
 	// Draw Play Icon (appears in center of screen when Toggle Pause)
 	Loader.BigPlayIcon {
@@ -115,6 +107,15 @@ Rectangle {
 		onLogoEffect: Wjs.fadeLogo()
 	}
 	// End Loading Screen
+	
+	// Start Top Right Text Box
+	Loader.TopRightText {
+		id: volumebox
+		fontColor: UI.colors.font
+		fontShadow: UI.colors.fontShadow
+	}
+	// End Top Right Text Box
+
 		
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
 	Loader.MouseSurface {

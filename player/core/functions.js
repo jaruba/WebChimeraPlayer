@@ -202,6 +202,7 @@ function onState() {
 			}
 			if (itemSettings.hasOwnProperty('subtitles')) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
+				setText("hello");
 				subButton.visible = true;
 			}
 		}
