@@ -111,6 +111,18 @@ Rectangle {
 	}
 	// End External Subtitles (SRT, SUB)
 	
+	// Start Remove all Subtitles
+	function clearAll() {
+		var pli = 0;
+		
+		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subItems[pli].destroy();
+	
+		clearSubtitles();
+		subPlaying = 0;
+		subItems = [];
+		totalSubs = 0;
+	}
+	// End Remove all Subtitles
 	
 	// Start Clear External Subtitles (SRT, SUB)
 	function clearSubtitles() {
@@ -122,14 +134,7 @@ Rectangle {
 
 	function addSubtitleItems(target) {
 		// Remove Old Subtitle Menu Items
-		var pli = 0;
-		
-		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subItems[pli].destroy();
-	
-		clearSubtitles();
-		subPlaying = 0;
-		subItems = [];
-		totalSubs = 0;
+		clearAll();
 	
 		// Adding Subtitle Menu Items
 		var plstring = "None";
