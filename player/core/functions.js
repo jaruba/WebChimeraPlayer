@@ -388,21 +388,7 @@ function togglePlaylist() {
 }
 // End Toggle Playlist Menu (open/close)
 
-// Start Toggle Subtitle Menu (open/close)
-function toggleSubtitles() {
-	if (subtitlemenu === false) {
-		if (playlistmenu === true) {
-			playlistblock.visible = false;
-			playilistmenu = false;
-		}
-		subMenublock.visible = true;
-		subtitlemenu = true;
-	} else {
-		subMenublock.visible = false;
-		subtitlemenu = false;
-	}
-}
-// End Toggle Subtitle Menu (open/close)
+// TOGGLE SUBTITLE MENU FUNCTION MOVED TO "/themes/sleek/components/SubtitleMenuItems.qml" (can be called with "subMenu." prefix)
 
 // Start Toggle Mute
 function toggleMute() {

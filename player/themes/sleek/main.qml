@@ -264,7 +264,7 @@ Rectangle {
 					iconSize: fullscreen ? 17 : 16
 					visible: false
 					glow: UI.settings.buttonGlow
-					onButtonClicked: Wjs.toggleSubtitles();
+					onButtonClicked: subMenu.toggleSubtitles();
 				}
 				// End Open Subtitle Menu Button
 				
