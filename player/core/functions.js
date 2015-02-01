@@ -141,7 +141,20 @@ function onTime( seconds ) {
 function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
+
+		// remove previous subtitles
+		subMenublock.visible = false;
+		subtitlemenu = false;
+		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subMenu.subItems[pli].destroy();
+
 		subMenu.clearSubtitles();
+		subMenu.subPlaying = 0;
+		subMenu.subItems = [];
+
+		subButton.visible = false;
+		totalSubs = 0;
+		// end remove previous subtitles
+
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) var itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 		if (typeof itemSettings !== 'undefined') {
 			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
@@ -190,20 +203,9 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
+			if (itemSettings.hasOwnProperty('subtitles')) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
-			} else {
-				subMenublock.visible = false;
-				subtitlemenu = false;
-				if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subMenu.subItems[pli].destroy();
-	
-				subMenu.clearSubtitles();
-				subMenu.subPlaying = 0;
-				subMenu.subItems = [];
-
-				subButton.visible = false;
-				totalSubs = 0;
 			}
 		}
 	}
