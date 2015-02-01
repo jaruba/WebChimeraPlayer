@@ -196,7 +196,7 @@ function onState() {
 			} else {
 				subMenublock.visible = false;
 				subtitlemenu = false;
-				if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subItems[pli].destroy();
+				if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) subMenu.subItems[pli].destroy();
 	
 				subMenu.clearSubtitles();
 				subMenu.subPlaying = 0;
