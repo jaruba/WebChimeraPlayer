@@ -255,7 +255,7 @@ Rectangle {
 				// Start Open Subtitle Menu Button
 				Loader.ToolbarBorder {
 					color: UI.colors.toolbar.border
-					visible: UI.settings.toolbar.borderVisible ? playlistButton.visible : false
+					visible: UI.settings.toolbar.borderVisible ? subButton.visible : false
 				}
 				Loader.ToolbarButton {
 					id: subButton
