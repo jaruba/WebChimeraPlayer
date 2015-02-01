@@ -44,6 +44,8 @@ Rectangle {
 	property var lastTime: 0;
 	property var buttonNormalColor: UI.colors.toolbar.button;
 	property var buttonHoverColor: UI.colors.toolbar.buttonHover;
+	property var setTitleBar: UI.settings.titleBar;
+	property var setCache: UI.settings.cache;
 
 	
     id: theview;
@@ -129,7 +131,7 @@ Rectangle {
 			id: topText
 			fontColor: UI.colors.titleBar.font
 			backgroundColor: UI.colors.titleBar.background
-			isVisible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? UI.settings.titleBar == "fullscreen" ? fullscreen ? true : false : UI.settings.titleBar == "minimized" ? fullscreen === false ? true : false : UI.settings.titleBar == "both" ? true : UI.settings.titleBar == "none" ? false : false : false
+			isVisible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? setTitleBar == "fullscreen" ? fullscreen ? true : false : setTitleBar == "minimized" ? fullscreen === false ? true : false : setTitleBar == "both" ? true : setTitleBar == "none" ? false : false : false
 		}
 		// End Title Bar (top bar)
 						
@@ -309,7 +311,7 @@ Rectangle {
 			backgroundColor: UI.colors.progress.background
 			viewedColor: UI.colors.progress.viewed
 			positionColor: UI.colors.progress.position
-			cacheVisible: UI.settings.cache
+			cacheVisible: setCache
 			cacheColor: UI.colors.progress.cache
 			onPressed: Wjs.progressDrag(mouseX,mouseY);
 			onChanged: Wjs.progressChanged(mouseX,mouseY);

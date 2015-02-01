@@ -46,6 +46,18 @@ if (typeof String.prototype.startsWith != 'function') {
 }
 // End add startsWith function to the String prototype
 
+// add isJson function to the String prototype
+if (typeof String.prototype.isJson != 'function') {
+	 String.prototype.isJson = function (){
+		try {
+			JSON.parse(this);
+		} catch (e) {
+			return false;
+		}
+		return true;
+	}
+}
+// end add isJson function to the String prototype
 
 // START CORE FUNCTIONS
 
@@ -264,21 +276,30 @@ function onQmlLoaded() {
 
 // Start Check On Page JS Message	
 function onMessage( message ) {
-	if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
-	if (message.startsWith("[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
-	if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
-	if (message.startsWith("[[caching]")) caching = message.replace("[[caching]","").replace("]",""); // Get network-caching parameter
-
-	// Set Multiscreen
-	if (message == "[multiscreen]") {
-		multiscreen = 1;
-		automute = 1;
+	if (message.isJson()) {
+		var jsonMessage = JSON.parse(message);
+		if (jsonMessage["settings"] === true) {
+			if (jsonMessage["caching"]) caching = jsonMessage["caching"]; // Get network-caching parameter
+			if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) UI.core.mouseevents = 1; // Set Mouse Events
+			if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) vlcPlayer.playlist.playItem(0); // Autoplay
+			if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) autoloop = 1; // Autoloop
+			if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) automute = 1; // Automute
+			if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) allowfullscreen = 0; // Allowfullscreen
+			if (jsonMessage["multiscreen"] == 1 || jsonMessage["multiscreen"] === true) {
+				multiscreen = 1;
+				automute = 1;
+			}
+			if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") setTitleBar = jsonMessage["titleBar"];
+			if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) setCache = true;
+		}
+	} else {
+		if (message.startsWith("[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
+		if (message.startsWith("[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
+		if (message.startsWith("[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 	}
-	if (message == "[mouseevents]") UI.core.mouseevents = 1; // Set Mouse Events
-	if (message == "[autoplay]" || message == "[autostart]") vlcPlayer.playlist.playItem(0); // Autoplay
-	if (message == "[autoloop]" || message == "[loop]") autoloop = 1; // Autoloop
-	if (message == "[mute]") automute = 1; // Automute
-	if (message == "[allowfullscreen]") allowfullscreen = 0; // Allowfullscreen
+	
+	
+	
 }
 // End Check On Page JS Message
 

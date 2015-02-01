@@ -60,8 +60,12 @@ var wjs = function(context) {
 
 // Static methods
 wjs.init = function(context) {
+
     // Save the context
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
+
+	// Save player parameters
+	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache"];
 
 	if (this.context.substring(0,1) == "#") {
 		this.videoelem = document.getElementById(this.context.substring(1));
@@ -89,13 +93,7 @@ wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
 
 // function that loads webchimera player settings after qml has loaded
 wjs.init.prototype.loadSettings = function(wjs_localsettings) {
-	var wjs_setting = [];
-	if (wjs_localsettings.indexOf("|") > -1) {
-		wjs_setting = wjs_localsettings.split("|");
-	} else {
-		wjs_setting[0] = wjs_localsettings;
-	}
-	for (wjs_i = 0; wjs_setting[wjs_i]; wjs_i++) this.videoelem.emitJsMessage("["+wjs_setting[wjs_i]+"]");
+	this.videoelem.emitJsMessage(JSON.stringify(wjs_localsettings));
 };
 // end function that loads webchimera player settings after qml has loaded
 
@@ -121,7 +119,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 
 	newid = (typeof qmlsettings["id"] === "undefined") ? "webchimera" : qmlsettings["id"]; // if no id set, default to "webchimera"
 
-	qmlsource = (typeof qmlsettings["theme"] === "undefined") ? "http://www.webchimera.org/player/themes/retro/main.qml" : qmlsettings["theme"]; // if no qmlsource set, default to latest Webchimera Player Default QML
+	qmlsource = (typeof qmlsettings["theme"] === "undefined") ? "http://www.webchimera.org/player/themes/sleek/main.qml" : qmlsettings["theme"]; // if no qmlsource set, default to latest Webchimera Player Default QML
 	
 	var playerbody = "";
 	if (typeof newid === 'string') {
@@ -145,41 +143,32 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	if (qmlsource.indexOf(suffix, qmlsource.length - suffix.length) === -1) qmlsource = webchimeraFolder+"/themes/"+qmlsource+"/main.qml";
 	playerbody += '<param name="qmlsrc" value="' + qmlsource.replace("https://","http://") + '" />'; // if QML Source is using SSL, replace protocol
 	
-	var onloadsettings = "";
+	var onloadsettings = {};
+	
+	onloadsettings["settings"] = true;
 	
 	var didbuffer = 0;
 	for (key in qmlsettings) {
 		if (qmlsettings.hasOwnProperty(key)) {
-			if (key == "multiscreen" || key == "mouseevents" || key == "autoplay" || key == "autostart" || key == "autoloop" || key == "loop" || key == "mute") {
-				if (qmlsettings[key] == 1 || qmlsettings[key] === true) {
-					if (onloadsettings.length > 0) onloadsettings += "|";
-					onloadsettings += key;
-				}
-			} else if (key == "allowfullscreen") {
-				if (qmlsettings[key] == 0 || qmlsettings[key] === false) {
-					if (onloadsettings.length > 0) onloadsettings += "|";
-					onloadsettings += key;
-				}
+			if (this.basicParams.indexOf(key) > -1) {
+				onloadsettings[key] = qmlsettings[key];
 			} else if (key == "buffer") {
-				if (onloadsettings.length > 0) onloadsettings += "|";
-				onloadsettings += "[caching]" + qmlsettings[key];
+				onloadsettings[key] = qmlsettings[key];
 				didbuffer = 1;
 				playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
 			} else {
 				if (key == "network-caching") {
-					var didbuffer = 1;
-					if (onloadsettings.length > 0) onloadsettings += "|";
-					onloadsettings += "[caching]" + qmlsettings[key];
+					onloadsettings[key] = qmlsettings[key];
+					didbuffer = 1;
 				}
 				if (key != "id" && key != "theme") playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';
 			}
 		}
 	}
-	
+		
 	// default buffer is 10 seconds (10000 milliseconds)
 	if (didbuffer == 0) {
-		if (onloadsettings.length > 0) onloadsettings += "|";
-		onloadsettings += "[caching]10000";
+		onloadsettings["caching"] = 10000;
 		playerbody += '<param name="network-caching" value="10000" />';
 	}
 
@@ -190,14 +179,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	
 	if (typeof onloadsettings !== "undefined") {
-		if (onloadsettings.length > 0) {
-			if (typeof webchimeraid !== "undefined") {
-				wjs("#" + webchimeraid).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("#" + webchimeraid).loadSettings(onloadsettings); });
-			}
-			if (typeof webchimeraclass !== "undefined") {
-				wjs("." + webchimeraclass).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("." + webchimeraclass).loadSettings(onloadsettings); });
-			}
-		}
+		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("#" + webchimeraid).loadSettings(onloadsettings); });
+		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("." + webchimeraclass).loadSettings(onloadsettings); });
 	}
 	
 };
