@@ -148,6 +148,8 @@ function onState() {
 		subMenu.clearAll();
 		subButton.visible = false;
 		// end remove previous subtitles
+		
+		var itemSettings = {};
 
 		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 		if (typeof itemSettings !== 'undefined') {
@@ -197,7 +199,7 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (typeof itemSettings.subtitles !== 'undefined') {
+			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
 			}
