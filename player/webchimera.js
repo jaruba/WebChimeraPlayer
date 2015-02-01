@@ -179,8 +179,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	
 	if (typeof onloadsettings !== "undefined") {
-		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("#" + webchimeraid).loadSettings(onloadsettings); });
-		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).catchEvent('QmlMessage', function(event) { if (event == "[qml-loaded]") wjs("." + webchimeraclass).loadSettings(onloadsettings); });
+		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(onloadsettings); });
+		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(onloadsettings); });
 	}
 	
 };
