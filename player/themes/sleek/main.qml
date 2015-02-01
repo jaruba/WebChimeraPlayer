@@ -262,7 +262,7 @@ Rectangle {
 					width: UI.settings.toolbar.buttonWidth
 					icon: glyphsLoaded ? UI.icon.subtitles : ""
 					iconSize: fullscreen ? 17 : 16
-					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
+					visible: false
 					glow: UI.settings.buttonGlow
 					onButtonClicked: Wjs.toggleSubtitles();
 				}
