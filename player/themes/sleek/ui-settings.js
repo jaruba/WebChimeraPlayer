@@ -47,7 +47,7 @@ var icon = {
 	playlist: "\ue833",
 	
 	// Subtitle Menu Button Icon
-	subtitle: "\ue83a",
+	subtitles: "\ue83a",
 	
 	// Fullscreen Button Icons
 	minimize: "\ue805",
