@@ -178,31 +178,31 @@ function onState() {
 			if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
 				var kl = 0;
 				for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == itemSettings.aspectRatio) {
-					vlcPlayer.video.aspectRatio = UI.core.aspectRatios[kl];
-					if (vlcPlayer.video.aspectRatio == "Default") {
+					UI.core.curAspect = UI.core.aspectRatios[kl];
+					if (UI.core.curAspect == "Default") {
 						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 						videoSource.width = videoSource.parent.width;
 						videoSource.height = videoSource.parent.height;
-					} else changeAspect(vlcPlayer.video.aspectRatio,"ratio");
+					} else changeAspect(UI.core.curAspect,"ratio");
 					break;
 				}
 			} else if (vlcPlayer.playlist.currentItem > 0) {
 				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 				videoSource.width = videoSource.parent.width;
 				videoSource.height = videoSource.parent.height;
-				vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
+				UI.core.curAspect = UI.core.aspectRatios[0];
 			}
 			if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
 				var kl = 0;
 				for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == itemSettings.crop) {
-					vlcPlayer.video.crop = UI.core.crops[kl];
-					if (vlcPlayer.video.crop == "Default") {
+					UI.core.curCrop = UI.core.crops[kl];
+					if (UI.core.curCrop == "Default") {
 						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 						videoSource.width = videoSource.parent.width;
 						videoSource.height = videoSource.parent.height;
-						vlcPlayer.video.crop = UI.core.crops[0];
+						UI.core.curCrop = UI.core.crops[0];
 					} else {
-						changeAspect(vlcPlayer.video.crop,"crop");
+						changeAspect(UI.core.curCrop,"crop");
 					}
 					break;
 				}
@@ -210,7 +210,7 @@ function onState() {
 				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 				videoSource.width = videoSource.parent.width;
 				videoSource.height = videoSource.parent.height;
-				vlcPlayer.video.crop = UI.core.crops[0];
+				UI.core.curCrop = UI.core.crops[0];
 			}
 		}
 	}
@@ -245,8 +245,8 @@ function onState() {
 
 // Start on QML Loaded
 function onQmlLoaded() {
-	vlcPlayer.video.aspectRatio = UI.core.aspectRatios[0];
-	vlcPlayer.video.crop = UI.core.crops[0];
+	UI.core.curAspect = UI.core.aspectRatios[0];
+	UI.core.curCrop = UI.core.crops[0];
 
 	vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
 	vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
