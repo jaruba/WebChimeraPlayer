@@ -200,7 +200,7 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (itemSettings.hasOwnProperty('subtitles')) {
+			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				setText("hello");
 				subButton.visible = true;
