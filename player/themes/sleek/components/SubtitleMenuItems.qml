@@ -1,6 +1,6 @@
 ﻿import QtQuick 2.1
 import QmlVlc 0.1
-import "../iconv.js" as iconv
+import "iconv.js" as iconv
 
 Rectangle {
 	id: root
