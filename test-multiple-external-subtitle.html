@@ -22,23 +22,19 @@
 <script>
 // create player
 wjs("#player_wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
-
 // add video url with an external subtitle
 myplaylist = [];
-
 myplaylist.push({
 	url: "http://archive.org/download/CartoonClassics/Mel-O-Toons__Peter_and_the_Wolf.mp4",
 	subtitles: {
 		"English": "http://www.webchimera.org/sub/the_last_belle_2011_eng.srt",
 		"Russian": "http://www.webchimera.org/sub/the_last_belle_2011_eng.srt",
-		"Turkish": "http://www.webchimera.org/sub/test.srt"
+		"Turkish": "http://dl.opensubtitles.org/en/download/filead/src-api/vrf-bfafe1c11f/sid-85k8neb5gpmo3npqoog00t6c64/1954590765.srt"
 	}
 });
-
 myplaylist.push({
 	url:"http://archive.org/download/CartoonClassics/Krazy_Kat_-_Keeping_Up_With_Krazy.mp4"
 });
-
 // add the playlist to the player
 wjs("#webchimera").addPlaylist(myplaylist);
 </script>
