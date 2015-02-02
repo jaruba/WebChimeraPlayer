@@ -1,5 +1,6 @@
 ﻿import QtQuick 2.1
 import QmlVlc 0.1
+#include <QString>
 
 Rectangle {
 	id: root
@@ -56,6 +57,10 @@ Rectangle {
 			if (xhr.readyState == 4) {
 	
 				var srt = xhr.responseText;
+				
+				QString str = srt;
+				srt = QString::fromUtf8(str.toLatin1().constData());
+				
 				subtitles = {};
 				
 				var extension = subtitleElement.split('.').pop();
