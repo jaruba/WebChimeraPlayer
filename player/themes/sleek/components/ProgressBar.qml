@@ -125,7 +125,7 @@ Rectangle {
 					width: fullscreen ? 6 : mousesurface.containsMouse ? 6 : 0
 					radius: width * 0.5
 					anchors.centerIn: parent
-					color: cache.visible ? dragging ? movepos.color : dragpos.containsMouse ? movepos.width -3 < dragpos.mouseX && dragpos.mouseX < movepos.width + 11 ? movepos.color : cache.color : cache.color : progressBackground.color
+					color: cache.visible ? dragging ? movepos.color : dragpos.containsMouse ? movepos.width -3 < dragpos.mouseX && dragpos.mouseX < movepos.width + 11 ? movepos.color : cache.color : cache.color : dragging ? movepos.color : dragpos.containsMouse ? movepos.width -3 < dragpos.mouseX && dragpos.mouseX < movepos.width + 11 ? movepos.color : progressBackground.color : progressBackground.color
 					Behavior on width { PropertyAnimation { duration: 250 } }
 					Behavior on height { PropertyAnimation { duration: 250 } }
 				}

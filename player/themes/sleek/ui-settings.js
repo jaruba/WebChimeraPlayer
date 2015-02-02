@@ -134,11 +134,7 @@ var colors = {
 	
 	volumeHeat: {
 		background: "#696969",
-		gradient: {
-			low: "#E7A307",
-			medium: "#E77607",
-			high: "#E72107"
-		}
+		color: "#E77607"
 	}
 	
 }

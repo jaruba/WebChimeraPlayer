@@ -3,9 +3,7 @@ import QmlVlc 0.1
 import "./" as Loader
 
 Rectangle {
-	property alias volLow: backgroundColors.volLow
-	property alias volMed: backgroundColors.volMed
-	property alias volHigh: backgroundColors.volHigh
+	property alias volColor: backgroundColors.volColor
 	property alias volume: moveposa.width
 	property alias backgroundColor: root.color
 

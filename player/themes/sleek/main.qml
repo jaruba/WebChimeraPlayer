@@ -223,9 +223,7 @@ Rectangle {
 					Loader.VolumeHeatGraphics {
 						id: volheat
 						backgroundColor: UI.colors.volumeHeat.background
-						volLow: UI.colors.volumeHeat.gradient.low
-						volMed: UI.colors.volumeHeat.gradient.medium
-						volHigh: UI.colors.volumeHeat.gradient.high
+						volColor: UI.colors.volumeHeat.color
 					}
 	
 				}
