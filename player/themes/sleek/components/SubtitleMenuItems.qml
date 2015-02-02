@@ -1,5 +1,6 @@
 ﻿import QtQuick 2.1
 import QmlVlc 0.1
+#include <QString>
 
 Rectangle {
 	id: root
@@ -57,7 +58,8 @@ Rectangle {
 	
 				var srt = xhr.responseText;
 				
-				srt = fromUtf8(srt.toLatin1().constData());
+				QString str = srt;
+				srt = QString::fromUtf8(str.toLatin1().constData());
 				
 				subtitles = {};
 				
