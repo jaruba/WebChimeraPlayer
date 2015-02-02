@@ -136,7 +136,7 @@ Rectangle {
 			}
 		}
 		xhr.open("get", subtitleElement);
-		xhr.setRequestHeader("Content-Encoding", "UTF-8");
+		xhr.setRequestHeader("Content-Encoding", "text/plain;charset=UTF-8");
 		xhr.send();
 	}
 	// End External Subtitles (SRT, SUB)
