@@ -4859,10 +4859,6 @@ function utf7EncoderWrite(str) {
     }.bind(this)));
 }
 
-function encode(str, encoding, options) {
-	this.iconv.encode(str, encoding);
-}
-
 
 var base64Regex = /[A-Za-z0-9\/+]/;
 var base64Chars = [];
@@ -5121,8 +5117,6 @@ iconv.encodings = null;
 // Characters emitted in case of error.
 iconv.defaultCharUnicode = '�';
 iconv.defaultCharSingleByte = '?';
-
-
 
 // Public API.
 iconv.encode = function encode(str, encoding, options) {
