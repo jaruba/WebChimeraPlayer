@@ -56,9 +56,6 @@ Rectangle {
 			if (xhr.readyState == 4) {
 	
 				var srt = xhr.responseText;
-				
-				srt = fromUtf8(srt.toLatin1().constData());
-				
 				subtitles = {};
 				
 				var extension = subtitleElement.split('.').pop();
