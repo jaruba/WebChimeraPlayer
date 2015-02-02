@@ -57,7 +57,7 @@ Rectangle {
 	
 				var srt = xhr.responseText;
 				
-				srt = fromUtf8(str.toLatin1().constData());
+				srt = fromUtf8(srt.toLatin1().constData());
 				
 				subtitles = {};
 				
