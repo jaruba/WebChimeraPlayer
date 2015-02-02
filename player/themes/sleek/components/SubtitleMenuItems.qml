@@ -1,6 +1,5 @@
 ﻿import QtQuick 2.1
 import QmlVlc 0.1
-import "../iconv.js" as Iconv
 
 Rectangle {
 	id: root
@@ -56,7 +55,7 @@ Rectangle {
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4) {
 	
-				var srt = Iconv.encode(xhr.responseText,"utf-8");
+				var srt = xhr.responseText;
 				subtitles = {};
 				
 				var extension = subtitleElement.split('.').pop();
