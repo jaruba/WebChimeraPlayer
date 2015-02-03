@@ -27,6 +27,7 @@ var pli = 0;
 var plstring = "";
 var oldRatioWidth = 0;
 var oldRatioHeight = 0;
+var gh = 0;
 
 // Required for jump to seconds (while paused)
 var notmuted = 0;
@@ -202,7 +203,7 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
+			if (typeof itemSettings.subtitles !== 'undefined') {
 				setText("Test");
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
