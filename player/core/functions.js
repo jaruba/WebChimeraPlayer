@@ -203,6 +203,7 @@ function onState() {
 				UI.core.curCrop = UI.core.crops[0];
 			}
 			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
+				setText("Test");
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
 			}
