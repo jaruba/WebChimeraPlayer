@@ -144,6 +144,7 @@ function onState() {
 		buftext.changeText = "Opening";
 
 		if (lastItem != vlcPlayer.playlist.currentItem) {
+			if (lastItem == -1) lastItem = 0;
 	
 			// remove previous subtitles
 			subMenublock.visible = false;
