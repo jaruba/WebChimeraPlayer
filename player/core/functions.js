@@ -143,71 +143,74 @@ function onState() {
 	if (vlcPlayer.state == 1) {
 		buftext.changeText = "Opening";
 
-		// remove previous subtitles
-		subMenublock.visible = false;
-		subtitlemenu = false;
-		subMenu.clearAll();
-		subButton.visible = false;
-		// end remove previous subtitles
-				
-		var itemSettings = {};
-
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) {
-			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
-			setText(JSON.stringify(itemSettings.subtitles));
-		}
-		gh = gh +1;
-		setText("Test "+gh);
-		if (typeof itemSettings !== 'undefined') {
-			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
-				videoSource.visible = false;
-				artwork.source = itemSettings.art;
-				artwork.visible = true;
-			} else {
-				artwork.source = "";
-				artwork.visible = false;
-				videoSource.visible = true;			
+		if (lastItem != vlcPlayer.playlist.currentItem) {
+	
+			// remove previous subtitles
+			subMenublock.visible = false;
+			subtitlemenu = false;
+			subMenu.clearAll();
+			subButton.visible = false;
+			// end remove previous subtitles
+					
+			var itemSettings = {};
+	
+			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) {
+				itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+				setText(JSON.stringify(itemSettings.subtitles));
 			}
-			if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
-				var kl = 0;
-				for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == itemSettings.aspectRatio) {
-					UI.core.curAspect = UI.core.aspectRatios[kl];
-					if (UI.core.curAspect == "Default") {
-						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-						videoSource.width = videoSource.parent.width;
-						videoSource.height = videoSource.parent.height;
-					} else changeAspect(UI.core.curAspect,"ratio");
-					break;
+			gh = gh +1;
+			setText("Test "+gh);
+			if (typeof itemSettings !== 'undefined') {
+				if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
+					videoSource.visible = false;
+					artwork.source = itemSettings.art;
+					artwork.visible = true;
+				} else {
+					artwork.source = "";
+					artwork.visible = false;
+					videoSource.visible = true;			
 				}
-			} else if (vlcPlayer.playlist.currentItem > 0) {
-				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-				videoSource.width = videoSource.parent.width;
-				videoSource.height = videoSource.parent.height;
-				UI.core.curAspect = UI.core.aspectRatios[0];
-			}
-			if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
-				var kl = 0;
-				for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == itemSettings.crop) {
-					UI.core.curCrop = UI.core.crops[kl];
-					if (UI.core.curCrop == "Default") {
-						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-						videoSource.width = videoSource.parent.width;
-						videoSource.height = videoSource.parent.height;
-						UI.core.curCrop = UI.core.crops[0];
-					} else {
-						changeAspect(UI.core.curCrop,"crop");
+				if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
+					var kl = 0;
+					for (kl = 0; typeof UI.core.aspectRatios[kl] !== 'undefined'; kl++) if (UI.core.aspectRatios[kl] == itemSettings.aspectRatio) {
+						UI.core.curAspect = UI.core.aspectRatios[kl];
+						if (UI.core.curAspect == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+						} else changeAspect(UI.core.curAspect,"ratio");
+						break;
 					}
-					break;
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					UI.core.curAspect = UI.core.aspectRatios[0];
 				}
-			} else if (vlcPlayer.playlist.currentItem > 0) {
-				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-				videoSource.width = videoSource.parent.width;
-				videoSource.height = videoSource.parent.height;
-				UI.core.curCrop = UI.core.crops[0];
-			}
-			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
-				subButton.visible = true;
-				subMenu.addSubtitleItems(itemSettings.subtitles);
+				if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
+					var kl = 0;
+					for (kl = 0; typeof UI.core.crops[kl] !== 'undefined'; kl++) if (UI.core.crops[kl] == itemSettings.crop) {
+						UI.core.curCrop = UI.core.crops[kl];
+						if (UI.core.curCrop == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+							UI.core.curCrop = UI.core.crops[0];
+						} else {
+							changeAspect(UI.core.curCrop,"crop");
+						}
+						break;
+					}
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					UI.core.curCrop = UI.core.crops[0];
+				}
+				if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
+					subButton.visible = true;
+					subMenu.addSubtitleItems(itemSettings.subtitles);
+				}
 			}
 		}
 	}
