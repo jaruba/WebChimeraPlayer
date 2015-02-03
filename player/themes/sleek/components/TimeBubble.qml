@@ -14,7 +14,7 @@ Rectangle {
 	anchors.bottom: parent.bottom
 	anchors.bottomMargin: fullscreen ? 66 : 63
 	anchors.left: parent.left
-	anchors.leftMargin: srctime.length > 5 ? progressBar.dragpos.mouseX < 33 ? 3 : (progressBar.dragpos.mouseX +35) > theview.width ? (theview.width -64) : (progressBar.dragpos.mouseX -29) : progressBar.dragpos.mouseX < 23 ? -7 : (progressBar.dragpos.mouseX +25) > theview.width ? (theview.width -54) : (progressBar.dragpos.mouseX -29) // Move Time Chat Bubble dependant of Mouse Horizontal Position
+	anchors.leftMargin: srctime.text.length > 5 ? progressBar.dragpos.mouseX < 33 ? 3 : (progressBar.dragpos.mouseX +36) > theview.width ? (theview.width -65) : (progressBar.dragpos.mouseX -29) : progressBar.dragpos.mouseX < 23 ? -7 : (progressBar.dragpos.mouseX +25) > theview.width ? (theview.width -54) : (progressBar.dragpos.mouseX -30) // Move Time Chat Bubble dependant of Mouse Horizontal Position
 	
 	color: 'transparent'
 	
