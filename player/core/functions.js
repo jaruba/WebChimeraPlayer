@@ -27,7 +27,6 @@ var pli = 0;
 var plstring = "";
 var oldRatioWidth = 0;
 var oldRatioHeight = 0;
-var gh = 0;
 
 // Required for jump to seconds (while paused)
 var notmuted = 0;
@@ -159,8 +158,7 @@ function onState() {
 				itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 				setText(JSON.stringify(itemSettings.subtitles));
 			}
-			gh = gh +1;
-			setText("Test "+gh);
+
 			if (typeof itemSettings !== 'undefined') {
 				if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
 					videoSource.visible = false;
