@@ -725,6 +725,10 @@ function changeAspect(newaspect,newtype) {
 
 // EXTERNAL SUBTITLE FUNCTIONS MOVED TO "themes/sleek/components/SubtitleMenuItems.qml" (can be called with "subMenu." prefix)
 
+function strip(s) {
+	return s.replace(/^\s+|\s+$/g,"");
+}
+
 // Load M3U Playlist
 function playM3U(m3uElement) {
 
