@@ -148,12 +148,13 @@ function onState() {
 		subMenu.clearAll();
 		subButton.visible = false;
 		// end remove previous subtitles
-		
-		setText(vlcPlayer.playlist.currentItem);
-		
+				
 		var itemSettings = {};
 
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) {
+			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+			setText(itemSettings.subtitles);
+		}
 		if (typeof itemSettings !== 'undefined') {
 			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
 				videoSource.visible = false;
