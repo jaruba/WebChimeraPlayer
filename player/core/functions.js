@@ -156,6 +156,8 @@ function onState() {
 			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 			setText(JSON.stringify(itemSettings.subtitles));
 		}
+		gh = gh +1;
+		setText("Test "+gh);
 		if (typeof itemSettings !== 'undefined') {
 			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
 				videoSource.visible = false;
@@ -204,8 +206,6 @@ function onState() {
 				UI.core.curCrop = UI.core.crops[0];
 			}
 			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
-				gh = gh +1;
-				setText("Test "+gh);
 				subButton.visible = true;
 				subMenu.addSubtitleItems(itemSettings.subtitles);
 			}
