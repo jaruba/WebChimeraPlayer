@@ -413,8 +413,8 @@ Rectangle {
 						id: subMenuClose
 						icon: glyphsLoaded ? UI.icon.closePlaylist : ""
 						iconSize: 9
-						iconColor: playlistClose.hover.containsMouse ? UI.colors.playlistMenu.closeHover : UI.colors.playlistMenu.close
-						color: playlistClose.hover.containsMouse ? UI.colors.playlistMenu.closeBackgroundHover : UI.colors.playlistMenu.closeBackground
+						iconColor: subMenuClose.hover.containsMouse ? UI.colors.playlistMenu.closeHover : UI.colors.playlistMenu.close
+						color: subMenuClose.hover.containsMouse ? UI.colors.playlistMenu.closeBackgroundHover : UI.colors.playlistMenu.closeBackground
 						hover.onClicked: {
 							subMenublock.visible = false;
 							subtitlemenu = false;
