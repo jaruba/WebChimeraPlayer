@@ -203,11 +203,11 @@ function onState() {
 				videoSource.height = videoSource.parent.height;
 				UI.core.curCrop = UI.core.crops[0];
 			}
-			if (typeof itemSettings.subtitles !== 'undefined') {
+			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
 				gh = gh +1;
 				setText("Test "+gh);
-				subMenu.addSubtitleItems(itemSettings.subtitles);
 				subButton.visible = true;
+				subMenu.addSubtitleItems(itemSettings.subtitles);
 			}
 		}
 	}
