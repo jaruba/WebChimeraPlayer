@@ -106,8 +106,8 @@ Rectangle {
 				currentSubtitle = -1;
 			}
 		}
+		if (subtitleElement.indexOf("http://dl.opensubtitles.org/") == 0) subtitleElement = "http://dl.opensubtitles.org/en/download/subencoding-utf8/file/"+subtitleElement.split('/').pop();
 		xhr.open("get", subtitleElement);
-		xhr.setRequestHeader("Content-Encoding", "text/plain;charset=UTF-8");
 		xhr.send();
 	}
 	// End External Subtitles (SRT, SUB)
