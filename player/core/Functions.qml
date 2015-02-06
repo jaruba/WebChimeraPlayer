@@ -186,13 +186,25 @@ Rectangle {
 						videoSource.height = videoSource.parent.height;
 						ui.core.curCrop = ui.core.crops[0];
 					}
-					if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) {
-						subButton.visible = true;
-						subMenu.addSubtitleItems(itemSettings.subtitles);
-					}
 				}
 			}
 		}
+		
+		// Load Internal and External Subtitles (when playback starts)
+		if (vlcPlayer.state == 3 && subButton.visible === false) {
+			var itemSettings = {};
+			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+			var doSubs = false;
+			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) doSubs = true;					
+			if (vlcPlayer.subtitle.count > 1) doSubs = true;
+			if (doSubs) {
+				subButton.visible = true;
+				subMenu.addSubtitleItems(itemSettings.subtitles);
+				subMenuScroll.dragger.anchors.topMargin = 0;
+				subMenu.anchors.topMargin = 0;
+			}			
+		}
+		// End Load Internal and External Subtitles
 			
 		// Reconnect if connection to server lost
 		if (vlcPlayer.time > 0) {
@@ -477,7 +489,7 @@ Rectangle {
 			}
 		} else {
 			subMenuScroll.dragger.anchors.topMargin = mousehint - (subMenuScroll.dragger.height / 2);
-			subMenu.anchors.topMargin = -(((totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (totalSubs.dragger.height /2))));
+			subMenu.anchors.topMargin = -(((totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (subMenuScroll.dragger.height /2))));
 		}
 	}
 	// End Scroll Subtitle Menu
