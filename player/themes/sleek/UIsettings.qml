@@ -1,14 +1,6 @@
 import QtQuick 2.1
 
 QtObject {
-	property variant core: {
-		// We strongly recommend that you do not remove or change any of the core variables
-		'curZoom': 0,
-		'mouseevents': 0,
-		'aspectRatios': ["Default", "1:1", "4:3", "16:9", "16:10", "2.21:1", "2.35:1", "2.39:1", "5:4"],
-		'crops': ["Default", "16:10", "16:9", "1.85:1", "2.21:1", "2.35:1", "2.39:1", "5:3", "4:3", "5:4", "1:1"],
-		'zooms': [[1, "Default"], [2, "2x Double"], [0.25, "0.25x Quarter"], [0.5, "0.5x Half"]]
-	}
 	
 	property variant settings: {
 		'iconFont': "fonts/glyphicons.ttf",
@@ -19,7 +11,7 @@ QtObject {
 			'buttonWidth': 59,
 			'buttonMuteWidth': 40
 		},
-		'cache': false, // If cache progress bar is visible or not
+		'caching': false, // If cache progress bar is visible or not
 		'titleBar': "fullscreen", // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
 		'buttonGlow': false // if button icons should glow when hovered
 	}

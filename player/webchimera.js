@@ -153,12 +153,12 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 			if (this.basicParams.indexOf(key) > -1) {
 				onloadsettings[key] = qmlsettings[key];
 			} else if (key == "buffer") {
-				onloadsettings[key] = qmlsettings[key];
+				onloadsettings["caching"] = qmlsettings[key];
 				didbuffer = 1;
 				playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
 			} else {
 				if (key == "network-caching") {
-					onloadsettings[key] = qmlsettings[key];
+					onloadsettings["caching"] = qmlsettings[key];
 					didbuffer = 1;
 				}
 				if (key != "id" && key != "theme") playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';

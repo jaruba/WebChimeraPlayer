@@ -13,7 +13,7 @@ Rectangle {
 	// onStatusChanged does not seem to work, so we add a timer to find out when the glyphicons have loaded
 	Timer {
 		interval: 0; running:  glyphs.source != "" ? glyphs.status == FontLoader.Ready ? true : false : false; repeat: false
-		onTriggered: { glyphsLoaded = true; }
+		onTriggered: { settings.glyphsLoaded = true; }
 	}
 	// End onStatusChanged does not seem to work, so we add a timer to find out when the glyphicons have loaded
 	

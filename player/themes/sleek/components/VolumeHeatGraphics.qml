@@ -19,7 +19,7 @@ Rectangle {
 		Rectangle {
 			id: moveposa
 			clip: true
-			width: (vlcPlayer.volume /200) * (parent.width - movecura.width)
+			width: 0
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom

@@ -47,7 +47,7 @@ Rectangle {
 	// Start on Buffering Changed
 	function onBuffering( percents ) {
 		buftext.changeText = "Buffering " + percents +"%"; // Announce Buffering Percent
-		buffering = percents; // Set Global Variable "buffering"
+		settings.buffering = percents; // Set Global Variable "buffering"
 		
 		if (percents == 100 && pauseAfterBuffer == 1) {
 			pauseAfterBuffer = 0;
@@ -59,7 +59,7 @@ Rectangle {
 	// Start on Current Time Changed
 	function onTime( seconds ) {
 		
-		lastTime = tempSecond;
+		settings.lastTime = tempSecond;
 		tempSecond = seconds;
 			
 		if (vlcPlayer.time > 0) lastPos = vlcPlayer.position;
@@ -68,7 +68,7 @@ Rectangle {
 		if (prevtime > 0 && seconds > prevtime) {
 			 pauseAfterBuffer = 0;
 			 if (notmuted == 1) if (vlcPlayer.audio.mute) {
-				 Wjs.toggleMute();
+				 wjs.toggleMute();
 				 notmuted = 0;
 				 prevtime = 0;
 			 }
@@ -76,24 +76,24 @@ Rectangle {
 		// End Solution to jump to time while video is paused
 		
 		// If volume is 0%, set to 40%
-		if (multiscreen == 0 && firstvolume == 1) {
+		if (settings.multiscreen == 0 && settings.firstvolume == 1) {
 			if (vlcPlayer.volume == 0) vlcPlayer.volume = 80;
 			volheat.volume = (vlcPlayer.volume /200) * (volheat.width -4);
 		}
-		if (firstvolume == 1) firstvolume = 2;
+		if (settings.firstvolume == 1) settings.firstvolume = 2;
 		// End If volume is 0%, set to 40%
 	
 		// if mute parameter set to true, mute on start	
-		if (automute == 1) if (vlcPlayer.volume > 0) {
+		if (settings.automute == 1) if (vlcPlayer.volume > 0) {
 			vlcPlayer.volume = 0;
 			volheat.volume = 0;
-			automute = 2;
+			settings.automute = 2;
 		}
 	
 		// Start on Playlist Video Changed
 		if (lastItem != vlcPlayer.playlist.currentItem) {
 			lastItem = vlcPlayer.playlist.currentItem;
-			ismoving = 1;
+			settings.ismoving = 1;
 			lastSecond = 0;
 		}
 		// End on Playlist Video Changed
@@ -109,13 +109,13 @@ Rectangle {
 			refreshMuteIcon();
 		}
 		
-		// Start if mouse is moving above the Video Surface increase "ismoving"
+		// Start if mouse is moving above the Video Surface increase "settings.ismoving"
 		if (Math.floor(seconds /1000) > lastSecond) {
 			// Don't Hide Toolbar if it's Hovered
 			lastSecond = Math.floor(seconds /1000);
-			if (progressBar.dragpos.containsMouse === false && toolbarBackground.bottomtab.containsMouse === false && playButton.hover.containsMouse === false && prevBut.hover.containsMouse === false && nextBut.hover.containsMouse === false && fullscreenButton.hover.containsMouse === false && playlistButton.hover.containsMouse === false && mutebut.hover.containsMouse === false && volumeMouse.dragger.containsMouse === false && volumeMouse.hover.containsMouse === false) ismoving++;
+			if (progressBar.dragpos.containsMouse === false && toolbarBackground.bottomtab.containsMouse === false && playButton.hover.containsMouse === false && prevBut.hover.containsMouse === false && nextBut.hover.containsMouse === false && fullscreenButton.hover.containsMouse === false && playlistButton.hover.containsMouse === false && mutebut.hover.containsMouse === false && volumeMouse.dragger.containsMouse === false && volumeMouse.hover.containsMouse === false) settings.ismoving++;
 		}
-		// End if mouse is moving above the Video Surface increase "ismoving"
+		// End if mouse is moving above the Video Surface increase "settings.ismoving"
 	}
 	// End on Current Time Changed
 	
@@ -130,7 +130,7 @@ Rectangle {
 		
 				// remove previous subtitles
 				subMenublock.visible = false;
-				subtitlemenu = false;
+				settings.subtitlemenu = false;
 				subMenu.clearAll();
 				subButton.visible = false;
 				// end remove previous subtitles
@@ -151,32 +151,32 @@ Rectangle {
 					}
 					if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
 						var kl = 0;
-						for (kl = 0; typeof ui.core.aspectRatios[kl] !== 'undefined'; kl++) if (ui.core.aspectRatios[kl] == itemSettings.aspectRatio) {
-							ui.core.curAspect = ui.core.aspectRatios[kl];
-							if (ui.core.curAspect == "Default") {
+						for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == itemSettings.aspectRatio) {
+							settings.curAspect = settings.aspectRatios[kl];
+							if (settings.curAspect == "Default") {
 								videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 								videoSource.width = videoSource.parent.width;
 								videoSource.height = videoSource.parent.height;
-							} else changeAspect(ui.core.curAspect,"ratio");
+							} else changeAspect(settings.curAspect,"ratio");
 							break;
 						}
 					} else if (vlcPlayer.playlist.currentItem > 0) {
 						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 						videoSource.width = videoSource.parent.width;
 						videoSource.height = videoSource.parent.height;
-						ui.core.curAspect = ui.core.aspectRatios[0];
+						settings.curAspect = settings.aspectRatios[0];
 					}
 					if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
 						var kl = 0;
-						for (kl = 0; typeof ui.core.crops[kl] !== 'undefined'; kl++) if (ui.core.crops[kl] == itemSettings.crop) {
-							ui.core.curCrop = ui.core.crops[kl];
-							if (ui.core.curCrop == "Default") {
+						for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == itemSettings.crop) {
+							settings.curCrop = settings.crops[kl];
+							if (settings.curCrop == "Default") {
 								videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 								videoSource.width = videoSource.parent.width;
 								videoSource.height = videoSource.parent.height;
-								ui.core.curCrop = ui.core.crops[0];
+								settings.curCrop = settings.crops[0];
 							} else {
-								changeAspect(ui.core.curCrop,"crop");
+								changeAspect(settings.curCrop,"crop");
 							}
 							break;
 						}
@@ -184,7 +184,7 @@ Rectangle {
 						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 						videoSource.width = videoSource.parent.width;
 						videoSource.height = videoSource.parent.height;
-						ui.core.curCrop = ui.core.crops[0];
+						settings.curCrop = settings.crops[0];
 					}
 				}
 			}
@@ -223,21 +223,21 @@ Rectangle {
 		}
 		// End Reconnect if connection to server lost
 		
-		if (vlcPlayer.state == 6 && autoloop == 1) {
+		if (vlcPlayer.state == 6 && settings.autoloop == 1) {
 			// autoloop (if set to true)
 			vlcPlayer.playlist.currentItem = 0;
 			vlcPlayer.playlist.play();
 		}
 		
 		// if title changed, change title in top bar (did this to avoid the "non-NOTIFYable property" errors)
-		if (title != vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","")) title = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","");
+		if (settings.title != vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","")) settings.title = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","");
 	}
 	// End on State Changed
 	
 	// Start on QML Loaded
 	function onQmlLoaded() {
-		ui.core.curAspect = ui.core.aspectRatios[0];
-		ui.core.curCrop = ui.core.crops[0];
+		settings.curAspect = settings.aspectRatios[0];
+		settings.curCrop = settings.crops[0];
 	
 		vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
 		vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
@@ -246,6 +246,8 @@ Rectangle {
 		plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 		
 		fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
+	
+//		setText(ui.settings.caching);
 	
 		playlist.addPlaylistItems();
 	}
@@ -257,18 +259,18 @@ Rectangle {
 		if (isJson(message)) {
 			var jsonMessage = JSON.parse(message);
 			if (jsonMessage["settings"] === true) {
-				if (jsonMessage["caching"]) caching = jsonMessage["caching"]; // Get network-caching parameter
-				if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) ui.core.mouseevents = 1; // Set Mouse Events
+				if (jsonMessage["caching"]) settings.cache = jsonMessage["caching"]; // Get network-caching parameter
+				if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) settings.mouseevents = 1; // Set Mouse Events
 				if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) vlcPlayer.playlist.playItem(0); // Autoplay
-				if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) autoloop = 1; // Autoloop
-				if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) automute = 1; // Automute
-				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) allowfullscreen = 0; // Allowfullscreen
+				if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) settings.autoloop = 1; // Autoloop
+				if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) settings.automute = 1; // Automute
+				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0; // Allowfullscreen
 				if (jsonMessage["multiscreen"] == 1 || jsonMessage["multiscreen"] === true) {
-					multiscreen = 1;
-					automute = 1;
+					settings.multiscreen = 1;
+					settings.automute = 1;
 				}
-				if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") setTitleBar = jsonMessage["titleBar"];
-				if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) setCache = true;
+				if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") ui.settings.titleBar = jsonMessage["titleBar"];
+				if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) ui.settings.caching = true;
 			}
 		} else {
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
@@ -291,7 +293,7 @@ Rectangle {
 		volumebox.textHolder.opacity = 1;
 		volumebox.shadowHolder.opacity = 1;
 		volumebox.textEffectDuration = 300;	
-		timervolume = 1;
+		settings.timervolume = 1;
 	}
 	// End Set Text to Upper Right Text Element (fades out after 300ms)
 	
@@ -307,7 +309,7 @@ Rectangle {
 	
 	// Refresh Mute Icon
 	function refreshMuteIcon() {
-		mutebut.icon = vlcPlayer.state == 0 ? ui.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? ui.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? ui.icon.mute : vlcPlayer.volume == 0 ? ui.icon.mute : vlcPlayer.volume <= 30 ? ui.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? ui.icon.volume.medium : ui.icon.volume.high
+		mutebut.icon = vlcPlayer.state == 0 ? ui.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? settings.automute == 0 ? ui.icon.volume.medium : ui.icon.mute : vlcPlayer.audio.mute ? ui.icon.mute : vlcPlayer.volume == 0 ? ui.icon.mute : vlcPlayer.volume <= 30 ? ui.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? ui.icon.volume.medium : ui.icon.volume.high
 	}
 	// End Refresh Mute Icon
 	
@@ -335,8 +337,8 @@ Rectangle {
 	
 	// Start Fullscreen Toggle
 	function togFullscreen() {
-		if (allowfullscreen == 1) {
-			ismoving = 1;
+		if (settings.allowfullscreen == 1) {
+			settings.ismoving = 1;
 		
 			oldRatioWidth = videoSource.width / videoSource.parent.width;
 			oldRatioHeight = videoSource.height / videoSource.parent.height;
@@ -344,7 +346,7 @@ Rectangle {
 			progressBar.effectDuration = 0;
 			toggleFullscreen();
 			
-			if (multiscreen == 0) progressBar.effectDuration = 250;
+			if (settings.multiscreen == 0) progressBar.effectDuration = 250;
 		}
 	}
 	// End Fullscreen Toggle
@@ -361,10 +363,10 @@ Rectangle {
 	// Start Multiscreen - Fullscreen Functions
 	function gobig() {
 		if (vlcPlayer.state != 1) if (toolbarBackground.bottomtab.containsMouse === false) togFullscreen();
-		if (multiscreen == 1) {
+		if (settings.multiscreen == 1) {
 			if (vlcPlayer.volume == 0) vlcPlayer.volume = 90;
 			volheat.volume = (vlcPlayer.volume /200) * volheat.width;
-			if (vlcPlayer.audio.mute) Wjs.toggleMute();
+			if (vlcPlayer.audio.mute) wjs.toggleMute();
 			refreshMuteIcon();
 		}
 	}
@@ -381,16 +383,16 @@ Rectangle {
 	
 	// Start Toggle Playlist Menu (open/close)
 	function togglePlaylist() {
-		if (playlistmenu === false) {
-			if (subtitlemenu === true) {
+		if (settings.playlistmenu === false) {
+			if (settings.subtitlemenu === true) {
 				subMenublock.visible = false;
-				subtitlemenu = false;
+				settings.subtitlemenu = false;
 			}
 			playlistblock.visible = true;
-			playlistmenu = true;
+			settings.playlistmenu = true;
 		} else {
 			playlistblock.visible = false;
-			playlistmenu = false;
+			settings.playlistmenu = false;
 		}
 	}
 	// End Toggle Playlist Menu (open/close)
@@ -441,7 +443,7 @@ Rectangle {
 	
 	// Start Progress Bar Seek Functionality
 	function progressDrag(mouseX,mouseY) {
-		dragging = true;
+		settings.dragging = true;
 		var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouseX -4) / theview.width);
 		if (newtime > 0) timeBubble.srctime = getTime(newtime);
 	}
@@ -456,7 +458,7 @@ Rectangle {
 			vlcPlayer.playlist.play();
 		}
 		vlcPlayer.position = lastPos;
-		dragging = false;
+		settings.dragging = false;
 	}
 	// End Progress Bar Seek Functionality
 	
@@ -484,12 +486,12 @@ Rectangle {
 			subMenu.anchors.topMargin = 0;
 		} else if (mousehint >= (240 - (subMenuScroll.dragger.height / 2))) {
 			subMenuScroll.dragger.anchors.topMargin = 240 - subMenuScroll.dragger.height;
-			if ((totalSubs *40) > 240) {
-				subMenu.anchors.topMargin = 240 - (totalSubs *40);
+			if ((settings.totalSubs *40) > 240) {
+				subMenu.anchors.topMargin = 240 - (settings.totalSubs *40);
 			}
 		} else {
 			subMenuScroll.dragger.anchors.topMargin = mousehint - (subMenuScroll.dragger.height / 2);
-			subMenu.anchors.topMargin = -(((totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (subMenuScroll.dragger.height /2))));
+			subMenu.anchors.topMargin = -(((settings.totalSubs * 40) - 240) / ((240 - subMenuScroll.dragger.height) / (mousehint - (subMenuScroll.dragger.height /2))));
 		}
 	}
 	// End Scroll Subtitle Menu
@@ -505,7 +507,7 @@ Rectangle {
 			var curvolume = vlcPlayer.volume -newvolume;
 			if (curvolume < 0) curvolume = 0;
 		}
-		if (vlcPlayer.audio.mute) Wjs.toggleMute();
+		if (vlcPlayer.audio.mute) wjs.toggleMute();
 		vlcPlayer.volume = curvolume;
 		refreshMuteIcon();
 		setText("Volume " + (Math.round((250 * (curvolume /200))/10) *5) + "%");
@@ -576,14 +578,14 @@ Rectangle {
 			// Change Icon from Pause to Play and vice versa
 			if (vlcPlayer.playing) {
 				pausetog.visible = true;
-				gobigpause = true;
+				settings.gobigpause = true;
 			} else {
 				playtog.visible = true;
-				gobigplay = true;
+				settings.gobigplay = true;
 			}
 			// End Change Icon
 			
-			if (multiscreen == 1 && fullscreen === false && vlcPlayer.playing === true) {
+			if (settings.multiscreen == 1 && fullscreen === false && vlcPlayer.playing === true) {
 				
 			} else {
 				vlcPlayer.togglePause(); // Toggle Pause
@@ -627,7 +629,7 @@ Rectangle {
 	function nextFrame(newtime) {
 		if (vlcPlayer.state == 3 || vlcPlayer.state == 4) {
 			if (notmuted == 0) if (vlcPlayer.audio.mute === false) {
-				Wjs.toggleMute();
+				wjs.toggleMute();
 				notmuted = 1;
 			}
 			if (vlcPlayer.state == 4) vlcPlayer.togglePause();
@@ -644,7 +646,7 @@ Rectangle {
 	function jumpTo(newtime,direction) {
 		if (vlcPlayer.state == 3 || vlcPlayer.state == 4) {
 			if (notmuted == 0) if (vlcPlayer.audio.mute === false) {
-				Wjs.toggleMute();
+				wjs.toggleMute();
 				notmuted = 1;
 			}
 			if (vlcPlayer.state == 4) {

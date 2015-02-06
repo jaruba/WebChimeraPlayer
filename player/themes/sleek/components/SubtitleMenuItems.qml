@@ -17,16 +17,16 @@ Rectangle {
 	
 	// Start Toggle Subtitle Menu (open/close)
 	function toggleSubtitles() {
-		if (subtitlemenu === false) {
-			if (playlistmenu === true) {
+		if (settings.subtitlemenu === false) {
+			if (settings.playlistmenu === true) {
 				playlistblock.visible = false;
-				playlistmenu = false;
+				settings.playlistmenu = false;
 			}
 			subMenublock.visible = true;
-			subtitlemenu = true;
+			settings.subtitlemenu = true;
 		} else {
 			subMenublock.visible = false;
-			subtitlemenu = false;
+			settings.subtitlemenu = false;
 		}
 	}
 	// End Toggle Subtitle Menu (open/close)
@@ -113,7 +113,7 @@ Rectangle {
 	function clearAll() {
 		var pli = 0;
 		
-		if (totalSubs > 0) for (pli = 0; pli < totalSubs; pli++) if (typeof subItems[pli] !== 'undefined') {
+		if (settings.totalSubs > 0) for (pli = 0; pli < settings.totalSubs; pli++) if (typeof subItems[pli] !== 'undefined') {
 			subItems[pli].destroy();
 			delete subItems[pli];
 		}
@@ -121,7 +121,7 @@ Rectangle {
 		clearSubtitles();
 		subPlaying = 0;
 		subItems = [];
-		totalSubs = 0;
+		settings.totalSubs = 0;
 	}
 	// End Remove all Subtitles
 	
@@ -145,6 +145,7 @@ Rectangle {
 		pli++;
 		
 		if (vlcPlayer.subtitle.count > 1) while (pli < vlcPlayer.subtitle.count) {
+			if (vlcPlayer.subtitle.track == pli) subPlaying = pli;
 			subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { toggleSubtitles(); clearSubtitles(); subPlaying = '+ pli +'; wjs.setText("Subtitle: '+ vlcPlayer.subtitle.description(pli) +'"); vlcPlayer.subtitle.track = '+ pli +'; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ vlcPlayer.subtitle.description(pli) +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
 			pli++;
 		}
@@ -157,7 +158,7 @@ Rectangle {
  			subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { toggleSubtitles(); playSubtitles("'+ slink +'"); subPlaying = '+ pli +'; wjs.setText("Subtitle: '+ plstring +'"); vlcPlayer.subtitle.track = 0; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
 			pli++
 		}
-		totalSubs = pli;
+		settings.totalSubs = pli;
 		// End Adding Subtitle Menu Items
 	}
 	

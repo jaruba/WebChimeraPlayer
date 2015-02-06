@@ -8,9 +8,9 @@ Rectangle {
 
 	anchors.centerIn: parent
 	visible: false
-	height: fullscreen ? gobigpause ? 170 : 85 : gobigpause ? 150 : 75
-	width: fullscreen ? gobigpause ? 170 : 85 : gobigpause ? 150 : 75
-	opacity: gobigpause ? 0 : 1
+	height: fullscreen ? settings.gobigpause ? 170 : 85 : settings.gobigpause ? 150 : 75
+	width: fullscreen ? settings.gobigpause ? 170 : 85 : settings.gobigpause ? 150 : 75
+	opacity: settings.gobigpause ? 0 : 1
 	radius: 10
 	smooth: true
 	
@@ -25,8 +25,8 @@ Rectangle {
 		anchors.centerIn: parent
 		font.family: fonts.icons.name
 		text: UI.icon.bigPause
-		font.pointSize: fullscreen ? gobigpause ? 92 : 46 : gobigpause ? 72 : 36
-		opacity: gobigplay ? 0 : 1
+		font.pointSize: fullscreen ? settings.gobigpause ? 92 : 46 : settings.gobigpause ? 72 : 36
+		opacity: settings.gobigpause ? 0 : 1
 
 		// Start Play Icon Effect when Visible
 		Behavior on font.pointSize { PropertyAnimation { duration: 300 } }
@@ -36,10 +36,10 @@ Rectangle {
 	
 	// Start Timer to Hide Big Pause Icon after 300ms
 	Timer  {
-		interval: 300; running: gobigpause ? true : false; repeat: false
+		interval: 300; running: settings.gobigpause ? true : false; repeat: false
 		onTriggered: {
 			pausetog.visible = false;
-			gobigpause = false;
+			settings.gobigpause = false;
 		}
 	}
 	// End Timer to Hide Big Pause Icon after 300ms

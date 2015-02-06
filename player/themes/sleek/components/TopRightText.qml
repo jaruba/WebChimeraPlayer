@@ -20,7 +20,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +38 : volumebox.paintedWidth +24
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 37 : topText.isVisible ? 26 : 11
+		anchors.topMargin: fullscreen ? 37 : topText.isVisible ? 30 : 11
         Behavior on opacity { PropertyAnimation { id: shadowTextEffect; duration: 500 } }
 		Text {
 			id: volumeBoxShadow
@@ -43,7 +43,7 @@ Rectangle {
 		anchors.right: parent.right
 		anchors.rightMargin: fullscreen ? volumebox.paintedWidth +40 : volumebox.paintedWidth +25
 		anchors.top: parent.top
-		anchors.topMargin: fullscreen ? 35 : topText.isVisible ? 24 : 10
+		anchors.topMargin: fullscreen ? 35 : topText.isVisible ? 28 : 10
 		opacity: 0
 		Behavior on opacity { PropertyAnimation { id: volTextEffect; duration: 0 } }
 		Text {
@@ -60,12 +60,12 @@ Rectangle {
 	}
 	// Fade Out Top Right text box after 3 seconds
 	Timer {
-		interval: 3000; running: timervolume == 1 ? true : false; repeat: false
+		interval: 3000; running: settings.timervolume == 1 ? true : false; repeat: false
 		onTriggered: {
 			shadowTextEffect.duration = 150;
 			shadowHolder.opacity = 0;
 			textHolder.opacity = 0;
-			timervolume = 0;
+			settings.timervolume = 0;
 		}
 	}
 	// End Fade Out Top Right text box after 3 seconds

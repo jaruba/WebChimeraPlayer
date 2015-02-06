@@ -10,7 +10,7 @@ Rectangle {
 	property alias backgroundOpacity: backgroundIcon.opacity
 	
 
-	visible: glyphsLoaded ? vlcPlayer.position > 0 ? dragging ? true : progressBar.dragpos.containsMouse ? true : false : false : false
+	visible: settings.glyphsLoaded ? vlcPlayer.position > 0 ? settings.dragging ? true : progressBar.dragpos.containsMouse ? true : false : false : false
 	anchors.bottom: parent.bottom
 	anchors.bottomMargin: fullscreen ? 66 : 63
 	anchors.left: parent.left
