@@ -22,7 +22,7 @@ Rectangle {
 	property var bottomPx: 0;
 	
 	
-	// Start Toggle Subtitle Menu (open/close)
+	// Start Toggle Context Menu (open/close)
 	function open() {
 		if (cursorX + root.width > mousesurface.width) {
 			root.anchors.leftMargin = mousesurface.width - root.width;
@@ -41,9 +41,9 @@ Rectangle {
 	function close() {
 		root.visible = false;
 	}
-	// End Toggle Subtitle Menu (open/close)
+	// End Toggle Context Menu (open/close)
 	
-	// Start Remove all Subtitles
+	// Start Remove all Context Menu Items
 	function clearAll() {
 		var pli = 0;
 		
@@ -59,14 +59,14 @@ Rectangle {
 		conItems = [];
 		totalCons = 0;
 	}
-	// End Remove all Subtitles
+	// End Remove all Context Menu Items
 	
 	function href(target) {
 		fireQmlMessage("[href]"+target);
 	}
 	
 	function addContextItems() {
-		// Remove Old Subtitle Menu Items
+		// Remove Old Context Menu Items
 		clearAll();
 
 		// Adding Context Menu Items
