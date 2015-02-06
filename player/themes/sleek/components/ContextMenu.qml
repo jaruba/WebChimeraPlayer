@@ -22,7 +22,7 @@ Rectangle {
 	property var bottomPx: 0;
 	
 	
-	// Start Toggle Context Menu (open/close)
+	// Start Open/Close Context Menu Functions
 	function open() {
 		if (cursorX + root.width > mousesurface.width) {
 			root.anchors.leftMargin = mousesurface.width - root.width;
@@ -41,7 +41,7 @@ Rectangle {
 	function close() {
 		root.visible = false;
 	}
-	// End Toggle Context Menu (open/close)
+	// End Open/Close Context Menu Functions
 	
 	// Start Remove all Context Menu Items
 	function clearAll() {
