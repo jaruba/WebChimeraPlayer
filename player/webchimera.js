@@ -53,6 +53,13 @@ function IsJsonString(str) {
 }
 // end function to check if a string is json
 
+// check if plugin is installed
+var isInstalled = false;
+$.each(navigator.plugins, function() {
+	if (this.name == "WebChimera Plugin") isInstalled = true;
+});
+// end check if plugin is installed
+
 var wjs = function(context) {
     // Call the constructor
     return new wjs.init(context);
@@ -116,6 +123,11 @@ wjs.init.prototype.qmlLoaded = function(action) {
 };
 
 wjs.init.prototype.addPlayer = function(qmlsettings) {
+	
+	if (!isInstalled) {
+		this.videoelem.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+		return false;
+	}
 
 	newid = (typeof qmlsettings["id"] === "undefined") ? "webchimera" : qmlsettings["id"]; // if no id set, default to "webchimera"
 
