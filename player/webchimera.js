@@ -278,3 +278,15 @@ wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.videoelem.emitJsMessage("[load-m3u]"+M3Uurl);
 };
 // end function to load m3u files
+
+// function to Change Opening Text
+wjs.init.prototype.setOpeningText = function(openingtext) {
+	if (typeof openingtext !== "undefined") this.videoelem.emitJsMessage("[opening-text]"+openingtext);
+};
+// end function to Change Opening Text
+
+// function to Send Download Percent (for buffering bar)
+wjs.init.prototype.setDownloaded = function(downloaded) {
+	if (typeof downloaded !== "undefined") this.videoelem.emitJsMessage("[downloaded]"+downloaded);
+};
+// end function to Send Download Percent (for buffering bar)
