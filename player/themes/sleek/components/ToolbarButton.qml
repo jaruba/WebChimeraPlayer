@@ -14,7 +14,7 @@ Rectangle {
 	
 	id: root
 	height: parent.height
-	width: 59
+	width: buttonWidth
 	clip: false
 	color: 'transparent'
 	Text {

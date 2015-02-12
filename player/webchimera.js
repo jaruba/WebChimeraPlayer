@@ -202,6 +202,22 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 };
 
+// function for skinning
+wjs.init.prototype.skin = function(skin) {
+	skin.skinning = true;
+	newid = this.context;
+	if (typeof newid === 'string') {
+		if (newid.substring(0,1) == "#") {
+			var webchimeraid = newid.substring(1);
+		} else if (newid.substring(0,1) == ".") {
+			var webchimeraclass = newid.substring(1);
+		} else var webchimeraid = newid;
+	}
+	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
+	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+}
+// end function for skinning
+
 // function to add playlist items
 wjs.init.prototype.addPlaylist = function(playlist) {
 	 if (typeof playlist === 'string') {

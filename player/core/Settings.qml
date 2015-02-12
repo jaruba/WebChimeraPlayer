@@ -1,6 +1,9 @@
 import QtQuick 2.1
 
 QtObject {
+	property alias data: root;
+	
+	id: root;
 	property var gobigplay: false;
 	property var gobigpause: false;
 	property var dragging: false;

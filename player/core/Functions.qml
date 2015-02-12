@@ -246,10 +246,9 @@ Rectangle {
 		plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 		
 		fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
-	
-//		setText(ui.settings.caching);
-	
+				
 		playlist.addPlaylistItems();
+		
 	}
 	// End on QML Loaded
 	
@@ -258,6 +257,7 @@ Rectangle {
 	function onMessage( message ) {
 		if (isJson(message)) {
 			var jsonMessage = JSON.parse(message);
+			ui = skinData.variables;
 			if (jsonMessage["settings"] === true) {
 				if (jsonMessage["caching"]) settings.cache = jsonMessage["caching"]; // Get network-caching parameter
 				if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) settings.mouseevents = 1; // Set Mouse Events
@@ -272,12 +272,71 @@ Rectangle {
 				if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") ui.settings.titleBar = jsonMessage["titleBar"];
 				if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) ui.settings.caching = true;
 			}
+			if (jsonMessage["skinning"] === true) {
+				if (jsonMessage["fonts"]) {
+					var skinFonts = jsonMessage["fonts"];
+					if (skinFonts["icons"]) ui.settings.iconFont = skinFonts["icons"];
+					if (skinFonts["text"]) {
+						var textFont = skinFonts["text"];
+						if (textFont["default"]) ui.settings.defaultFont = textFont["default"];
+						if (textFont["secondary"]) ui.settings.secondaryFont = textFont["secondary"];
+					}
+				}
+				if (jsonMessage["toolbar"]) {
+					var skinToolbar = jsonMessage["toolbar"];
+					if (skinToolbar["settings"]) {
+						var tbSettings = skinToolbar["settings"];
+						if (tbSettings["button"]) {
+							var btSettings = tbSettings["button"];
+							if (btSettings["width"]) buttonWidth = btSettings["width"];
+							if (btSettings["muteWidth"]) ui.settings.toolbar.buttonMuteWidth = btSettings["muteWidth"];
+							if (btSettings["hoverGlow"]) ui.settings.buttonGlow = btSettings["hoverGlow"];
+							if (typeof btSettings["borderVisible"] !== "undefined") borderVisible = btSettings["borderVisible"];
+						}
+						if (typeof tbSettings["timeMargin"] !== "undefined") timeMargin = tbSettings["timeMargin"];
+						if (typeof tbSettings["opacity"] !== "undefined") ui.settings.toolbar.opacity = tbSettings["opacity"];
+					}
+					if (skinToolbar["colors"]) {
+						var tbColors = skinToolbar["colors"];
+						if (tbColors["button"]) ui.colors.toolbar.button = tbColors["button"];
+						if (tbColors["buttonHover"]) ui.colors.toolbar.buttonHover = tbColors["buttonHover"];
+						if (tbColors["border"]) ui.colors.toolbar.border = tbColors["border"];
+						if (tbColors["currentTime"]) ui.colors.toolbar.currentTime = tbColors["currentTime"];
+						if (tbColors["lengthTime"]) ui.colors.toolbar.lengthTime = tbColors["lengthTime"];
+						if (tbColors["background"]) ui.colors.background = tbColors["background"];
+						if (tbColors["progressBar"]) {
+							var tbProgress = tbColors["progressBar"];
+							if (tbProgress["background"]) ui.colors.progress.background = tbProgress["background"];
+							if (tbProgress["viewed"]) ui.colors.progress.viewed = tbProgress["viewed"];
+							if (tbProgress["position"]) ui.colors.progress.position = tbProgress["position"];
+							if (tbProgress["cache"]) ui.colors.progress.cache = tbProgress["cache"];
+						}
+						if (tbColors["volume"]) {
+							var tbVolume = tbColors["volume"];
+							if (tbVolume["background"]) ui.colors.volumeHeat.background = tbVolume["background"];
+							if (tbVolume["color"]) ui.colors.volumeHeat.color = tbVolume["color"];
+						}
+					}
+					if (skinToolbar["icons"]) {
+						var tbIcons = skinToolbar["icons"];
+						if (tbIcons["prev"]) ui.icon.prev = tbIcons["prev"];
+						if (tbIcons["next"]) ui.icon.next = tbIcons["next"];
+						if (tbIcons["play"]) ui.icon.play = tbIcons["play"];
+						if (tbIcons["pause"]) ui.icon.pause = tbIcons["pause"];
+						if (tbIcons["mute"]) ui.icon.mute = tbIcons["mute"];
+						if (tbIcons["subtitles"]) ui.icon.subtitles = tbIcons["subtitles"];
+						if (tbIcons["playlist"]) ui.icon.playlist = tbIcons["playlist"];
+						if (tbIcons["minimize"]) ui.icon.minimize = tbIcons["minimize"];
+						if (tbIcons["maximize"]) ui.icon.maximize = tbIcons["maximize"];
+					}
+				}
+				ui = ui;
+			}		
 		} else {
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 		}
-		
 		
 		
 	}
