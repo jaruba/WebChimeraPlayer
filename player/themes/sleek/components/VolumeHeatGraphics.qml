@@ -3,9 +3,7 @@ import QmlVlc 0.1
 import "./" as Loader
 
 Rectangle {
-	property alias volLow: backgroundColors.volLow
-	property alias volMed: backgroundColors.volMed
-	property alias volHigh: backgroundColors.volHigh
+	property alias volColor: backgroundColors.volColor
 	property alias volume: moveposa.width
 	property alias backgroundColor: root.color
 
@@ -21,7 +19,7 @@ Rectangle {
 		Rectangle {
 			id: moveposa
 			clip: true
-			width: (vlcPlayer.volume /200) * (parent.width - movecura.width)
+			width: 0
 			anchors.top: parent.top
 			anchors.left: parent.left
 			anchors.bottom: parent.bottom

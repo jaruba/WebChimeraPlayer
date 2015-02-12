@@ -22,9 +22,5 @@ Rectangle {
 		anchors.fill: parent
 		cursorShape: Qt.PointingHandCursor
 		hoverEnabled: true
-		onClicked: {
-			playlistblock.visible = false;
-			playlistmenu = false
-		}
 	}
 }

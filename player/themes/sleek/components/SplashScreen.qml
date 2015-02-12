@@ -14,7 +14,7 @@ Rectangle {
 	// If Playlist is Open Show Top Text
 	Text {
 		id: openingtext
-		visible: playlistmenu
+		visible: settings.playlistmenu === true || settings.subtitlemenu === true ? true : false
 		anchors.top: parent.top
 		anchors.topMargin: 10
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -26,7 +26,7 @@ Rectangle {
 	Rectangle {
 		anchors.centerIn: parent
 		width: 1
-		height: multiscreen == 1 ? fullscreen ? 100 : 76 : 100 // Required for Multiscreen
+		height: settings.multiscreen == 1 ? fullscreen ? 100 : 76 : 100 // Required for Multiscreen
 		color: "transparent"
 		Rectangle {
 			Image {
@@ -44,11 +44,11 @@ Rectangle {
 			}
 			Text {
 				id: loadingFont
-				visible: multiscreen == 1 ? fullscreen ? vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false : false : vlcPlayer.state == 1 ? true : buffering > 0 && buffering < 100 ? true : false // Required for Multiscreen
+				visible: settings.multiscreen == 1 ? fullscreen ? vlcPlayer.state == 1 || vlcPlayer.state == 0 ? true : settings.buffering > 0 && settings.buffering < 100 ? true : false : false : vlcPlayer.state == 1 || vlcPlayer.state == 0 ? true : settings.buffering > 0 && settings.buffering < 100 ? true : false // Required for Multiscreen
 				anchors.top: parent.top
 				anchors.topMargin: 80
 				anchors.horizontalCenter: parent.horizontalCenter
-				text: "Loading Resource"
+				text: settings.openingText
 				font.pointSize: fullscreen ? 14 : 13
 				font.weight: Font.DemiBold
 				color: openingtext.color

@@ -29,7 +29,6 @@ Rectangle {
 		anchors.left: parent.left
 		anchors.leftMargin: 13
 		width: 10
-		height: (vlcPlayer.playlist.itemCount * 40) < 240 ? 240 : (240 / (vlcPlayer.playlist.itemCount * 40)) * 240
 		opacity: playmdrag.height == 240 ? 0 : 1
 	}
 	MouseArea {

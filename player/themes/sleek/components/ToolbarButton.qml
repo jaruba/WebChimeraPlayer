@@ -14,14 +14,14 @@ Rectangle {
 	
 	id: root
 	height: parent.height
-	width: 59
+	width: buttonWidth
 	clip: false
 	color: 'transparent'
 	Text {
 		id: icon
 		anchors.centerIn: parent
 		font.family: fonts.icons.name
-		color: mouseAreaButton.containsMouse ? buttonHoverColor : buttonNormalColor
+		color: mouseAreaButton.containsMouse ? ui.colors.toolbar.buttonHover : ui.colors.toolbar.button
 		height: paintedHeight + (glowEffect.radius * 2)
         width: paintedWidth + (glowEffect.radius * 2)
 		horizontalAlignment: Text.AlignHCenter

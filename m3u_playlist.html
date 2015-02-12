@@ -21,13 +21,10 @@
 <script src="player/webchimera.js" type="text/javascript"></script>
 <script>
 // create player
-wjs("#player_wrapper").addPlayer("sleek", "webchimera",{ autoplay: 1 });
+wjs("#player_wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
 
-// when qml has loaded
-wjs("#webchimera").qmlLoaded(function() {
-	// load m3u playlist
-    wjs("#webchimera").loadM3U("http://www.webchimera.org/m3u/playlist-demo.m3u");
-});
+// load m3u playlist
+wjs("#webchimera").addPlaylist("http://www.webchimera.org/m3u/playlist-demo.m3u");
 </script>
 
 </body>

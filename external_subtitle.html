@@ -21,16 +21,20 @@
 <script src="player/webchimera.js" type="text/javascript"></script>
 <script>
 // create player
-wjs("#player_wrapper").addPlayer("sleek", "webchimera",{ autoplay: 1 });
+wjs("#player_wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
 
-// add video url
-wjs("#webchimera").addPlaylist("http://www.youtube.com/watch?v=ja1sjfnfjg0");
+// add video url with an external subtitle
+myplaylist = [];
 
-// when qml has loaded
-wjs("#webchimera").qmlLoaded(function() {
-	// load the subtitle file
-    wjs("#webchimera").startSubtitle("http://www.webchimera.org/sub/the_last_belle_2011_eng.srt");
+myplaylist.push({
+	url: "http://www.youtube.com/watch?v=ja1sjfnfjg0",
+	subtitles: {
+		"English": "http://www.webchimera.org/sub/the_last_belle_2011_eng.srt"
+	}
 });
+
+// add the playlist to the player
+wjs("#webchimera").addPlaylist(myplaylist);
 </script>
 
 </body>
