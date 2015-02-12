@@ -22,17 +22,17 @@ Rectangle {
 	property var bottomPx: 0;
 	
 	
-	// Start Toggle Subtitle Menu (open/close)
+	// Start Open/Close Context Menu Functions
 	function open() {
-		if (cursorX + root.width > mousesurface.width) {
+		if (settings.cursorX + root.width > mousesurface.width) {
 			root.anchors.leftMargin = mousesurface.width - root.width;
-		} else root.anchors.leftMargin = cursorX;
+		} else root.anchors.leftMargin = settings.cursorX;
 		
 		rightPx = mousesurface.width - (root.anchors.leftMargin + root.width);
 
-		if (cursorY + root.height > mousesurface.height) {
+		if (settings.cursorY + root.height > mousesurface.height) {
 			root.anchors.topMargin = mousesurface.height - root.height;
-		} else root.anchors.topMargin = cursorY;
+		} else root.anchors.topMargin = settings.cursorY;
 
 		bottomPx = mousesurface.height - (root.anchors.topMargin + root.height);
 
@@ -41,9 +41,9 @@ Rectangle {
 	function close() {
 		root.visible = false;
 	}
-	// End Toggle Subtitle Menu (open/close)
+	// End Open/Close Context Menu Functions
 	
-	// Start Remove all Subtitles
+	// Start Remove all Context Menu Items
 	function clearAll() {
 		var pli = 0;
 		
@@ -59,14 +59,14 @@ Rectangle {
 		conItems = [];
 		totalCons = 0;
 	}
-	// End Remove all Subtitles
+	// End Remove all Context Menu Items
 	
 	function href(target) {
 		fireQmlMessage("[href]"+target);
 	}
 	
 	function addContextItems() {
-		// Remove Old Subtitle Menu Items
+		// Remove Old Context Menu Items
 		clearAll();
 
 		// Adding Context Menu Items
@@ -79,7 +79,6 @@ Rectangle {
 				var logicIt = "";
 				var clickIt = "";
 				var preLogicIt = "";
-				var aspectRatios = ["Default", "1:1", "4:3", "16:9", "16:10", "2.21:1", "2.35:1", "2.39:1", "5:4"];
 				var selected = 0;
 				var submenuWidth = 102;
 				
@@ -100,7 +99,7 @@ Rectangle {
 						clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { vlcPlayer.audio.track = '+ plsi +'; selectedIt.anchors.topMargin = '+ plsi +' *30 +11; wjs.setText("Audio Track: " + vlcPlayer.audio.description('+ plsi +')); } ';
 					}
 					
-					submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: closeIcon; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
+					submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: ui.icon.closePlaylist; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
 					
 					var submenuTop = 0;
 					var submenuLeft = 0;
@@ -115,7 +114,7 @@ Rectangle {
 			
 					conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { property var iTmouseY: subcmitem'+ pli +'.mouseY; property var tempvar: false; id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { } onExited: { tempvar = true; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } Rectangle { id: submenu'+ pli +'; visible: cmitem'+ pli +'.containsMouse ? true : subcmitem'+ pli +'.containsMouse ? true : false; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; border.color: root.border.color; border.width: 1; height: '+submenuHeight+'; width: '+submenuWidth+'; color: root.color; '+ submenuIt +' } MouseArea { id: subcmitem'+ pli +'; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; height: '+submenuHeight+'; width: '+submenuWidth+'; visible: submenu'+ pli +'.visible ? true : tempvar ? true : false; hoverEnabled: submenu'+ pli +'.visible ? true : tempvar ? true : false; cursorShape: Qt.PointingHandCursor; onEntered: { tempvar = true; } onExited: { tempvar = false; '+ preLogicIt +' } onPositionChanged: { '+ logicIt +' } onClicked: { '+ clickIt +' } } Timer { interval: 300; running: tempvar; repeat: false; onTriggered: { if (!subcmitem'+ pli +'.containsMouse) tempvar = false; } } }', root, 'cmenustr' +pli);
 			
-					conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: glyphsLoaded ? playIcon : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
+					conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: settings.glyphsLoaded ? ui.icon.play : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
 					pli++;
 				}
 			}
@@ -125,25 +124,24 @@ Rectangle {
 			var logicIt = "";
 			var clickIt = "";
 			var preLogicIt = "";
-			var aspectRatios = ["Default", "1:1", "4:3", "16:9", "16:10", "2.21:1", "2.35:1", "2.39:1", "5:4"];
 			var selected = 0;
 			
-			var submenuHeight = (aspectRatios.length *30) +2;
+			var submenuHeight = (settings.aspectRatios.length *30) +2;
 			if (submenuHeight < mousesurface.height) {
 			
 				var plsi = 0;
-				for (plsi = 0; plsi < aspectRatios.length; plsi++) {
-					if (aspectRatios[plsi] == curAspect) selected = plsi *30;
-					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ aspectRatios[plsi] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
+				for (plsi = 0; plsi < settings.aspectRatios.length; plsi++) {
+					if (settings.aspectRatios[plsi] == settings.curAspect) selected = plsi *30;
+					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ settings.aspectRatios[plsi] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
 					preLogicIt += ' sbmenu'+ plsi +'.color = "transparent"; ';
 				}
-				for (plsi = 0; plsi < aspectRatios.length; plsi++) {
+				for (plsi = 0; plsi < settings.aspectRatios.length; plsi++) {
 					if (logicIt != "") logicIt += ' else';
 					logicIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { if (sbmenu'+ plsi +'.color != "#3D3D3D") { '+ preLogicIt +' sbmenu'+ plsi +'.color = "#3D3D3D"; } } ';
-					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { curAspect = "'+ aspectRatios[plsi] +'"; if (curAspect == "Default") { wjs.resetAspect(); } else { wjs.changeAspect(curAspect,"ratio"); } wjs.setText("Aspect Ratio: " + curAspect); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
+					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { settings.curAspect = "'+ settings.aspectRatios[plsi] +'"; if (settings.curAspect == "Default") { wjs.resetAspect(); } else { wjs.changeAspect(settings.curAspect,"ratio"); } wjs.setText("Aspect Ratio: " + settings.curAspect); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
 				}
 				
-				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: closeIcon; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
+				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: ui.icon.closePlaylist; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
 				
 				var submenuWidth = 102;
 				var submenuTop = 0;
@@ -159,7 +157,7 @@ Rectangle {
 		
 				conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { property var iTmouseY: subcmitem'+ pli +'.mouseY; property var tempvar: false; id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { } onExited: { tempvar = true; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } Rectangle { id: submenu'+ pli +'; visible: cmitem'+ pli +'.containsMouse ? true : subcmitem'+ pli +'.containsMouse ? true : false; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; border.color: root.border.color; border.width: 1; height: '+submenuHeight+'; width: '+submenuWidth+'; color: root.color; '+ submenuIt +' } MouseArea { id: subcmitem'+ pli +'; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; height: '+submenuHeight+'; width: '+submenuWidth+'; visible: submenu'+ pli +'.visible ? true : tempvar ? true : false; hoverEnabled: submenu'+ pli +'.visible ? true : tempvar ? true : false; cursorShape: Qt.PointingHandCursor; onEntered: { tempvar = true; } onExited: { tempvar = false; '+ preLogicIt +' } onPositionChanged: { '+ logicIt +' } onClicked: { '+ clickIt +' } } Timer { interval: 300; running: tempvar; repeat: false; onTriggered: { if (!subcmitem'+ pli +'.containsMouse) tempvar = false; } } }', root, 'cmenustr' +pli);
 		
-				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: glyphsLoaded ? playIcon : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
+				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: settings.glyphsLoaded ? ui.icon.play : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
 				pli++;
 			}
 	
@@ -168,25 +166,24 @@ Rectangle {
 			var logicIt = "";
 			var clickIt = "";
 			var preLogicIt = "";
-			var crops = ["Default", "16:10", "16:9", "1.85:1", "2.21:1", "2.35:1", "2.39:1", "5:3", "4:3", "5:4", "1:1"];
 			var selected = 0;
 			
-			var submenuHeight = (crops.length *30) +2;
+			var submenuHeight = (settings.crops.length *30) +2;
 			if (submenuHeight < mousesurface.height) {
 			
 				var plsi = 0;
-				for (plsi = 0; plsi < crops.length; plsi++) {
-					if (crops[plsi] == curCrop) selected = plsi *30;
-					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ crops[plsi] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
+				for (plsi = 0; plsi < settings.crops.length; plsi++) {
+					if (settings.crops[plsi] == settings.curCrop) selected = plsi *30;
+					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ settings.crops[plsi] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
 					preLogicIt += ' sbmenu'+ plsi +'.color = "transparent"; ';
 				}
-				for (plsi = 0; plsi < crops.length; plsi++) {
+				for (plsi = 0; plsi < settings.crops.length; plsi++) {
 					if (logicIt != "") logicIt += ' else';
 					logicIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { if (sbmenu'+ plsi +'.color != "#3D3D3D") { '+ preLogicIt +' sbmenu'+ plsi +'.color = "#3D3D3D"; } } ';
-					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { curCrop = "'+ crops[plsi] +'"; if (curCrop == "Default") { wjs.resetAspect(); } else { wjs.changeAspect(curCrop,"crop"); } wjs.setText("Crop: " + curCrop); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
+					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { settings.curCrop = "'+ settings.crops[plsi] +'"; if (settings.curCrop == "Default") { wjs.resetAspect(); } else { wjs.changeAspect(settings.curCrop,"crop"); } wjs.setText("Crop: " + settings.curCrop); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
 				}
 				
-				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: closeIcon; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
+				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: ui.icon.closePlaylist; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
 				
 				var submenuWidth = 102;
 				var submenuTop = 0;
@@ -202,7 +199,7 @@ Rectangle {
 		
 				conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { property var iTmouseY: subcmitem'+ pli +'.mouseY; property var tempvar: false; id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { } onExited: { tempvar = true; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } Rectangle { id: submenu'+ pli +'; visible: cmitem'+ pli +'.containsMouse ? true : subcmitem'+ pli +'.containsMouse ? true : false; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; border.color: root.border.color; border.width: 1; height: '+submenuHeight+'; width: '+submenuWidth+'; color: root.color; '+ submenuIt +' } MouseArea { id: subcmitem'+ pli +'; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; height: '+submenuHeight+'; width: '+submenuWidth+'; visible: submenu'+ pli +'.visible ? true : tempvar ? true : false; hoverEnabled: submenu'+ pli +'.visible ? true : tempvar ? true : false; cursorShape: Qt.PointingHandCursor; onEntered: { tempvar = true; } onExited: { tempvar = false; '+ preLogicIt +' } onPositionChanged: { '+ logicIt +' } onClicked: { '+ clickIt +' } } Timer { interval: 300; running: tempvar; repeat: false; onTriggered: { if (!subcmitem'+ pli +'.containsMouse) tempvar = false; } } }', root, 'cmenustr' +pli);
 		
-				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: glyphsLoaded ? playIcon : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
+				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: settings.glyphsLoaded ? ui.icon.play : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
 				pli++;
 			}
 	
@@ -211,25 +208,24 @@ Rectangle {
 			var logicIt = "";
 			var clickIt = "";
 			var preLogicIt = "";
-			var zooms = [[1, "Default"], [2, "2x Double"], [0.25, "0.25x Quarter"], [0.5, "0.5x Half"]];
 			var selected = 0;
 			
-			var submenuHeight = (zooms.length *30) +2;
+			var submenuHeight = (settings.zooms.length *30) +2;
 			if (submenuHeight < mousesurface.height) {
 			
 				var plsi = 0;
-				for (plsi = 0; plsi < zooms.length; plsi++) {
-					if (crops[plsi] == curCrop) selected = plsi *30;
-					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ zooms[plsi][1] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
+				for (plsi = 0; plsi < settings.zooms.length; plsi++) {
+					if (plsi == settings.curZoom) selected = plsi *30;
+					submenuIt += ' Rectangle { id: sbmenu'+ plsi +'; height: 30; width: 100; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: ('+ plsi +' * 30) +1; color: "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 15; anchors.top: parent.top; anchors.topMargin: 7; text: "'+ settings.zooms[plsi][1] +'"; color: "#e5e5e5"; font.pointSize: 9 } } ';
 					preLogicIt += ' sbmenu'+ plsi +'.color = "transparent"; ';
 				}
-				for (plsi = 0; plsi < zooms.length; plsi++) {
+				for (plsi = 0; plsi < settings.zooms.length; plsi++) {
 					if (logicIt != "") logicIt += ' else';
 					logicIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { if (sbmenu'+ plsi +'.color != "#3D3D3D") { '+ preLogicIt +' sbmenu'+ plsi +'.color = "#3D3D3D"; } } ';
-					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { curCrop = "'+ crops[plsi] +'"; wjs.changeZoom('+ zooms[plsi][0] +'); wjs.setText("Zoom Mode: '+ zooms[plsi][1] +'"); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
+					clickIt += ' if (iTmouseY > ('+ plsi +' *30) && iTmouseY < (('+ plsi +' +1) *30)) { settings.curZoom = "'+ plsi +'"; wjs.changeZoom('+ settings.zooms[plsi][0] +'); wjs.setText("Zoom Mode: '+ settings.zooms[plsi][1] +'"); selectedIt.anchors.topMargin = '+ plsi +' *30 +11; } ';
 				}
 				
-				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: closeIcon; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
+				submenuIt += ' Text { id: selectedIt; anchors.left: parent.left; anchors.leftMargin: 5; anchors.top: parent.top; anchors.topMargin: '+ selected +' +11; text: ui.icon.closePlaylist; font.family: fonts.icons.name; color: "#e5e5e5"; font.pointSize: 6 } ';
 				
 				var submenuWidth = 102;
 				var submenuTop = 0;
@@ -245,7 +241,7 @@ Rectangle {
 		
 				conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { property var iTmouseY: subcmitem'+ pli +'.mouseY; property var tempvar: false; id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { } onExited: { tempvar = true; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } Rectangle { id: submenu'+ pli +'; visible: cmitem'+ pli +'.containsMouse ? true : subcmitem'+ pli +'.containsMouse ? true : false; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; border.color: root.border.color; border.width: 1; height: '+submenuHeight+'; width: '+submenuWidth+'; color: root.color; '+ submenuIt +' } MouseArea { id: subcmitem'+ pli +'; anchors.left: parent.right; anchors.leftMargin: '+ submenuLeft +'; anchors.top: parent.top; anchors.topMargin: '+ submenuTop +'; height: '+submenuHeight+'; width: '+submenuWidth+'; visible: submenu'+ pli +'.visible ? true : tempvar ? true : false; hoverEnabled: submenu'+ pli +'.visible ? true : tempvar ? true : false; cursorShape: Qt.PointingHandCursor; onEntered: { tempvar = true; } onExited: { tempvar = false; '+ preLogicIt +' } onPositionChanged: { '+ logicIt +' } onClicked: { '+ clickIt +' } } Timer { interval: 300; running: tempvar; repeat: false; onTriggered: { if (!subcmitem'+ pli +'.containsMouse) tempvar = false; } } }', root, 'cmenustr' +pli);
 		
-				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: glyphsLoaded ? playIcon : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
+				conArrows[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Text {  anchors.right: parent.right; anchors.rightMargin: 11; anchors.top: parent.top; anchors.topMargin: 10+ ('+ pli +' *30); text: settings.glyphsLoaded ? ui.icon.play : ""; font.family: fonts.icons.name; font.pointSize: 9; color: "#e5e5e5"; }', root, 'omenustr' +pli);
 				pli++;
 			}
 		}

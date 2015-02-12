@@ -116,6 +116,13 @@ wjs.init.prototype.qmlLoaded = function(action) {
 };
 
 wjs.init.prototype.addPlayer = function(qmlsettings) {
+	
+	// check if plugin is installed
+	if (navigator.plugins["WebChimera Plugin"].name != "WebChimera Plugin") {
+		this.videoelem.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+		return false;
+	}
+	// end check if plugin is installed
 
 	newid = (typeof qmlsettings["id"] === "undefined") ? "webchimera" : qmlsettings["id"]; // if no id set, default to "webchimera"
 
@@ -153,12 +160,12 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 			if (this.basicParams.indexOf(key) > -1) {
 				onloadsettings[key] = qmlsettings[key];
 			} else if (key == "buffer") {
-				onloadsettings[key] = qmlsettings[key];
+				onloadsettings["caching"] = qmlsettings[key];
 				didbuffer = 1;
 				playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
 			} else {
 				if (key == "network-caching") {
-					onloadsettings[key] = qmlsettings[key];
+					onloadsettings["caching"] = qmlsettings[key];
 					didbuffer = 1;
 				}
 				if (key != "id" && key != "theme") playerbody += '<param name="' + key + '" value="' + qmlsettings[key] + '" />';
@@ -194,6 +201,22 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	}
 	
 };
+
+// function for skinning
+wjs.init.prototype.skin = function(skin) {
+	skin.skinning = true;
+	newid = this.context;
+	if (typeof newid === 'string') {
+		if (newid.substring(0,1) == "#") {
+			var webchimeraid = newid.substring(1);
+		} else if (newid.substring(0,1) == ".") {
+			var webchimeraclass = newid.substring(1);
+		} else var webchimeraid = newid;
+	}
+	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
+	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+}
+// end function for skinning
 
 // function to add playlist items
 wjs.init.prototype.addPlaylist = function(playlist) {

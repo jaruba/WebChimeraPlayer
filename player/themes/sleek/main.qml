@@ -23,50 +23,17 @@ import "../../core" as JsLogic
 import "components" as Loader
 
 Rectangle {
-	// We strongly recommend that you do not remove or change any of the global variables
-	property var gobigplay: false;
-	property var gobigpause: false;
-	property var dragging: false;
-	property var ismoving: 1;
-	property var buffering: 0;
-	property var autoloop: 0;
-	property var automute: 0;
-	property var allowfullscreen: 1;
-	property var playlistmenu: false;
-	property var subtitlemenu: false;
-	property var totalSubs: 0;
-	property var title: "";
-    property var multiscreen: 0;
-	property var timervolume: 0;
-	property var glyphsLoaded: false;
-	property var firsttime: 1;
-	property var firstvolume: 1;
-	property var caching: 0;
-	property var lastTime: 0;
-	property var buttonNormalColor: ui.colors.toolbar.button;
-	property var buttonHoverColor: ui.colors.toolbar.buttonHover;
-	property var setTitleBar: ui.settings.titleBar;
-	property var setCache: ui.settings.cache;
-	property var playIcon: ui.icon.play;
-	property var closeIcon: ui.icon.closePlaylist;
-	property var iconFont: ui.settings.iconFont;
-	property var cursorX: 0;
-	property var cursorY: 0;
-	property var contextmenu: false;
-	property var curZoom: 0;
-	property var curCrop: "Default";
-	property var curAspect: "Default";
 
-
-	LoadSettings.UIsettings { id: ui }
-
-	// load core javascript functions
-	JsLogic.Functions { id: jsFunc }
-	property var wjs: jsFunc;
-
-	JsLogic.Hotkeys { id: hotkeyFunc }
-	property var hotkeys: hotkeyFunc;
-	// end load core javascript functions
+	// load core javascript functions and settings
+	property variant ui: {}
+	LoadSettings.UIsettings { id: skinData }
+	property var borderVisible: skinData.variables.settings.toolbar.borderVisible;
+	property var buttonWidth: skinData.variables.settings.toolbar.buttonWidth;
+	property var timeMargin: skinData.variables.settings.toolbar.timeMargin;
+	JsLogic.Settings { id: settings }
+	JsLogic.Functions { id: wjs }
+	JsLogic.Hotkeys { id: hotkeys }
+	// end load core javascript functions and settings
 	
     id: theview;
     color: ui.colors.videoBackground; // Set Video Background Color
@@ -97,15 +64,7 @@ Rectangle {
 		fontShadow: ui.colors.fontShadow
 	}
 	// End Top Center Text Box
-	
-	// Start Top Right Text Box
-	Loader.TopRightText {
-		id: volumebox
-		fontColor: ui.colors.font
-		fontShadow: ui.colors.fontShadow
-	}
-	// End Top Right Text Box
-		
+			
 	// Draw Play Icon (appears in center of screen when Toggle Pause)
 	Loader.BigPlayIcon {
 		id: playtog
@@ -133,6 +92,14 @@ Rectangle {
 		onLogoEffect: wjs.fadeLogo()
 	}
 	// End Loading Screen
+	
+	// Start Top Right Text Box
+	Loader.TopRightText {
+		id: volumebox
+		fontColor: ui.colors.font
+		fontShadow: ui.colors.fontShadow
+	}
+	// End Top Right Text Box
 			
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
 	Loader.MouseSurface {
@@ -151,7 +118,7 @@ Rectangle {
 			id: topText
 			fontColor: ui.colors.titleBar.font
 			backgroundColor: ui.colors.titleBar.background
-			isVisible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? setTitleBar == "fullscreen" ? fullscreen ? true : false : setTitleBar == "minimized" ? fullscreen === false ? true : false : setTitleBar == "both" ? true : setTitleBar == "none" ? false : false : false
+			isVisible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
 		}
 		// End Title Bar (top bar)
 						
@@ -163,7 +130,7 @@ Rectangle {
 			Loader.ToolbarBackground {
 				id: toolbarBackground
 				color: ui.colors.background
-				opacity: 0.9
+				opacity: ui.settings.toolbar.opacity
 			}
 
 			// Start Left Side Buttons in Toolbar
@@ -172,8 +139,7 @@ Rectangle {
 				// Start Playlist Previous Button
 				Loader.ToolbarButton {
 					id: prevBut
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? ui.icon.prev : ""
+					icon: settings.glyphsLoaded ? ui.icon.prev : ""
 					iconSize: fullscreen ? 8 : 7
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 					glow: ui.settings.buttonGlow
@@ -184,16 +150,18 @@ Rectangle {
 				}
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible ? prevBut.visible : false
+					anchors.left: prevBut.right
+					visible: prevBut.visible ? borderVisible : false
 				}
 				// End Playlist Previous Button
 	
 				// Start Play/Pause Button
 				Loader.ToolbarButton {
 					id: playButton
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? vlcPlayer.playing ? ui.icon.pause : vlcPlayer.state != 6 ? ui.icon.play : ui.icon.replay : ""
+					icon: settings.glyphsLoaded ? vlcPlayer.playing ? ui.icon.pause : vlcPlayer.state != 6 ? ui.icon.play : ui.icon.replay : ""
 					iconSize: fullscreen ? 14 : 13
+					anchors.left: prevBut.visible ? prevBut.right : parent.left
+					anchors.leftMargin: prevBut.visible ? 1 : 0
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
 						if (contextblock.visible === true) contextblock.close();
@@ -202,16 +170,18 @@ Rectangle {
 				}
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible
+					anchors.left: playButton.right
+					visible: borderVisible
 				}
 				// End Play/Pause Button
 	
 				// Start Playlist Next Button
 				Loader.ToolbarButton {
 					id: nextBut
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? ui.icon.next : ""
+					icon: settings.glyphsLoaded ? ui.icon.next : ""
 					iconSize: fullscreen ? 8 : 7
+					anchors.left: playButton.right
+					anchors.leftMargin: 1
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
@@ -220,7 +190,8 @@ Rectangle {
 					}
 				}
 				Loader.ToolbarBorder {
-					visible: ui.settings.toolbar.borderVisible ? nextBut.visible : false
+					visible: nextBut.visible ? borderVisible : false
+					anchors.left: nextBut.right
 					color: ui.colors.toolbar.border
 				}
 				// End Playlist Next Button
@@ -228,9 +199,11 @@ Rectangle {
 				// Start Mute Button
 				Loader.ToolbarButton {
 					id: mutebut
-					icon: glyphsLoaded ? vlcPlayer.state == 0 ? ui.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? automute == 0 ? ui.icon.volume.medium : vlcPlayer.audio.mute : vlcPlayer.audio.mute ? ui.icon.mute : vlcPlayer.volume == 0 ? ui.icon.mute : vlcPlayer.volume <= 30 ? ui.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? ui.icon.volume.medium : ui.icon.volume.high : ""
+					anchors.left: nextBut.visible ? nextBut.right : playButton.right
+					anchors.leftMargin: 1
+					icon: settings.glyphsLoaded ? vlcPlayer.state == 0 ? ui.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? settings.automute == 0 ? ui.icon.volume.medium : ui.icon.mute : vlcPlayer.audio.mute ? ui.icon.mute : vlcPlayer.volume == 0 ? ui.icon.mute : vlcPlayer.volume <= 30 ? ui.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? ui.icon.volume.medium : ui.icon.volume.high : ""
 					iconSize: fullscreen ? 17 : 16
-					width: ui.settings.toolbar.buttonMuteWidth
+					width: skinData.done === true ? ui.settings.toolbar.buttonMuteWidth : skinData.variables.settings.toolbar.buttonMuteWidth
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
 						if (contextblock.visible === true) contextblock.close();
@@ -238,6 +211,7 @@ Rectangle {
 					}
 					onButtonEntered: wjs.refreshMuteIcon();
 					onButtonExited: wjs.refreshMuteIcon();
+
 				}
 				// End Mute Button
 				
@@ -262,17 +236,23 @@ Rectangle {
 				Loader.ToolbarBorder {
 					id: volumeBorder
 					anchors.left: mutebut.right
-					anchors.leftMargin: firstvolume == 1 ? 0 : mutebut.hover.containsMouse ? 130 : volumeMouse.dragger.containsMouse ? 130 : 0
+					anchors.leftMargin: settings.firstvolume == 1 ? 0 : mutebut.hover.containsMouse ? 130 : volumeMouse.dragger.containsMouse ? 130 : 0
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible
+					visible: borderVisible
 					Behavior on anchors.leftMargin { PropertyAnimation { duration: 250 } }
 				}
 	
 				// Start "Time / Length" Text in Toolbar
 				Loader.ToolbarTimeLength {
 					id: showtime
-					text: "   "+ wjs.getTime(vlcPlayer.time) +" / "+ wjs.getLengthTime()
-					color: ui.colors.toolbar.timeLength
+					text: wjs.getTime(vlcPlayer.time)
+					color: ui.colors.toolbar.currentTime
+				}
+				Loader.ToolbarTimeLength {
+					anchors.left: showtime.right
+					anchors.leftMargin: 0
+					text: " / "+ wjs.getLengthTime()
+					color: ui.colors.toolbar.lengthTime
 				}
 				// End "Time / Length" Text in Toolbar
 			}
@@ -283,13 +263,14 @@ Rectangle {
 				// Start Open Subtitle Menu Button
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible ? subButton.visible : false
+					visible: subButton.visible ? borderVisible : false
 				}
 				Loader.ToolbarButton {
 					id: subButton
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? ui.icon.subtitles : ""
+					icon: settings.glyphsLoaded ? ui.icon.subtitles : ""
 					iconSize: fullscreen ? 17 : 16
+					anchors.right: playlistButton.visible? playlistButton.left : fullscreenButton.left
+					anchors.rightMargin: 1
 					visible: false
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
@@ -302,14 +283,16 @@ Rectangle {
 				// Start Open Playlist Button
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible ? playlistButton.visible : false
+					anchors.right: playlistButton.left
+					visible: playlistButton.visible ? borderVisible : false
 				}
 				Loader.ToolbarButton {
 					id: playlistButton
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? ui.icon.playlist : ""
+					icon: settings.glyphsLoaded ? ui.icon.playlist : ""
 					iconSize: fullscreen ? 18 : 17
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
+					anchors.right: fullscreenButton.left
+					anchors.rightMargin: 1
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
 						if (contextblock.visible === true) contextblock.close();
@@ -321,23 +304,24 @@ Rectangle {
 				// Fullscreen Button
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
-					visible: ui.settings.toolbar.borderVisible
+					anchors.right: fullscreenButton.left
+					visible: borderVisible
 				}
 				Loader.ToolbarButton {
 					id: fullscreenButton
-					width: ui.settings.toolbar.buttonWidth
-					icon: glyphsLoaded ? fullscreen ? ui.icon.minimize : ui.icon.maximize : ""
+					anchors.right: parent.right
+					icon: settings.glyphsLoaded ? fullscreen ? ui.icon.minimize : ui.icon.maximize : ""
 					iconSize: fullscreen ? 18 : 17
-					iconElem.color: allowfullscreen == 1 ? hover.containsMouse ? buttonHoverColor : buttonNormalColor : buttonHoverColor
-					hover.cursorShape: allowfullscreen == 1 ? toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape : Qt.ForbiddenCursor
-					opacity: allowfullscreen == 1 ? 1 : 0.2
-					color: allowfullscreen == 1 ? "transparent" : "#000000"
+					iconElem.color: settings.allowfullscreen == 1 ? hover.containsMouse ? ui.colors.toolbar.buttonHover : ui.colors.toolbar.button : ui.colors.toolbar.buttonHover
+					hover.cursorShape: settings.allowfullscreen == 1 ? toolbar.opacity == 1 ? Qt.PointingHandCursor : mousesurface.cursorShape : Qt.ForbiddenCursor
+					opacity: settings.allowfullscreen == 1 ? 1 : 0.2
+					color: settings.allowfullscreen == 1 ? "transparent" : "#000000"
 					glow: ui.settings.buttonGlow
 					onButtonClicked: {
-						if (allowfullscreen == 1) {
+						if (settings.allowfullscreen == 1) {
 							if (contextblock.visible === true) contextblock.close();
 							wjs.togFullscreen();
-							if (multiscreen == 1) wjs.toggleMute(); // Multiscreen - Edit
+							if (settings.multiscreen == 1) wjs.toggleMute(); // Multiscreen - Edit
 						}
 					}
 				}
@@ -351,7 +335,7 @@ Rectangle {
 		Loader.TimeBubble {
 			id: timeBubble
 			fontColor: ui.colors.timeBubble.font
-			backgroundIcon: glyphsLoaded ? timeBubble.srctime.length > 5 ? ui.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : ui.icon.timeBubble.small : ""
+			backgroundIcon: settings.glyphsLoaded ? timeBubble.srctime.length > 5 ? ui.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : ui.icon.timeBubble.small : ""
 			backgroundColor: ui.colors.timeBubble.background
 			backgroundBorder: ui.colors.timeBubble.border
 			backgroundOpacity: 0.9
@@ -364,8 +348,8 @@ Rectangle {
 			backgroundColor: ui.colors.progress.background
 			viewedColor: ui.colors.progress.viewed
 			positionColor: ui.colors.progress.position
-			cacheVisible: setCache
-			cacheColor: ui.colors.progress.cache
+			cache.visible: vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
+			cache.color: ui.colors.progress.cache
 			onPressed: wjs.progressDrag(mouseX,mouseY);
 			onChanged: wjs.progressChanged(mouseX,mouseY);
 			onReleased: wjs.progressReleased(mouseX,mouseY);
@@ -395,20 +379,20 @@ Rectangle {
 		
 				// Top Holder (Title + Close Button)
 				Loader.MenuHeader {
-					text: "Title"
+					text: "Playlist Menu"
 					textColor: ui.colors.playlistMenu.headerFont
 					backgroundColor: ui.colors.playlistMenu.header
 										
 					// Start Close Playlist Button
 					Loader.MenuClose {
 						id: playlistClose
-						icon: glyphsLoaded ? ui.icon.closePlaylist : ""
+						icon: settings.glyphsLoaded ? ui.icon.closePlaylist : ""
 						iconSize: 9
 						iconColor: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
 						hover.onClicked: {
 							playlistblock.visible = false;
-							playlistmenu = false
+							settings.playlistmenu = false
 						}
 					}
 					// End Close Playlist Button
@@ -430,7 +414,7 @@ Rectangle {
 				draggerColor: ui.colors.playlistMenu.drag
 				backgroundColor: ui.colors.playlistMenu.scroller
 				onDrag: wjs.moveSubMenu(mouseY)
-				dragger.height: (totalSubs * 40) < 240 ? 240 : (240 / (totalSubs * 40)) * 240
+				dragger.height: (settings.totalSubs * 40) < 240 ? 240 : (240 / (settings.totalSubs * 40)) * 240
 			}
 			// End Subtitle Menu Scroll
 		
@@ -441,20 +425,20 @@ Rectangle {
 		
 				// Top Holder (Title + Close Button)
 				Loader.MenuHeader {
-					text: "Language"
+					text: "Subtitle Menu"
 					textColor: ui.colors.playlistMenu.headerFont
 					backgroundColor: ui.colors.playlistMenu.header
 										
 					// Start Close Subtitle Menu Button
 					Loader.MenuClose {
 						id: subMenuClose
-						icon: glyphsLoaded ? ui.icon.closePlaylist : ""
+						icon: settings.glyphsLoaded ? ui.icon.closePlaylist : ""
 						iconSize: 9
 						iconColor: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
 						hover.onClicked: {
 							subMenublock.visible = false;
-							subtitlemenu = false;
+							settings.subtitlemenu = false;
 						}
 					}
 					// End Close Subtitle Menu Button

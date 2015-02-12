@@ -11,7 +11,7 @@ Rectangle {
 		if (event.key == Qt.Key_Escape) {
 			if (fullscreen) {
 				fullscreen = false;
-				if (multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
+				if (settings.multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
 			}
 		}
 		if (event.key == Qt.Key_F || event.key == Qt.Key_F11) {
@@ -66,47 +66,47 @@ Rectangle {
 		}
 		if (event.key == Qt.Key_A) {
 			var kl = 0;
-			for (kl = 0; typeof ui.core.aspectRatios[kl] !== 'undefined'; kl++) if (ui.core.aspectRatios[kl] == curAspect) {
-				if (typeof ui.core.aspectRatios[kl+1] !== 'undefined') {
-					curAspect = ui.core.aspectRatios[kl+1];
-				} else curAspect = ui.core.aspectRatios[0];
+			for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == settings.curAspect) {
+				if (typeof settings.aspectRatios[kl+1] !== 'undefined') {
+					settings.curAspect = settings.aspectRatios[kl+1];
+				} else settings.curAspect = settings.aspectRatios[0];
 				
-				if (curAspect == "Default") {
+				if (settings.curAspect == "Default") {
 					wjs.resetAspect();
 				} else {
-					wjs.changeAspect(curAspect,"ratio");
+					wjs.changeAspect(settings.curAspect,"ratio");
 				}
 				
-				wjs.setText("Aspect Ratio: " + curAspect);
+				wjs.setText("Aspect Ratio: " + settings.curAspect);
 				break;
 			}
 		}
 		if (event.key == Qt.Key_C) {
 			var kl = 0;
-			for (kl = 0; typeof ui.core.crops[kl] !== 'undefined'; kl++) if (ui.core.crops[kl] == curCrop) {
-				if (typeof ui.core.crops[kl+1] !== 'undefined') {
-					curCrop = ui.core.crops[kl+1];
-				} else curCrop = ui.core.crops[0];
-				if (curCrop == "Default") {
+			for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == settings.curCrop) {
+				if (typeof settings.crops[kl+1] !== 'undefined') {
+					settings.curCrop = settings.crops[kl+1];
+				} else settings.curCrop = settings.crops[0];
+				if (settings.curCrop == "Default") {
 					wjs.resetAspect();
 				} else {
-					wjs.changeAspect(curCrop,"crop");
+					wjs.changeAspect(settings.curCrop,"crop");
 				}
 				
-				wjs.setText("Crop: " + curCrop);
+				wjs.setText("Crop: " + settings.curCrop);
 				break;
 			}
 		}
 		if (event.key == Qt.Key_Z) {
 			var kl = 0;
-			for (kl = 0; typeof ui.core.zooms[kl] !== 'undefined'; kl++) if (curZoom == kl) {
-				if (typeof ui.core.zooms[kl+1] !== 'undefined') {
-					curZoom = kl +1;
-				} else curZoom = 0;
+			for (kl = 0; typeof settings.zooms[kl] !== 'undefined'; kl++) if (settings.curZoom == kl) {
+				if (typeof settings.zooms[kl+1] !== 'undefined') {
+					settings.curZoom = kl +1;
+				} else settings.curZoom = 0;
 				
-				wjs.changeZoom(ui.core.zooms[curZoom][0]);
+				wjs.changeZoom(settings.zooms[settings.curZoom][0]);
 				
-				wjs.setText("Zoom Mode: " + ui.core.zooms[curZoom][1]);
+				wjs.setText("Zoom Mode: " + settings.zooms[settings.curZoom][1]);
 				break;
 			}
 		}
@@ -139,9 +139,9 @@ Rectangle {
 		// End Change Volume on Mouse Scroll
 	}
 	function mouseMoved(mouseX,mouseY) {
-		ismoving = 1;  // Reset Idle Mouse Movement if mouse position has changed
+		settings.ismoving = 1;  // Reset Idle Mouse Movement if mouse position has changed
 		
-		if (ui.core.mouseevents == 1) {
+		if (settings.mouseevents == 1) {
 			// JavaScript Mouse Events Demo
 			var sendjsdata = {};
 			sendjsdata["type"] = "mouseMove";
@@ -151,12 +151,12 @@ Rectangle {
 			fireQmlMessage(JSON.stringify(sendjsdata));
 		}
 	
-		cursorX = mouseX;
-		cursorY = mouseY;
+		settings.cursorX = mouseX;
+		settings.cursorY = mouseY;
 	}
 	function mouseDblClick(clicked) {
-		if (multiscreen == 0) {
-			if (ui.core.mouseevents == 1) {
+		if (settings.multiscreen == 0) {
+			if (settings.mouseevents == 1) {
 				// JavaScript Mouse Events Demo
 				if (vlcPlayer.state != 1) if (toolbarBackground.bottomtab.containsMouse === false) if (clicked == Qt.LeftButton) {
 					var sendjsdata = {};
@@ -167,15 +167,15 @@ Rectangle {
 			}
 			var doit = 0;
 			if (clicked == Qt.LeftButton) {
-				if (multiscreen == 0) doit = 1;
-				if (fullscreen) if (multiscreen == 1) doit = 1;
+				if (settings.multiscreen == 0) doit = 1;
+				if (fullscreen) if (settings.multiscreen == 1) doit = 1;
 			}
 			if (doit == 1) {
 						
 				if (vlcPlayer.state == 4) wjs.togPause();
 					
-				gobigpause = false;
-				gobigplay = false;
+				settings.gobigpause = false;
+				settings.gobigplay = false;
 				pausetog.visible = false;
 				playtog.visible = false;
 				if (!fullscreen) mouseClicked = 1; // Fix for Missing Clicks
@@ -183,7 +183,7 @@ Rectangle {
 				mousesurface.focus = true;
 			}
 		}
-		if (multiscreen == 1) MouseClicked(clicked); // Multiscreen does not support Fullscreen Toggle on Double Click
+		if (settings.multiscreen == 1) MouseClicked(clicked); // Multiscreen does not support Fullscreen Toggle on Double Click
 	}
 	function mouseClick(clicked) {
 		mouseClicked = 1; // Fix for Missing Clicks
@@ -192,12 +192,12 @@ Rectangle {
 	
 			if (clicked == Qt.RightButton) {
 				// JavaScript Mouse Events Demo
-				if (ui.core.mouseevents == 1) {
+				if (settings.mouseevents == 1) {
 					sendjsdata["type"] = "mouseRightClick";
 					fireQmlMessage(JSON.stringify(sendjsdata));
 				}
-				if (cursorX == 0 && cursorY == 0) { } else {
-					if (multiscreen == 1 && fullscreen === false) { } else {
+				if (settings.cursorX == 0 && settings.cursorY == 0) { } else {
+					if (settings.multiscreen == 1 && fullscreen === false) { } else {
 						contextblock.open();
 						contextblock.addContextItems();
 					}
@@ -206,9 +206,9 @@ Rectangle {
 				if (contextblock.visible === true) {
 					contextblock.close();
 				} else {
-					if (multiscreen == 0) {
+					if (settings.multiscreen == 0) {
 						if (vlcPlayer.state != 1) wjs.isbig(); // Toggle Pause if clicked on Surface
-						if (ui.core.mouseevents == 1) {
+						if (settings.mouseevents == 1) {
 							// JavaScript Mouse Events Demo
 							sendjsdata["type"] = "mouseLeftClick";
 							fireQmlMessage(JSON.stringify(sendjsdata));
@@ -234,16 +234,16 @@ Rectangle {
 		
 				if (clicked == Qt.RightButton) {
 					// JavaScript Mouse Events Demo
-					if (ui.core.mouseevents == 1) {
+					if (settings.mouseevents == 1) {
 						sendjsdata["type"] = "mouseRightClick";
 						fireQmlMessage(JSON.stringify(sendjsdata));
 					}
 					contextblock.addContextItems();
 					contextblock.toggle();
 				} else {
-					if (multiscreen == 0) {
+					if (settings.multiscreen == 0) {
 						if (vlcPlayer.state != 1) wjs.isbig(); // Toggle Pause if clicked on Surface
-						if (ui.core.mouseevents == 1) {
+						if (settings.mouseevents == 1) {
 							// JavaScript Mouse Events Demo
 							sendjsdata["type"] = "mouseLeftClick";
 							fireQmlMessage(JSON.stringify(sendjsdata));

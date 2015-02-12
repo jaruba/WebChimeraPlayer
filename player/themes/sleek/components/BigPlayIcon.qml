@@ -8,9 +8,9 @@ Rectangle {
 	
 	anchors.centerIn: parent
 	visible: false
-	height: fullscreen ? gobigplay ? 170 : 85 : gobigplay ? 150 : 75
-	width: fullscreen ? gobigplay ? 170 : 85 : gobigplay ? 150 : 75
-	opacity: gobigplay ? 0 : 1
+	height: fullscreen ? settings.gobigplay ? 170 : 85 : settings.gobigplay ? 150 : 75
+	width: fullscreen ? settings.gobigplay ? 170 : 85 : settings.gobigplay ? 150 : 75
+	opacity: settings.gobigplay ? 0 : 1
 	radius: 10
 	smooth: true
 	
@@ -25,9 +25,9 @@ Rectangle {
 		anchors.centerIn: parent
 		font.family: fonts.icons.name
 		text: UI.icon.bigPlay
-		font.pointSize: fullscreen ? gobigplay ? 108 : 54 : gobigplay ? 90 : 45
+		font.pointSize: fullscreen ? settings.gobigplay ? 108 : 54 : settings.gobigplay ? 90 : 45
 		color: UI.colors.bigIcon
-		opacity: gobigplay ? 0 : 1
+		opacity: settings.gobigplay ? 0 : 1
 
 		// Start Play Icon Effect when Visible
 		Behavior on font.pointSize { PropertyAnimation { duration: 300 } }
@@ -37,10 +37,10 @@ Rectangle {
 	
 	// Start Timer to Hide Big Play Icon after 300ms
 	Timer  {
-		interval: 320; running: gobigplay ? true : false; repeat: false
+		interval: 320; running: settings.gobigplay ? true : false; repeat: false
 		onTriggered: {
 			playtog.visible = false;
-			gobigplay = false;
+			settings.gobigplay = false;
 		}
 	}
 	// End Timer to Hide Big Play Icon after 300ms
