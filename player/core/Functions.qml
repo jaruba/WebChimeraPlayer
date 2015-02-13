@@ -338,6 +338,13 @@ Rectangle {
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 			if (startsWith(message,"[downloaded]")) { settings.downloaded = parseFloat(message.replace("[downloaded]","")); settings = settings; } // Get Downloaded Percent
 			if (startsWith(message,"[opening-text]")) { settings.openingText = message.replace("[opening-text]",""); settings = settings; } // Get New Opening Text
+			
+			// implementation for .preventDefault()
+			if (startsWith(message,"[stop-pressed]")) settings.preventKey[message.replace("[stop-pressed]","")] = true;
+			if (startsWith(message,"[start-pressed]")) delete settings.preventKey[message.replace("[start-pressed]","")];
+			if (startsWith(message,"[stop-clicked]")) settings.preventClicked[message.replace("[stop-clicked]","")] = true;
+			if (startsWith(message,"[start-clicked]")) delete settings.preventClicked[message.replace("[start-clicked]","")];
+			// end implementation for .preventDefault()
 		}
 		
 		

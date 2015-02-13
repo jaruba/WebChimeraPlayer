@@ -32,6 +32,8 @@ QtObject {
 	property var mouseevents: 0;
 	property var downloaded: 0;
 	property var openingText: "Loading Resource";
+	property variant preventKey: [];
+	property variant preventClicked: [];
 	property variant aspectRatios: ["Default", "1:1", "4:3", "16:9", "16:10", "2.21:1", "2.35:1", "2.39:1", "5:4"];
 	property variant crops: ["Default", "16:10", "16:9", "1.85:1", "2.21:1", "2.35:1", "2.39:1", "5:3", "4:3", "5:4", "1:1"];
 	property variant zooms: [[1, "Default"], [2, "2x Double"], [0.25, "0.25x Quarter"], [0.5, "0.5x Half"]];

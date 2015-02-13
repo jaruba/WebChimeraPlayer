@@ -6,125 +6,186 @@ Rectangle {
 	
 	// START HOTKEYS
 	function keys(event) {
+	
+		// send data back to On Page JavaScript for .onKeyPressed
+		if (event.modifiers) {
+			if (event.modifiers == Qt.ControlModifier && event.key == Qt.Key_Control) {
+				fireQmlMessage("[pressed-"+event.key+"]");
+			} else if (event.modifiers == Qt.MetaModifier && event.key == Qt.Key_Meta) {
+				fireQmlMessage("[pressed-"+event.key+"]");
+			} else if (event.modifiers == Qt.ShiftModifier && event.key == Qt.Key_Shift) {
+				fireQmlMessage("[pressed-"+event.key+"]");
+			} else if (event.modifiers == Qt.AltModifier && event.key == Qt.Key_Alt) {
+				fireQmlMessage("[pressed-"+event.key+"]");
+			} else {
+				fireQmlMessage("[pressed-"+event.modifiers+"+"+event.key+"]");
+			}
+		} else {
+			fireQmlMessage("[pressed-"+event.key+"]");
+		}
+		// end send data back to On Page JavaScript for .onKeyPressed
+
 		if (contextblock.visible === true) contextblock.close();
-		if (event.key == Qt.Key_Space) { wjs.togPause(); }
+		if (event.key == Qt.Key_Space) {
+			if (typeof settings.preventKey[Qt.Key_Space] === "undefined") {
+				wjs.togPause();
+			}
+		}
 		if (event.key == Qt.Key_Escape) {
-			if (fullscreen) {
-				fullscreen = false;
-				if (settings.multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
+			if (typeof settings.preventKey[Qt.Key_Escape] === "undefined") {
+				if (fullscreen) {
+					fullscreen = false;
+					if (settings.multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
+				}
 			}
 		}
 		if (event.key == Qt.Key_F || event.key == Qt.Key_F11) {
-			wjs.togFullscreen();
+			if (typeof settings.preventKey[Qt.Key_F] === "undefined" && typeof settings.preventKey[Qt.Key_F11] === "undefined") {
+				wjs.togFullscreen();
+			}
 		}
 		if (event.key == Qt.Key_E) {
-			wjs.nextFrame(500);
+			if (typeof settings.preventKey[Qt.Key_E] === "undefined") {
+				wjs.nextFrame(500);
+			}
 		}
 		if (event.key == Qt.Key_N) {
-			vlcPlayer.playlist.next();
+			if (typeof settings.preventKey[Qt.Key_N] === "undefined") {
+				vlcPlayer.playlist.next();
+			}
 		}
 		if(event.modifiers == Qt.ControlModifier) {
 			if (event.key == Qt.Key_Right) {
-				wjs.jumpTo(60000,"forward");
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Right] === "undefined") {
+					wjs.jumpTo(60000,"forward");
+				}
 			} else if (event.key == Qt.Key_Left) {
-				wjs.jumpTo(60000,"backward");
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Left] === "undefined") {
+					wjs.jumpTo(60000,"backward");
+				}
 			} else if (event.key == Qt.Key_Up) {
-				wjs.volumeTo(8,"increase");
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Up] === "undefined") {
+					wjs.volumeTo(8,"increase");
+				}
 			} else if (event.key == Qt.Key_Down) {
-				wjs.volumeTo(8,"decrease");
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Down] === "undefined") {
+					wjs.volumeTo(8,"decrease");
+				}
 			} else if (event.key == Qt.Key_L) {
-				wjs.togglePlaylist();
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_L] === "undefined") {
+					wjs.setText(Qt.Key_Escape);
+					wjs.togglePlaylist();
+				}
 			}
 		}
 		if(event.modifiers == Qt.AltModifier) {
 			if (event.key == Qt.Key_Right) {
-				wjs.jumpTo(10000,"forward");
-			} else if (event.key == Qt.Key_Left) {
-				wjs.jumpTo(10000,"backward");
-			}
-		}
-		if (event.key == Qt.Key_M) {
-			wjs.toggleMute();
-			if (vlcPlayer.audio.mute) {
-				wjs.setText("Muted");
-			} else {
-				wjs.setText("Volume " + (Math.round((250 * (vlcPlayer.volume /200))/10) *5) + "%");
-			}
-			wjs.refreshMuteIcon();
-		}
-		if (event.key == Qt.Key_P) {
-			vlcPlayer.time = 0;
-		}
-		if (event.key == Qt.Key_Plus || event.key == Qt.Key_BracketRight) {
-			wjs.rateTo("increase");
-		}
-		if (event.key == Qt.Key_Minus || event.key == Qt.Key_BracketLeft) {
-			wjs.rateTo("decrease");
-		}
-		if (event.key == Qt.Key_Equal) {
-			wjs.rateTo("normal");
-		}
-		if (event.key == Qt.Key_A) {
-			var kl = 0;
-			for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == settings.curAspect) {
-				if (typeof settings.aspectRatios[kl+1] !== 'undefined') {
-					settings.curAspect = settings.aspectRatios[kl+1];
-				} else settings.curAspect = settings.aspectRatios[0];
-				
-				if (settings.curAspect == "Default") {
-					wjs.resetAspect();
-				} else {
-					wjs.changeAspect(settings.curAspect,"ratio");
+				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Right] === "undefined") {
+					wjs.jumpTo(10000,"forward");
 				}
-				
-				wjs.setText("Aspect Ratio: " + settings.curAspect);
-				break;
-			}
-		}
-		if (event.key == Qt.Key_C) {
-			var kl = 0;
-			for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == settings.curCrop) {
-				if (typeof settings.crops[kl+1] !== 'undefined') {
-					settings.curCrop = settings.crops[kl+1];
-				} else settings.curCrop = settings.crops[0];
-				if (settings.curCrop == "Default") {
-					wjs.resetAspect();
-				} else {
-					wjs.changeAspect(settings.curCrop,"crop");
-				}
-				
-				wjs.setText("Crop: " + settings.curCrop);
-				break;
-			}
-		}
-		if (event.key == Qt.Key_Z) {
-			var kl = 0;
-			for (kl = 0; typeof settings.zooms[kl] !== 'undefined'; kl++) if (settings.curZoom == kl) {
-				if (typeof settings.zooms[kl+1] !== 'undefined') {
-					settings.curZoom = kl +1;
-				} else settings.curZoom = 0;
-				
-				wjs.changeZoom(settings.zooms[settings.curZoom][0]);
-				
-				wjs.setText("Zoom Mode: " + settings.zooms[settings.curZoom][1]);
-				break;
-			}
-		}
-		if (event.key == Qt.Key_T) {
-			wjs.setText(showtime.text.trim());
-		}
-		if(event.modifiers == Qt.AltModifier) {
-			if (event.key == Qt.Key_Right) {
-				wjs.jumpTo(10000,"forward");
 			} else if (event.key == Qt.Key_Left) {
-				wjs.jumpTo(10000,"backward");
+				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Left] === "undefined") {
+					wjs.jumpTo(10000,"backward");
+				}
 			}
 		}
 		if(event.modifiers == Qt.ShiftModifier) {
 			if (event.key == Qt.Key_Right) {
-				wjs.jumpTo(3000,"forward");
+				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Right] === "undefined") {
+					wjs.jumpTo(3000,"forward");
+				}
 			} else if (event.key == Qt.Key_Left) {
-				wjs.jumpTo(3000,"backward");
+				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Left] === "undefined") {
+					wjs.jumpTo(3000,"backward");
+				}
+			}
+		}
+		if (event.key == Qt.Key_M) {
+			if (typeof settings.preventKey[Qt.Key_M] === "undefined") {
+				wjs.toggleMute();
+				if (vlcPlayer.audio.mute) {
+					wjs.setText("Muted");
+				} else {
+					wjs.setText("Volume " + (Math.round((250 * (vlcPlayer.volume /200))/10) *5) + "%");
+				}
+				wjs.refreshMuteIcon();
+			}
+		}
+		if (event.key == Qt.Key_P) {
+			if (typeof settings.preventKey[Qt.Key_P] === "undefined") {
+				vlcPlayer.time = 0;
+			}
+		}
+		if (event.key == Qt.Key_Plus || event.key == Qt.Key_BracketRight) {
+			if (typeof settings.preventKey[Qt.Key_Plus] === "undefined" && typeof settings.preventKey[Qt.Key_BracketRight] === "undefined") {
+				wjs.rateTo("increase");
+			}
+		}
+		if (event.key == Qt.Key_Minus || event.key == Qt.Key_BracketLeft) {
+			if (typeof settings.preventKey[Qt.Key_Minus] === "undefined" && typeof settings.preventKey[Qt.Key_BracketLeft] === "undefined") {
+				wjs.rateTo("decrease");
+			}
+		}
+		if (event.key == Qt.Key_Equal) {
+			if (typeof settings.preventKey[Qt.Key_Equal] === "undefined") {
+				wjs.rateTo("normal");
+			}
+		}
+		if (event.key == Qt.Key_A) {
+			if (typeof settings.preventKey[Qt.Key_A] === "undefined") {
+				var kl = 0;
+				for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == settings.curAspect) {
+					if (typeof settings.aspectRatios[kl+1] !== 'undefined') {
+						settings.curAspect = settings.aspectRatios[kl+1];
+					} else settings.curAspect = settings.aspectRatios[0];
+					
+					if (settings.curAspect == "Default") {
+						wjs.resetAspect();
+					} else {
+						wjs.changeAspect(settings.curAspect,"ratio");
+					}
+					
+					wjs.setText("Aspect Ratio: " + settings.curAspect);
+					break;
+				}
+			}
+		}
+		if (event.key == Qt.Key_C) {
+			if (typeof settings.preventKey[Qt.Key_C] === "undefined") {
+				var kl = 0;
+				for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == settings.curCrop) {
+					if (typeof settings.crops[kl+1] !== 'undefined') {
+						settings.curCrop = settings.crops[kl+1];
+					} else settings.curCrop = settings.crops[0];
+					if (settings.curCrop == "Default") {
+						wjs.resetAspect();
+					} else {
+						wjs.changeAspect(settings.curCrop,"crop");
+					}
+					
+					wjs.setText("Crop: " + settings.curCrop);
+					break;
+				}
+			}
+		}
+		if (event.key == Qt.Key_Z) {
+			if (typeof settings.preventKey[Qt.Key_Z] === "undefined") {
+				var kl = 0;
+				for (kl = 0; typeof settings.zooms[kl] !== 'undefined'; kl++) if (settings.curZoom == kl) {
+					if (typeof settings.zooms[kl+1] !== 'undefined') {
+						settings.curZoom = kl +1;
+					} else settings.curZoom = 0;
+					
+					wjs.changeZoom(settings.zooms[settings.curZoom][0]);
+					
+					wjs.setText("Zoom Mode: " + settings.zooms[settings.curZoom][1]);
+					break;
+				}
+			}
+		}
+		if (event.key == Qt.Key_T) {
+			if (typeof settings.preventKey[Qt.Key_T] === "undefined") {
+				wjs.setText(showtime.text.trim());
 			}
 		}
 	}
