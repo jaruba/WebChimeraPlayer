@@ -14,6 +14,7 @@ Rectangle {
 	property var plstring: "";
 	property var oldRatioWidth: 0;
 	property var oldRatioHeight: 0;
+	property var itemnr: 0;
 	
 	// Required for jump to seconds (while paused)
 	property var notmuted: 0;
@@ -246,9 +247,10 @@ Rectangle {
 		plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 		
 		fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
-				
-		playlist.addPlaylistItems();
 		
+		if (vlcPlayer.playlist.itemCount > 0) playlist.addPlaylistItems();
+		
+		if (settings.autoplay == 1 && vlcPlayer.state == 0 && vlcPlayer.playlist.itemCount > 0) vlcPlayer.playlist.playItem(0); 
 	}
 	// End on QML Loaded
 	
@@ -261,7 +263,11 @@ Rectangle {
 			if (jsonMessage["settings"] === true) {
 				if (jsonMessage["caching"]) settings.cache = jsonMessage["caching"]; // Get network-caching parameter
 				if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) settings.mouseevents = 1; // Set Mouse Events
-				if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) vlcPlayer.playlist.playItem(0); // Autoplay
+				if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) {
+					// Autoplay
+					if (vlcPlayer.state == 0 && vlcPlayer.playlist.itemCount > 0) vlcPlayer.playlist.playItem(0);
+					settings.autoplay = 1;
+				}
 				if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) settings.autoloop = 1; // Autoloop
 				if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) settings.automute = 1; // Automute
 				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0; // Allowfullscreen
@@ -336,6 +342,19 @@ Rectangle {
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
+			if (startsWith(message,"[refresh-playlist]")) {
+				playlist.addPlaylistItems(); // Refresh Playlist GUI
+				if (settings.autoplay == 1 && vlcPlayer.state == 0 && vlcPlayer.playlist.itemCount > 0) vlcPlayer.playlist.playItem(0); 
+			}
+			if (startsWith(message,"[downloaded]")) { settings.downloaded = parseFloat(message.replace("[downloaded]","")); settings = settings; } // Get Downloaded Percent
+			if (startsWith(message,"[opening-text]")) { settings.openingText = message.replace("[opening-text]",""); settings = settings; } // Get New Opening Text
+			
+			// implementation for .preventDefault()
+			if (startsWith(message,"[stop-pressed]")) settings.preventKey[message.replace("[stop-pressed]","")] = true;
+			if (startsWith(message,"[start-pressed]")) delete settings.preventKey[message.replace("[start-pressed]","")];
+			if (startsWith(message,"[stop-clicked]")) settings.preventClicked[message.replace("[stop-clicked]","")] = true;
+			if (startsWith(message,"[start-clicked]")) delete settings.preventClicked[message.replace("[start-clicked]","")];
+			// end implementation for .preventDefault()
 		}
 		
 		
@@ -809,8 +828,6 @@ Rectangle {
 	
 					var s = 0;
 					var st = "";
-					var itemnr = 0;
-					vlcPlayer.playlist.removeItem(0);
 					for (s = 1; s < m3udatay.length; s++) {
 						if (m3udatay[s].charAt(0) == "#") {
 							// get video source title
@@ -820,18 +837,18 @@ Rectangle {
 							// end get video source title
 						} else {
 							vlcPlayer.playlist.add(m3udatay[s]);
-							if (st !== 'undefined' && typeof st === 'string') vlcPlayer.playlist.items[itemnr].title = "[custom]"+st;
+							if (typeof st !== 'undefined' && typeof st === 'string') vlcPlayer.playlist.items[itemnr].title = "[custom]"+st;
 							st = "";
 							itemnr++;
 						}
 					}
-					if (s > 3) {
-						// Adding Playlist Menu Items from M3U File
-						playlist.addPlaylistItems();	
-						// End Adding Playlist Menu Items from M3U File
+					if (vlcPlayer.playlist.itemCount > 1) {
+						playlist.addPlaylistItems(); // Refresh Playlist Menu GUI
 						playlistButton.visible = 1;
+						prevBut.visible = true;
+						nextBut.visible = true;
 					}
-					vlcPlayer.play();
+					if (vlcPlayer.state == 0) vlcPlayer.play();
 				}
 			}
 		}

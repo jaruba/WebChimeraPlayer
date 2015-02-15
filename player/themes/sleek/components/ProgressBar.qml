@@ -55,7 +55,7 @@ Rectangle {
 				anchors.left: parent.left
 				anchors.bottom: parent.bottom
 				color: "#3E3E3E"
-				width: vlcPlayer.state <= 1 ? 0 : settings.dragging ? 0 : ((parent.width - anchors.leftMargin - anchors.rightMargin) * vlcPlayer.position) + ((parent.width - anchors.leftMargin - anchors.rightMargin) * ((settings.cache / ((vlcPlayer.time * (1 / vlcPlayer.position)) /100)) /100) /100 * settings.buffering)
+				width: settings.downloaded > 0 ? vlcPlayer.state == 3 || vlcPlayer.state == 4 ? parent.width * settings.downloaded : 0 : vlcPlayer.state <= 1 ? 0 : settings.dragging ? 0 : ((parent.width - anchors.leftMargin - anchors.rightMargin) * vlcPlayer.position) + ((parent.width - anchors.leftMargin - anchors.rightMargin) * ((settings.cache / ((vlcPlayer.time * (1 / vlcPlayer.position)) /100)) /100) /100 * settings.buffering)
 //				Behavior on width { PropertyAnimation { duration: settings.dragging ? 0 : vlcPlayer.time - lastTime > 0 ? vlcPlayer.time - lastTime : 0 } }
 			}
 			Rectangle {

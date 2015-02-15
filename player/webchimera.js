@@ -34,6 +34,9 @@ switch(window.location.protocol) {
 }
 // end if page on local machine, add warning
 
+var pitem = [];
+var ploaded = [];
+
 // only implement if no native isArray implementation is available (for backward compatibility with old browsers)
 if (typeof Array.isArray === 'undefined') {
   Array.isArray = function(obj) {
@@ -53,6 +56,16 @@ function IsJsonString(str) {
 }
 // end function to check if a string is json
 
+// hack to remember variables until qml has loaded
+function delayLoadM3U(context,tempV) {
+    return function(){
+    	wjs(context).qmlLoaded(function() {
+			wjs(context).loadM3U(tempV);
+		});
+    }
+}
+// end hack to remember variables until qml has loaded
+
 var wjs = function(context) {
     // Call the constructor
     return new wjs.init(context);
@@ -66,34 +79,34 @@ wjs.init = function(context) {
 
 	// Save player parameters
 	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache"];
-
+	
 	if (this.context.substring(0,1) == "#") {
-		this.videoelem = document.getElementById(this.context.substring(1));
+		this.video = document.getElementById(this.context.substring(1));
 	} else if (this.context.substring(0,1) == ".") {
-		this.videoelem = document.getElementsByClassName(this.context.substring(1));
+		this.video = document.getElementsByClassName(this.context.substring(1));
 	} else {
-		this.videoelem = document.getElementsByTagName(this.context);
+		this.video = document.getElementsByTagName(this.context);
 	}
 };
 
 // catch event function
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
-	if (this.videoelem.attachEvent) {
+	if (this.video.attachEvent) {
 		// Microsoft
-		this.videoelem.attachEvent("on"+wjs_event, wjs_function);
-	} else if (this.videoelem.addEventListener) {
+		this.video.attachEvent("on"+wjs_event, wjs_function);
+	} else if (this.video.addEventListener) {
 		// Mozilla: DOM level 2
-		this.videoelem.addEventListener(wjs_event, wjs_function, false);
+		this.video.addEventListener(wjs_event, wjs_function, false);
 	} else {
 		// DOM level 0
-		this.videoelem["on"+wjs_event] = wjs_function;
+		this.video["on"+wjs_event] = wjs_function;
 	}
 };
 // end catch event function
 
 // function that loads webchimera player settings after qml has loaded
 wjs.init.prototype.loadSettings = function(wjs_localsettings) {
-	this.videoelem.emitJsMessage(JSON.stringify(wjs_localsettings));
+	this.video.emitJsMessage(JSON.stringify(wjs_localsettings));
 };
 // end function that loads webchimera player settings after qml has loaded
 
@@ -102,15 +115,92 @@ wjs.init.prototype.qmlLoaded = function(action) {
 		if (event == "[qml-loaded]") action();
 	}
 	
-	if (this.videoelem.attachEvent) {
+	if (this.video.attachEvent) {
 		// Microsoft
-		this.videoelem.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.videoelem.addEventListener) {
+		this.video.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.video.addEventListener) {
 		// Mozilla: DOM level 2
-		this.videoelem.addEventListener("QmlMessage", wjs_function, false);
+		this.video.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.videoelem["onQmlMessage"] = wjs_function;
+		this.video["onQmlMessage"] = wjs_function;
+	}
+	
+};
+
+wjs.init.prototype.onClicked = function(target, action) {
+	function wjs_function(event) {
+		if (event == "[clicked]"+target) action();
+	}
+	
+	if (this.video.attachEvent) {
+		// Microsoft
+		this.video.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.video.addEventListener) {
+		// Mozilla: DOM level 2
+		this.video.addEventListener("QmlMessage", wjs_function, false);
+	} else {
+		// DOM level 0
+		this.video["onQmlMessage"] = wjs_function;
+	}
+	
+};
+
+wjs.init.prototype.onKeyPressed = function(target, action) {
+	
+	var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
+
+	function wjs_function(event) {
+		if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
+			var res = target.split("+");
+			var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
+			if (event == "[pressed-"+newtarget+"]") action();
+		} else {
+			if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action();
+		}
+	}
+	
+	if (this.video.attachEvent) {
+		// Microsoft
+		this.video.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.video.addEventListener) {
+		// Mozilla: DOM level 2
+		this.video.addEventListener("QmlMessage", wjs_function, false);
+	} else {
+		// DOM level 0
+		this.video["onQmlMessage"] = wjs_function;
+	}
+	
+};
+
+wjs.init.prototype.preventDefault = function(type, target, action) {
+	
+	if (type.toLowerCase() == "key") {
+		var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
+		
+		if (action === true) {
+			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
+				var res = target.split("+");
+				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
+				this.video.emitJsMessage("[stop-pressed]"+newtarget);
+			} else {
+				this.video.emitJsMessage("[stop-pressed]"+keyMap[target.toLowerCase()]);
+			}
+		} else if (action === false) {
+			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
+				var res = target.split("+");
+				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
+				this.video.emitJsMessage("[start-pressed]"+newtarget);
+			} else {
+				this.video.emitJsMessage("[start-pressed]"+keyMap[target.toLowerCase()]);
+			}
+		}
+	} else if (type.toLowerCase() == "click") {
+		if (action === true) {
+			this.video.emitJsMessage("[stop-clicked]"+target.toLowerCase());
+		} else if (action === false) {
+			this.video.emitJsMessage("[start-clicked]"+target.toLowerCase());
+		}
 	}
 	
 };
@@ -119,7 +209,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	// check if plugin is installed
 	if (navigator.plugins["WebChimera Plugin"].name != "WebChimera Plugin") {
-		this.videoelem.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+		this.video.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
 		return false;
 	}
 	// end check if plugin is installed
@@ -182,22 +272,25 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		
 	playerbody += '</object>';
 	
-	this.videoelem.innerHTML = playerbody;
+	this.video.innerHTML = playerbody;
 	
-	
-	if (typeof onloadsettings !== "undefined") {
-		if (typeof webchimeraid !== "undefined") {
-			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-				if (event == "[qml-loaded]") wjs("#" + webchimeraid).loadSettings(onloadsettings);
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-		}
-		if (typeof webchimeraclass !== "undefined") {
-			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-				if (event == "[qml-loaded]") wjs("." + webchimeraclass).loadSettings(onloadsettings);
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-		}
+	if (typeof webchimeraid !== "undefined") {
+		wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+				wjs("#" + webchimeraid).loadSettings(onloadsettings);
+				ploaded["#" + webchimeraid] = true;
+			}
+			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+		});
+	}
+	if (typeof webchimeraclass !== "undefined") {
+		wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+				wjs("." + webchimeraclass).loadSettings(onloadsettings);
+				ploaded["." + webchimeraclass] = true;
+			}
+			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+		});
 	}
 	
 };
@@ -220,61 +313,102 @@ wjs.init.prototype.skin = function(skin) {
 
 // function to add playlist items
 wjs.init.prototype.addPlaylist = function(playlist) {
-	 if (typeof playlist === 'string') {
-		 var re = /(?:\.([^.]+))?$/;
-		 var ext = re.exec(playlist)[1];
-		 if (typeof ext !== 'undefined' && ext == "m3u") {
-			 wjs(this.context).qmlLoaded(function() {
-				// load m3u playlist
-				wjs(this.context).loadM3U(playlist);
-			});
-		 } else {
-			 this.videoelem.playlist.add(playlist); // if Playlist has one Element
+
+	 // convert all strings to json object
+	 if (Array.isArray(playlist) === true) {
+		 var item = 0;
+		 for (item = 0; typeof playlist[item] !== 'undefined'; item++) {
+			 if (typeof playlist[item] === 'string') {
+				 var tempPlaylist = playlist[item];
+				 delete playlist[item];
+				 playlist[item] = {
+					url: tempPlaylist
+				 };
+			 }
 		 }
-	 } else {
-		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
-			 // if Playlist has Custom Titles
-			 var item = 0;
-			 for (item = 0; item < playlist.length; item++) {
-				  var playerSettings = {};
-				  this.videoelem.playlist.add(playlist[item].url);
-				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.videoelem.playlist.items[item].title = "[custom]"+playlist[item].title;
+	 } else if (typeof playlist === 'string') {
+		 var tempPlaylist = playlist;
+		 delete playlist;
+		 playlist = [];
+		 playlist.push({
+			url: tempPlaylist
+		 });
+		 delete tempPlaylist;
+	 } else if (typeof playlist === 'object') {
+		 var tempPlaylist = playlist;
+		 delete playlist;
+		 playlist = [];
+		 playlist.push(tempPlaylist);
+		 delete tempPlaylist;
+	 }
+	 // end convert all strings to json object
+
+	 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
+		 var item = 0;
+		 for (item = 0; item < playlist.length; item++) {
+			  var re = /(?:\.([^.]+))?$/;
+			  var ext = re.exec(playlist[item].url)[1];
+			  if (typeof ext !== 'undefined' && ext == "m3u") {
+				  if (typeof ploaded[this.context] !== 'undefined') {
+					  wjs(this.context).loadM3U(playlist[item].url); // load m3u playlist
+				  } else {
+					  var context = this.context;
+					  var tempV = playlist[item].url;
+					  setTimeout(delayLoadM3U(context,tempV),1);
+				  }
+			  } else {
+				  if (typeof pitem[this.context] === 'undefined') pitem[this.context] = 0;
+				  console.log(pitem[this.context]+" - "+playlist[item].title);
+				  this.video.playlist.add(playlist[item].url);
+	  			  var playerSettings = {};
+				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.video.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
 				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
 				  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
 				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
 				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
-				  if (playerSettings) this.videoelem.playlist.items[item].setting = JSON.stringify(playerSettings);
-			 }
-			 // end if Playlist has Custom Titles
-		 } else if (Array.isArray(playlist) === true) {
-			 var item = 0;
-			 for (item = 0; typeof playlist[item] !== 'undefined'; item++) this.videoelem.playlist.add(playlist[item]); // if Playlist is Array
+				  
+				  if (Object.keys(playerSettings).length > 0) this.video.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
+				  pitem[this.context]++;
+			  }
 		 }
 	 }
+	 this.video.emitJsMessage("[refresh-playlist]");
 };
 // end function to add playlist items
 
 // function to Start Playback
 wjs.init.prototype.startPlayer = function() {
-	this.videoelem.playlist.playItem(0); // Play Current Item
-	this.videoelem.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
+	this.video.playlist.playItem(0); // Play Current Item
+	this.video.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
 };
 // end function to Start Playback
 
 // function to Start External Subtitle
 wjs.init.prototype.startSubtitle = function(suburl) {
-	if (typeof suburl !== "undefined") this.videoelem.emitJsMessage("[start-subtitle]"+suburl);
+	if (typeof suburl !== "undefined") this.video.emitJsMessage("[start-subtitle]"+suburl);
 };
 // end function to Start External Subtitle
 
 // function to Clear External Subtitle
 wjs.init.prototype.clearSubtitle = function() {
-	this.videoelem.emitJsMessage("[clear-subtitle]");
+	this.video.emitJsMessage("[clear-subtitle]");
 };
 // end function to Clear External Subtitle
 
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
-	if (typeof M3Uurl !== "undefined") this.videoelem.emitJsMessage("[load-m3u]"+M3Uurl);
+	if (typeof M3Uurl !== "undefined") this.video.emitJsMessage("[load-m3u]"+M3Uurl);
 };
 // end function to load m3u files
+
+// function to Change Opening Text
+wjs.init.prototype.setOpeningText = function(openingtext) {
+	if (typeof openingtext !== "undefined") this.video.emitJsMessage("[opening-text]"+openingtext);
+};
+// end function to Change Opening Text
+
+// function to Send Download Percent (for buffering bar)
+wjs.init.prototype.setDownloaded = function(downloaded) {
+	if (typeof downloaded !== "undefined") this.video.emitJsMessage("[downloaded]"+downloaded);
+};
+// end function to Send Download Percent (for buffering bar)

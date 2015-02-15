@@ -33,6 +33,7 @@ Rectangle {
 	JsLogic.Settings { id: settings }
 	JsLogic.Functions { id: wjs }
 	JsLogic.Hotkeys { id: hotkeys }
+	JsLogic.Buttons { id: buttons }
 	// end load core javascript functions and settings
 	
     id: theview;
@@ -143,10 +144,7 @@ Rectangle {
 					iconSize: fullscreen ? 8 : 7
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						vlcPlayer.playlist.prev();
-					}
+					onButtonClicked: buttons.clicked("prev");
 				}
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
@@ -163,10 +161,7 @@ Rectangle {
 					anchors.left: prevBut.visible ? prevBut.right : parent.left
 					anchors.leftMargin: prevBut.visible ? 1 : 0
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						wjs.togPause();
-					}
+					onButtonClicked: buttons.clicked("play");
 				}
 				Loader.ToolbarBorder {
 					color: ui.colors.toolbar.border
@@ -184,10 +179,7 @@ Rectangle {
 					anchors.leftMargin: 1
 					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						vlcPlayer.playlist.next();
-					}
+					onButtonClicked: buttons.clicked("next");
 				}
 				Loader.ToolbarBorder {
 					visible: nextBut.visible ? borderVisible : false
@@ -205,10 +197,7 @@ Rectangle {
 					iconSize: fullscreen ? 17 : 16
 					width: skinData.done === true ? ui.settings.toolbar.buttonMuteWidth : skinData.variables.settings.toolbar.buttonMuteWidth
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						wjs.toggleMute();
-					}
+					onButtonClicked: buttons.clicked("mute");
 					onButtonEntered: wjs.refreshMuteIcon();
 					onButtonExited: wjs.refreshMuteIcon();
 
@@ -273,10 +262,7 @@ Rectangle {
 					anchors.rightMargin: 1
 					visible: false
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						subMenu.toggleSubtitles();
-					}
+					onButtonClicked: buttons.clicked("subtitles");
 				}
 				// End Open Subtitle Menu Button
 				
@@ -294,10 +280,7 @@ Rectangle {
 					anchors.right: fullscreenButton.left
 					anchors.rightMargin: 1
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (contextblock.visible === true) contextblock.close();
-						wjs.togglePlaylist();
-					}
+					onButtonClicked: buttons.clicked("playlist");
 				}
 				// End Open Playlist Button
 				
@@ -317,13 +300,7 @@ Rectangle {
 					opacity: settings.allowfullscreen == 1 ? 1 : 0.2
 					color: settings.allowfullscreen == 1 ? "transparent" : "#000000"
 					glow: ui.settings.buttonGlow
-					onButtonClicked: {
-						if (settings.allowfullscreen == 1) {
-							if (contextblock.visible === true) contextblock.close();
-							wjs.togFullscreen();
-							if (settings.multiscreen == 1) wjs.toggleMute(); // Multiscreen - Edit
-						}
-					}
+					onButtonClicked: buttons.clicked("fullscreen");
 				}
 				// End Fullscreen Button
 			}
@@ -368,7 +345,7 @@ Rectangle {
 				draggerColor: ui.colors.playlistMenu.drag
 				backgroundColor: ui.colors.playlistMenu.scroller
 				onDrag: wjs.movePlaylist(mouseY)
-				dragger.height: (vlcPlayer.playlist.itemCount * 40) < 240 ? 240 : (240 / (vlcPlayer.playlist.itemCount * 40)) * 240
+				dragger.height: (playlist.totalPlay * 40) < 240 ? 240 : (240 / (playlist.totalPlay * 40)) * 240
 			}
 			// End Playlist Menu Scroll
 		
