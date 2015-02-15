@@ -101,6 +101,8 @@ wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
 		// DOM level 0
 		this.video["on"+wjs_event] = wjs_function;
 	}
+	
+	return wjs(this.context);
 };
 // end catch event function
 
@@ -126,6 +128,7 @@ wjs.init.prototype.qmlLoaded = function(action) {
 		this.video["onQmlMessage"] = wjs_function;
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.onClicked = function(target, action) {
@@ -144,6 +147,7 @@ wjs.init.prototype.onClicked = function(target, action) {
 		this.video["onQmlMessage"] = wjs_function;
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.onKeyPressed = function(target, action) {
@@ -171,6 +175,7 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 		this.video["onQmlMessage"] = wjs_function;
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.preventDefault = function(type, target, action) {
@@ -202,6 +207,8 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 			this.video.emitJsMessage("[start-clicked]"+target.toLowerCase());
 		}
 	}
+	
+	return wjs(this.context);
 	
 };
 
@@ -293,6 +300,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		});
 	}
 	
+	return wjs(this.context);
 };
 
 // function for skinning
@@ -308,6 +316,8 @@ wjs.init.prototype.skin = function(skin) {
 	}
 	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
 	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+
+	return wjs(this.context);
 }
 // end function for skinning
 
@@ -373,6 +383,8 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 		 }
 	 }
 	 this.video.emitJsMessage("[refresh-playlist]");
+
+	return wjs(this.context);
 };
 // end function to add playlist items
 
@@ -380,35 +392,47 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 wjs.init.prototype.startPlayer = function() {
 	this.video.playlist.playItem(0); // Play Current Item
 	this.video.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
+
+	return wjs(this.context);
 };
 // end function to Start Playback
 
 // function to Start External Subtitle
 wjs.init.prototype.startSubtitle = function(suburl) {
 	if (typeof suburl !== "undefined") this.video.emitJsMessage("[start-subtitle]"+suburl);
+
+	return wjs(this.context);
 };
 // end function to Start External Subtitle
 
 // function to Clear External Subtitle
 wjs.init.prototype.clearSubtitle = function() {
 	this.video.emitJsMessage("[clear-subtitle]");
+
+	return wjs(this.context);
 };
 // end function to Clear External Subtitle
 
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.video.emitJsMessage("[load-m3u]"+M3Uurl);
+
+	return wjs(this.context);
 };
 // end function to load m3u files
 
 // function to Change Opening Text
 wjs.init.prototype.setOpeningText = function(openingtext) {
 	if (typeof openingtext !== "undefined") this.video.emitJsMessage("[opening-text]"+openingtext);
+
+	return wjs(this.context);
 };
 // end function to Change Opening Text
 
 // function to Send Download Percent (for buffering bar)
 wjs.init.prototype.setDownloaded = function(downloaded) {
 	if (typeof downloaded !== "undefined") this.video.emitJsMessage("[downloaded]"+downloaded);
+
+	return wjs(this.context);
 };
 // end function to Send Download Percent (for buffering bar)
