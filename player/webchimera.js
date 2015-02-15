@@ -81,25 +81,25 @@ wjs.init = function(context) {
 	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache"];
 	
 	if (this.context.substring(0,1) == "#") {
-		this.video = document.getElementById(this.context.substring(1));
+		this.plugin = document.getElementById(this.context.substring(1));
 	} else if (this.context.substring(0,1) == ".") {
-		this.video = document.getElementsByClassName(this.context.substring(1));
+		this.plugin = document.getElementsByClassName(this.context.substring(1));
 	} else {
-		this.video = document.getElementsByTagName(this.context);
+		this.plugin = document.getElementsByTagName(this.context);
 	}
 };
 
 // catch event function
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("on"+wjs_event, wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("on"+wjs_event, wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener(wjs_event, wjs_function, false);
+		this.plugin.addEventListener(wjs_event, wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["on"+wjs_event] = wjs_function;
+		this.plugin["on"+wjs_event] = wjs_function;
 	}
 	
 	return wjs(this.context);
@@ -108,7 +108,7 @@ wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
 
 // function that loads webchimera player settings after qml has loaded
 wjs.init.prototype.loadSettings = function(wjs_localsettings) {
-	this.video.emitJsMessage(JSON.stringify(wjs_localsettings));
+	this.plugin.emitJsMessage(JSON.stringify(wjs_localsettings));
 };
 // end function that loads webchimera player settings after qml has loaded
 
@@ -117,15 +117,15 @@ wjs.init.prototype.qmlLoaded = function(action) {
 		if (event == "[qml-loaded]") action();
 	}
 	
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = wjs_function;
 	}
 	
 	return wjs(this.context);
@@ -136,15 +136,15 @@ wjs.init.prototype.onClicked = function(target, action) {
 		if (event == "[clicked]"+target) action();
 	}
 	
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = wjs_function;
 	}
 	
 	return wjs(this.context);
@@ -164,15 +164,15 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 		}
 	}
 	
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = wjs_function;
 	}
 	
 	return wjs(this.context);
@@ -187,24 +187,24 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 				var res = target.split("+");
 				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-				this.video.emitJsMessage("[stop-pressed]"+newtarget);
+				this.plugin.emitJsMessage("[stop-pressed]"+newtarget);
 			} else {
-				this.video.emitJsMessage("[stop-pressed]"+keyMap[target.toLowerCase()]);
+				this.plugin.emitJsMessage("[stop-pressed]"+keyMap[target.toLowerCase()]);
 			}
 		} else if (action === false) {
 			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 				var res = target.split("+");
 				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-				this.video.emitJsMessage("[start-pressed]"+newtarget);
+				this.plugin.emitJsMessage("[start-pressed]"+newtarget);
 			} else {
-				this.video.emitJsMessage("[start-pressed]"+keyMap[target.toLowerCase()]);
+				this.plugin.emitJsMessage("[start-pressed]"+keyMap[target.toLowerCase()]);
 			}
 		}
 	} else if (type.toLowerCase() == "click") {
 		if (action === true) {
-			this.video.emitJsMessage("[stop-clicked]"+target.toLowerCase());
+			this.plugin.emitJsMessage("[stop-clicked]"+target.toLowerCase());
 		} else if (action === false) {
-			this.video.emitJsMessage("[start-clicked]"+target.toLowerCase());
+			this.plugin.emitJsMessage("[start-clicked]"+target.toLowerCase());
 		}
 	}
 	
@@ -216,7 +216,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	// check if plugin is installed
 	if (navigator.plugins["WebChimera Plugin"].name != "WebChimera Plugin") {
-		this.video.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+		this.plugin.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
 		return false;
 	}
 	// end check if plugin is installed
@@ -279,7 +279,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		
 	playerbody += '</object>';
 	
-	this.video.innerHTML = playerbody;
+	this.plugin.innerHTML = playerbody;
 	
 	if (typeof webchimeraid !== "undefined") {
 		wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
@@ -369,20 +369,20 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 			  } else {
 				  if (typeof pitem[this.context] === 'undefined') pitem[this.context] = 0;
 				  console.log(pitem[this.context]+" - "+playlist[item].title);
-				  this.video.playlist.add(playlist[item].url);
+				  this.plugin.playlist.add(playlist[item].url);
 	  			  var playerSettings = {};
-				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.video.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
+				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.plugin.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
 				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
 				  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
 				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
 				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
 				  
-				  if (Object.keys(playerSettings).length > 0) this.video.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
+				  if (Object.keys(playerSettings).length > 0) this.plugin.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
 				  pitem[this.context]++;
 			  }
 		 }
 	 }
-	 this.video.emitJsMessage("[refresh-playlist]");
+	 this.plugin.emitJsMessage("[refresh-playlist]");
 
 	return wjs(this.context);
 };
@@ -390,8 +390,8 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 
 // function to Start Playback
 wjs.init.prototype.startPlayer = function() {
-	this.video.playlist.playItem(0); // Play Current Item
-	this.video.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
+	this.plugin.playlist.playItem(0); // Play Current Item
+	this.plugin.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
 
 	return wjs(this.context);
 };
@@ -399,7 +399,7 @@ wjs.init.prototype.startPlayer = function() {
 
 // function to Start External Subtitle
 wjs.init.prototype.startSubtitle = function(suburl) {
-	if (typeof suburl !== "undefined") this.video.emitJsMessage("[start-subtitle]"+suburl);
+	if (typeof suburl !== "undefined") this.plugin.emitJsMessage("[start-subtitle]"+suburl);
 
 	return wjs(this.context);
 };
@@ -407,7 +407,7 @@ wjs.init.prototype.startSubtitle = function(suburl) {
 
 // function to Clear External Subtitle
 wjs.init.prototype.clearSubtitle = function() {
-	this.video.emitJsMessage("[clear-subtitle]");
+	this.plugin.emitJsMessage("[clear-subtitle]");
 
 	return wjs(this.context);
 };
@@ -415,7 +415,7 @@ wjs.init.prototype.clearSubtitle = function() {
 
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
-	if (typeof M3Uurl !== "undefined") this.video.emitJsMessage("[load-m3u]"+M3Uurl);
+	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);
 
 	return wjs(this.context);
 };
@@ -423,7 +423,7 @@ wjs.init.prototype.loadM3U = function(M3Uurl) {
 
 // function to Change Opening Text
 wjs.init.prototype.setOpeningText = function(openingtext) {
-	if (typeof openingtext !== "undefined") this.video.emitJsMessage("[opening-text]"+openingtext);
+	if (typeof openingtext !== "undefined") this.plugin.emitJsMessage("[opening-text]"+openingtext);
 
 	return wjs(this.context);
 };
@@ -431,7 +431,7 @@ wjs.init.prototype.setOpeningText = function(openingtext) {
 
 // function to Send Download Percent (for buffering bar)
 wjs.init.prototype.setDownloaded = function(downloaded) {
-	if (typeof downloaded !== "undefined") this.video.emitJsMessage("[downloaded]"+downloaded);
+	if (typeof downloaded !== "undefined") this.plugin.emitJsMessage("[downloaded]"+downloaded);
 
 	return wjs(this.context);
 };
