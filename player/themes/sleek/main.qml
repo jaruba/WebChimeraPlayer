@@ -345,7 +345,7 @@ Rectangle {
 				draggerColor: ui.colors.playlistMenu.drag
 				backgroundColor: ui.colors.playlistMenu.scroller
 				onDrag: wjs.movePlaylist(mouseY)
-				dragger.height: (vlcPlayer.playlist.itemCount * 40) < 240 ? 240 : (240 / (vlcPlayer.playlist.itemCount * 40)) * 240
+				dragger.height: (playlist.totalPlay * 40) < 240 ? 240 : (240 / (playlist.totalPlay * 40)) * 240
 			}
 			// End Playlist Menu Scroll
 		

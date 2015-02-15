@@ -28,10 +28,10 @@ Rectangle {
 	// Start Remove all Playlist Menu Items
 	function clearAll() {
 		var pli = 0;
-		
-		if (totalPlay > 0) for (pli = 0; pli < totalPlay; pli++) if (typeof vplItems[pli] !== 'undefined') {
-			vplItems[pli].destroy();
+		while (typeof vplItems[pli] !== 'undefined') {
+			vplItems[pli].destroy(1);
 			delete vplItems[pli];
+			pli++;
 		}
 	
 		vplItems = [];
@@ -46,12 +46,17 @@ Rectangle {
 		// Adding Playlist Menu Items
 		var pli = 0;
 		for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
-			var plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
-			plstring = unescape(plstring);
-			plstring = plstring.split('_').join(' ');
-			plstring = plstring.split('  ').join(' ');
-			plstring = plstring.split('  ').join(' ');
-			plstring = plstring.split('  ').join(' ');
+			if (vlcPlayer.playlist.items[pli].title.indexOf("[custom]") == -1) {
+				var plstring = vlcPlayer.playlist.items[pli].title;
+				plstring = unescape(plstring);
+				plstring = plstring.split('_').join(' ');
+				plstring = plstring.split('  ').join(' ');
+				plstring = plstring.split('  ').join(' ');
+				plstring = plstring.split('  ').join(' ');
+			} else {
+				var plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
+			}
+			
 			if (plstring.indexOf("youtube.com") > 0) {
 				var youtubeID =	plstring.substr(plstring.lastIndexOf("/")+1).replace("watch?v=","");
 				if (youtubeID.indexOf("&") > 0) youtubeID =	youtubeID.substr(0,youtubeID.IndexOf("&"));

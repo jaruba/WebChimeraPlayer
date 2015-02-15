@@ -11,6 +11,7 @@ QtObject {
 	property var buffering: 0;
 	property var autoloop: 0;
 	property var automute: 0;
+	property var autoplay: 0;
 	property var allowfullscreen: 1;
 	property var playlistmenu: false;
 	property var subtitlemenu: false;
