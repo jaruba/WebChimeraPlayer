@@ -73,7 +73,6 @@ Rectangle {
 				}
 			} else if (event.key == Qt.Key_L) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_L] === "undefined") {
-					wjs.setText(Qt.Key_Escape);
 					wjs.togglePlaylist();
 				}
 			}
