@@ -78,13 +78,9 @@ function IsJsonString(str) {
 // hack to remember variables until qml has loaded
 function delayLoadM3U(context,tempV) {
     return function(){
-		if (isNodeWebkit) {
+		wjs(context).qmlLoaded(function() {
 			wjs(context).loadM3U(tempV);
-		} else {
-			wjs(context).qmlLoaded(function() {
-				wjs(context).loadM3U(tempV);
-			});
-		}
+		});
     }
 }
 // end hack to remember variables until qml has loaded
@@ -136,19 +132,23 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 // end function that loads webchimera player settings after qml has loaded
 
 wjs.init.prototype.qmlLoaded = function(action) {
-	function wjs_function(event) {
-		if (event == "[qml-loaded]") action();
-	}
-	
-	if (this.plugin.attachEvent) {
-		// Microsoft
-		this.plugin.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.plugin.addEventListener) {
-		// Mozilla: DOM level 2
-		this.plugin.addEventListener("QmlMessage", wjs_function, false);
+	if (isNodeWebkit) {
+		action();
 	} else {
-		// DOM level 0
-		this.plugin["onQmlMessage"] = wjs_function;
+		function wjs_function(event) {
+			if (event == "[qml-loaded]") action();
+		}
+		
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", wjs_function);
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", wjs_function, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = wjs_function;
+		}
 	}
 	
 	return wjs(this.context);
@@ -350,13 +350,8 @@ wjs.init.prototype.skin = function(skin) {
 			var webchimeraclass = newid.substring(1);
 		} else var webchimeraid = newid;
 	}
-	if (isNodeWebkit) {
-		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).loadSettings(skin);
-		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).loadSettings(skin);
-	} else {
-		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
-		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
-	}
+	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
+	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
 	
 	return wjs(this.context);
 }
