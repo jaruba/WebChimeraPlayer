@@ -21,16 +21,35 @@
 var globalurlstring = " ";
 var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML File cannot be loaded from your Local Machine! Upload the Demo on a Web server to see it working correctly!</div></div>';
 var wjsScripts = document.getElementsByTagName("script"),
-    webchimeraSrc = wjsScripts[wjsScripts.length-1].src,
-	webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
+    webchimeraSrc = wjsScripts[wjsScripts.length-1].src;
+var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
+var isNodeWebkit = false;
+	
+//Is this Node.js?
+if(isNode) {
+  //If so, test for Node-Webkit
+  try {
+    isNodeWebkit = (typeof require('nw.gui') !== "undefined");
+  } catch(e) {
+    isNodeWebkit = false;
+  }
+}
+
+if (isNodeWebkit) {
+	var webchimeraFolder = "file:///"+ process.cwd() +"/player";
+} else {
+	var webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
+}
+
 switch(window.location.protocol) {
    case 'http:': break;
-   case 'https:': break
+   case 'https:': break;
+   case 'app:': break;
    case 'file:':
-	 document.body.innerHTML += localwarning;
+	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 	 break;
    default: 
-	 document.body.innerHTML += localwarning;
+	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 }
 // end if page on local machine, add warning
 
@@ -368,7 +387,6 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 				  }
 			  } else {
 				  if (typeof pitem[this.context] === 'undefined') pitem[this.context] = 0;
-				  console.log(pitem[this.context]+" - "+playlist[item].title);
 				  this.plugin.playlist.add(playlist[item].url);
 	  			  var playerSettings = {};
 				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.plugin.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
