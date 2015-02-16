@@ -432,6 +432,22 @@ wjs.init.prototype.startPlayer = function() {
 };
 // end function to Start Playback
 
+// function to Stop Playback
+wjs.init.prototype.stopPlayer = function() {
+	this.plugin.playlist.stop(); // Stop Playback
+
+	return wjs(this.context);
+};
+// end function to Stop Playback
+
+// function to Set Custom Total Length to Current Item
+wjs.init.prototype.setTotalLength = function(mseconds) {
+	if (typeof mseconds !== "undefined") this.plugin.emitJsMessage("[set-total-length]"+mseconds);
+
+	return wjs(this.context);
+};
+// end function to Set Custom Total Length to Current Item
+
 // function to Start External Subtitle
 wjs.init.prototype.startSubtitle = function(suburl) {
 	if (typeof suburl !== "undefined") this.plugin.emitJsMessage("[start-subtitle]"+suburl);
