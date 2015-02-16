@@ -78,9 +78,13 @@ function IsJsonString(str) {
 // hack to remember variables until qml has loaded
 function delayLoadM3U(context,tempV) {
     return function(){
-    	wjs(context).qmlLoaded(function() {
+		if (isNodeWebkit) {
 			wjs(context).loadM3U(tempV);
-		});
+		} else {
+			wjs(context).qmlLoaded(function() {
+				wjs(context).loadM3U(tempV);
+			});
+		}
     }
 }
 // end hack to remember variables until qml has loaded
@@ -299,26 +303,39 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	playerbody += '</object>';
 	
 	this.plugin.innerHTML = playerbody;
-	
-	if (typeof webchimeraid !== "undefined") {
-		wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-				wjs("#" + webchimeraid).loadSettings(onloadsettings);
-				ploaded["#" + webchimeraid] = true;
-			}
-			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-		});
+	if (isNodeWebkit) {
+		wjs("#" + webchimeraid).loadSettings(onloadsettings);
+		ploaded["#" + webchimeraid] = true;
+		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+	} else {
+		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+					wjs("#" + webchimeraid).loadSettings(onloadsettings);
+					ploaded["#" + webchimeraid] = true;
+				}
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+					wjs("." + webchimeraclass).loadSettings(onloadsettings);
+					ploaded["." + webchimeraclass] = true;
+				}
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
 	}
-	if (typeof webchimeraclass !== "undefined") {
-		wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-				wjs("." + webchimeraclass).loadSettings(onloadsettings);
-				ploaded["." + webchimeraclass] = true;
-			}
-			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-		});
-	}
-	
 	return wjs(this.context);
 };
 
@@ -333,9 +350,14 @@ wjs.init.prototype.skin = function(skin) {
 			var webchimeraclass = newid.substring(1);
 		} else var webchimeraid = newid;
 	}
-	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
-	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
-
+	if (isNodeWebkit) {
+		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).loadSettings(skin);
+		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).loadSettings(skin);
+	} else {
+		if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
+		if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+	}
+	
 	return wjs(this.context);
 }
 // end function for skinning
