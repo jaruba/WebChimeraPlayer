@@ -211,7 +211,7 @@ Rectangle {
 		// Load Internal and External Subtitles (when playback starts)
 		if (vlcPlayer.state == 3 && subButton.visible === false) {
 			var itemSettings = {};
-			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+			if (isJson(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting)) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
 			var doSubs = false;
 			if (typeof itemSettings.subtitles !== 'undefined' && itemSettings.hasOwnProperty('subtitles') === true) doSubs = true;					
 			if (vlcPlayer.subtitle.count > 1) doSubs = true;
