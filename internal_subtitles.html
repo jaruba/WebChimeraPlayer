@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<link rel="icon" href="http://www.webchimera.org/favicon.ico">
+<meta charset="UTF-8">
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+<title>Internal Subtitles Demo - WebChimera Player</title>
+
+</head>
+
+<body>
+
+<div id="close_wrapper"><a id="close_button" href="index.html"><img src="images/close_but.png"></a></div>
+
+<div id="page_title"><h1>Internal Subtitles Demo</h1></div>
+
+<div id="player_wrapper"></div>
+
+<script src="player/webchimera.js" type="text/javascript"></script>
+<script>
+// create player
+wjs("#player_wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
+
+// add the playlist item to the player
+wjs("#webchimera").addPlaylist("http://trailers.divx.com/divx_prod/divx_plus_hd_showcase/Sintel_DivXPlus_6500kbps.mkv");
+</script>
+
+</body>
+
+</html>
