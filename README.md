@@ -1,4 +1,4 @@
-WebChimera Player
+WebChimera Player v1.0
 ==============
 
 An Open Source <b><a href="http://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
@@ -19,6 +19,9 @@ Current Features
 - <a href="http://wiki.webchimera.org/.addPlaylist()" target="_blank">Custom Video Titles and Artwork Support</a>
 - <a href="http://wiki.webchimera.org/Player_Hotkeys" target="_blank">Hotkeys and Mouse Actions</a>
 - <a href="http://wiki.webchimera.org/Player_Skinning" target="_blank">Skinning and Themes</a>
+- <a href="http://www.webchimera.org/demos/internal_subtitles" target="_blank">Internal Video Subtitle</a> and Audio Track Support
+- Advanced Playlist Menu (drag and drop, skip)
+- Context Menu with: Audio Tracks, Aspect Ratio, Crop and Zoom.
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Streams: RTMP, RTSP, HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Audio Formats: MP3, AAC, MPEG3, FLAC, WAV and <a href="http://www.videolan.org/vlc/features.php?cat=audio" target="_blank">more</a>
@@ -26,7 +29,4 @@ Current Features
 
 Upcoming Features
 ==============
-- Internal Video Subtitle and Audio Track Support
-- Context Menu
-- Advanced Playlist Menu (drag and drop, skip)
 - Windowed Mode (Pop Out)
