@@ -360,6 +360,21 @@ Rectangle {
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 			if (startsWith(message,"[set-total-length]")) settings.customLength = message.replace("[set-total-length]",""); // Set custom total length
+			if (startsWith(message,"[reset-progress]")) {
+				// Reset properties related to .setTotalLength()
+				var changedSettings = false;
+				if (settings.customLength > 0) {
+					settings.customLength = 0;
+					changedSettings = true;
+				}
+				if (settings.newProgress > 0) {
+					settings.newProgress = 0;
+					changedSettings = true;
+				}
+				if (changedSettings) settings = settings;
+				delete changedSettings;
+				// end Reset properties related to .setTotalLength()
+			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {

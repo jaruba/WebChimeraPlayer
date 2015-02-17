@@ -435,6 +435,7 @@ wjs.init.prototype.startPlayer = function() {
 // function to Stop Playback
 wjs.init.prototype.stopPlayer = function() {
 	this.plugin.playlist.stop(); // Stop Playback
+	this.plugin.emitJsMessage("[reset-progress]");
 
 	return wjs(this.context);
 };
