@@ -62,6 +62,9 @@ Rectangle {
 		
 		settings.lastTime = tempSecond;
 		tempSecond = seconds;
+		
+		settings.newProgress = vlcPlayer.time / getLength();
+		settings = settings;
 			
 		if (vlcPlayer.time > 0) lastPos = vlcPlayer.position;
 		
@@ -125,6 +128,20 @@ Rectangle {
 	function onState() {
 		if (vlcPlayer.state == 1) {
 			buftext.changeText = "Opening";
+			
+			// Reset properties related to .setTotalLength()
+			var changedSettings = false;
+			if (settings.customLength > 0) {
+				settings.customLength = 0;
+				changedSettings = true;
+			}
+			if (settings.newProgress > 0) {
+				settings.newProgress = 0;
+				changedSettings = true;
+			}
+			if (changedSettings) settings = settings;
+			delete changedSettings;
+			// end Reset properties related to .setTotalLength()
 	
 			if (lastItem != vlcPlayer.playlist.currentItem) {
 				if (lastItem == -1) lastItem = 0;
@@ -342,8 +359,29 @@ Rectangle {
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
+			if (startsWith(message,"[set-total-length]")) settings.customLength = message.replace("[set-total-length]",""); // Set custom total length
+			if (startsWith(message,"[reset-progress]")) {
+				// Reset properties related to .setTotalLength()
+				var changedSettings = false;
+				if (settings.customLength > 0) {
+					settings.customLength = 0;
+					changedSettings = true;
+				}
+				if (settings.newProgress > 0) {
+					settings.newProgress = 0;
+					changedSettings = true;
+				}
+				if (changedSettings) settings = settings;
+				delete changedSettings;
+				// end Reset properties related to .setTotalLength()
+			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
+				if (vlcPlayer.playlist.itemCount > 1) {
+					playlistButton.visible = 1;
+					prevBut.visible = true;
+					nextBut.visible = true;
+				}
 				if (settings.autoplay == 1 && vlcPlayer.state == 0 && vlcPlayer.playlist.itemCount > 0) vlcPlayer.playlist.playItem(0); 
 			}
 			if (startsWith(message,"[downloaded]")) { settings.downloaded = parseFloat(message.replace("[downloaded]","")); settings = settings; } // Get Downloaded Percent
@@ -522,11 +560,11 @@ Rectangle {
 	// Start Progress Bar Seek Functionality
 	function progressDrag(mouseX,mouseY) {
 		settings.dragging = true;
-		var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouseX -4) / theview.width);
+		var newtime = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
 		if (newtime > 0) timeBubble.srctime = getTime(newtime);
 	}
 	function progressChanged(mouseX,mouseY) {
-		var newtime = (vlcPlayer.time * (1 / vlcPlayer.position)) * ((mouseX -4) / theview.width);
+		var newtime = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
 		if (newtime > 0) timeBubble.srctime = getTime(newtime);
 	}
 	function progressReleased(mouseX,mouseY) {
@@ -535,7 +573,8 @@ Rectangle {
 			vlcPlayer.playlist.currentItem = lastItem;
 			vlcPlayer.playlist.play();
 		}
-		vlcPlayer.position = lastPos;
+		// calculate new player time and set it in the player
+		vlcPlayer.time = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
 		settings.dragging = false;
 	}
 	// End Progress Bar Seek Functionality
@@ -630,7 +669,9 @@ Rectangle {
 	function getLength() {
 		if (vlcPlayer.length > 0) {
 			return vlcPlayer.length;
-		} else {
+    	} else if (settings.customLength > 0) {
+			return settings.customLength;
+    	} else {
 			return vlcPlayer.time * (1 / vlcPlayer.position);
 		}
 	}

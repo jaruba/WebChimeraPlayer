@@ -55,12 +55,12 @@ Rectangle {
 				anchors.left: parent.left
 				anchors.bottom: parent.bottom
 				color: "#3E3E3E"
-				width: settings.downloaded > 0 ? vlcPlayer.state == 3 || vlcPlayer.state == 4 ? parent.width * settings.downloaded : 0 : vlcPlayer.state <= 1 ? 0 : settings.dragging ? 0 : ((parent.width - anchors.leftMargin - anchors.rightMargin) * vlcPlayer.position) + ((parent.width - anchors.leftMargin - anchors.rightMargin) * ((settings.cache / ((vlcPlayer.time * (1 / vlcPlayer.position)) /100)) /100) /100 * settings.buffering)
+				width: settings.downloaded > 0 ? vlcPlayer.state == 3 || vlcPlayer.state == 4 ? parent.width * settings.downloaded : 0 : vlcPlayer.state <= 1 ? 0 : settings.dragging ? 0 : ((parent.width - anchors.leftMargin - anchors.rightMargin) * settings.newProgress) + ((parent.width - anchors.leftMargin - anchors.rightMargin) * ((settings.cache / ((vlcPlayer.time * (1 / settings.newProgress)) /100)) /100) /100 * settings.buffering)
 //				Behavior on width { PropertyAnimation { duration: settings.dragging ? 0 : vlcPlayer.time - lastTime > 0 ? vlcPlayer.time - lastTime : 0 } }
 			}
 			Rectangle {
 				id: movepos
-				width: vlcPlayer.state <= 1 ? 0 : settings.dragging ? dragpos.mouseX -4 : (parent.width - anchors.leftMargin - anchors.rightMargin) * vlcPlayer.position
+				width: vlcPlayer.state <= 1 ? 0 : settings.dragging ? dragpos.mouseX -4 : (parent.width - anchors.leftMargin - anchors.rightMargin) * settings.newProgress
 				anchors.top: parent.top
 				anchors.left: parent.left
 				anchors.bottom: parent.bottom
@@ -75,7 +75,7 @@ Rectangle {
 		anchors.left: parent.left
 		anchors.right: parent.right
 		anchors.bottom: parent.bottom
-		anchors.leftMargin: vlcPlayer.state <= 1 ? 0 : settings.dragging ? dragpos.mouseX -4 > 0 ? dragpos.mouseX < parent.width -4 ? dragpos.mouseX -4 : parent.width -8 : 0 : (parent.width - anchors.rightMargin) * vlcPlayer.position > 0 ? (parent.width - anchors.rightMargin) * vlcPlayer.position < parent.width -8 ? (parent.width - anchors.rightMargin) * vlcPlayer.position : parent.width -8 : 0
+		anchors.leftMargin: vlcPlayer.state <= 1 ? 0 : settings.dragging ? dragpos.mouseX -4 > 0 ? dragpos.mouseX < parent.width -4 ? dragpos.mouseX -4 : parent.width -8 : 0 : (parent.width - anchors.rightMargin) * settings.newProgress > 0 ? (parent.width - anchors.rightMargin) * settings.newProgress < parent.width -8 ? (parent.width - anchors.rightMargin) * settings.newProgress : parent.width -8 : 0
 		
 		// Start Multiscreen - Edit
 		anchors.bottomMargin: settings.multiscreen == 1 ? fullscreen ? toolbar.height : -16 : fullscreen ? toolbar.height : mousesurface.containsMouse ? toolbar.height : 0

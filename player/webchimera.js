@@ -21,16 +21,35 @@
 var globalurlstring = " ";
 var localwarning = '<div id="warning-wrapper"><div id="lwarning" class="btn">QML File cannot be loaded from your Local Machine! Upload the Demo on a Web server to see it working correctly!</div></div>';
 var wjsScripts = document.getElementsByTagName("script"),
-    webchimeraSrc = wjsScripts[wjsScripts.length-1].src,
-	webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
+    webchimeraSrc = wjsScripts[wjsScripts.length-1].src;
+var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
+var isNodeWebkit = false;
+	
+//Is this Node.js?
+if(isNode) {
+  //If so, test for Node-Webkit
+  try {
+    isNodeWebkit = (typeof require('nw.gui') !== "undefined");
+  } catch(e) {
+    isNodeWebkit = false;
+  }
+}
+
+if (isNodeWebkit) {
+	var webchimeraFolder = "file:///"+ process.cwd() +"/player";
+} else {
+	var webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
+}
+
 switch(window.location.protocol) {
    case 'http:': break;
-   case 'https:': break
+   case 'https:': break;
+   case 'app:': break;
    case 'file:':
-	 document.body.innerHTML += localwarning;
+	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 	 break;
    default: 
-	 document.body.innerHTML += localwarning;
+	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 }
 // end if page on local machine, add warning
 
@@ -59,7 +78,7 @@ function IsJsonString(str) {
 // hack to remember variables until qml has loaded
 function delayLoadM3U(context,tempV) {
     return function(){
-    	wjs(context).qmlLoaded(function() {
+		wjs(context).qmlLoaded(function() {
 			wjs(context).loadM3U(tempV);
 		});
     }
@@ -81,51 +100,58 @@ wjs.init = function(context) {
 	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache"];
 	
 	if (this.context.substring(0,1) == "#") {
-		this.video = document.getElementById(this.context.substring(1));
+		this.plugin = document.getElementById(this.context.substring(1));
 	} else if (this.context.substring(0,1) == ".") {
-		this.video = document.getElementsByClassName(this.context.substring(1));
+		this.plugin = document.getElementsByClassName(this.context.substring(1));
 	} else {
-		this.video = document.getElementsByTagName(this.context);
+		this.plugin = document.getElementsByTagName(this.context);
 	}
 };
 
 // catch event function
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("on"+wjs_event, wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("on"+wjs_event, wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener(wjs_event, wjs_function, false);
+		this.plugin.addEventListener(wjs_event, wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["on"+wjs_event] = wjs_function;
+		this.plugin["on"+wjs_event] = wjs_function;
 	}
+	
+	return wjs(this.context);
 };
 // end catch event function
 
 // function that loads webchimera player settings after qml has loaded
 wjs.init.prototype.loadSettings = function(wjs_localsettings) {
-	this.video.emitJsMessage(JSON.stringify(wjs_localsettings));
+	this.plugin.emitJsMessage(JSON.stringify(wjs_localsettings));
 };
 // end function that loads webchimera player settings after qml has loaded
 
 wjs.init.prototype.qmlLoaded = function(action) {
-	function wjs_function(event) {
-		if (event == "[qml-loaded]") action();
-	}
-	
-	if (this.video.attachEvent) {
-		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
-		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+	if (isNodeWebkit) {
+		action();
 	} else {
-		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		function wjs_function(event) {
+			if (event == "[qml-loaded]") action();
+		}
+		
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", wjs_function);
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", wjs_function, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = wjs_function;
+		}
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.onClicked = function(target, action) {
@@ -133,17 +159,18 @@ wjs.init.prototype.onClicked = function(target, action) {
 		if (event == "[clicked]"+target) action();
 	}
 	
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = wjs_function;
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.onKeyPressed = function(target, action) {
@@ -160,17 +187,18 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 		}
 	}
 	
-	if (this.video.attachEvent) {
+	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.video.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.video.addEventListener) {
+		this.plugin.attachEvent("onQmlMessage", wjs_function);
+	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.video.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", wjs_function, false);
 	} else {
 		// DOM level 0
-		this.video["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = wjs_function;
 	}
 	
+	return wjs(this.context);
 };
 
 wjs.init.prototype.preventDefault = function(type, target, action) {
@@ -182,26 +210,28 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 				var res = target.split("+");
 				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-				this.video.emitJsMessage("[stop-pressed]"+newtarget);
+				this.plugin.emitJsMessage("[stop-pressed]"+newtarget);
 			} else {
-				this.video.emitJsMessage("[stop-pressed]"+keyMap[target.toLowerCase()]);
+				this.plugin.emitJsMessage("[stop-pressed]"+keyMap[target.toLowerCase()]);
 			}
 		} else if (action === false) {
 			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 				var res = target.split("+");
 				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-				this.video.emitJsMessage("[start-pressed]"+newtarget);
+				this.plugin.emitJsMessage("[start-pressed]"+newtarget);
 			} else {
-				this.video.emitJsMessage("[start-pressed]"+keyMap[target.toLowerCase()]);
+				this.plugin.emitJsMessage("[start-pressed]"+keyMap[target.toLowerCase()]);
 			}
 		}
 	} else if (type.toLowerCase() == "click") {
 		if (action === true) {
-			this.video.emitJsMessage("[stop-clicked]"+target.toLowerCase());
+			this.plugin.emitJsMessage("[stop-clicked]"+target.toLowerCase());
 		} else if (action === false) {
-			this.video.emitJsMessage("[start-clicked]"+target.toLowerCase());
+			this.plugin.emitJsMessage("[start-clicked]"+target.toLowerCase());
 		}
 	}
+	
+	return wjs(this.context);
 	
 };
 
@@ -209,7 +239,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	// check if plugin is installed
 	if (navigator.plugins["WebChimera Plugin"].name != "WebChimera Plugin") {
-		this.video.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+		this.plugin.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
 		return false;
 	}
 	// end check if plugin is installed
@@ -272,27 +302,41 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		
 	playerbody += '</object>';
 	
-	this.video.innerHTML = playerbody;
-	
-	if (typeof webchimeraid !== "undefined") {
-		wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-				wjs("#" + webchimeraid).loadSettings(onloadsettings);
-				ploaded["#" + webchimeraid] = true;
-			}
-			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-		});
+	this.plugin.innerHTML = playerbody;
+	if (isNodeWebkit) {
+		wjs("#" + webchimeraid).loadSettings(onloadsettings);
+		ploaded["#" + webchimeraid] = true;
+		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+	} else {
+		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+					wjs("#" + webchimeraid).loadSettings(onloadsettings);
+					ploaded["#" + webchimeraid] = true;
+				}
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
+		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
+					wjs("." + webchimeraclass).loadSettings(onloadsettings);
+					ploaded["." + webchimeraclass] = true;
+				}
+				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+			});
+		}
 	}
-	if (typeof webchimeraclass !== "undefined") {
-		wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-			if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-				wjs("." + webchimeraclass).loadSettings(onloadsettings);
-				ploaded["." + webchimeraclass] = true;
-			}
-			if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-		});
-	}
-	
+	return wjs(this.context);
 };
 
 // function for skinning
@@ -308,6 +352,8 @@ wjs.init.prototype.skin = function(skin) {
 	}
 	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
 	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+	
+	return wjs(this.context);
 }
 // end function for skinning
 
@@ -358,57 +404,87 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 				  }
 			  } else {
 				  if (typeof pitem[this.context] === 'undefined') pitem[this.context] = 0;
-				  console.log(pitem[this.context]+" - "+playlist[item].title);
-				  this.video.playlist.add(playlist[item].url);
+				  this.plugin.playlist.add(playlist[item].url);
 	  			  var playerSettings = {};
-				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.video.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
+				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.plugin.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
 				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
 				  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
 				  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
 				  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
 				  
-				  if (Object.keys(playerSettings).length > 0) this.video.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
+				  if (Object.keys(playerSettings).length > 0) this.plugin.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
 				  pitem[this.context]++;
 			  }
 		 }
 	 }
-	 this.video.emitJsMessage("[refresh-playlist]");
+	 this.plugin.emitJsMessage("[refresh-playlist]");
+
+	return wjs(this.context);
 };
 // end function to add playlist items
 
 // function to Start Playback
 wjs.init.prototype.startPlayer = function() {
-	this.video.playlist.playItem(0); // Play Current Item
-	this.video.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
+	this.plugin.playlist.playItem(0); // Play Current Item
+	this.plugin.playlist.Normal; // Set Normal Playback (options: Normal, Loop, Single)
+
+	return wjs(this.context);
 };
 // end function to Start Playback
 
+// function to Stop Playback
+wjs.init.prototype.stopPlayer = function() {
+	this.plugin.playlist.stop(); // Stop Playback
+	this.plugin.emitJsMessage("[reset-progress]");
+
+	return wjs(this.context);
+};
+// end function to Stop Playback
+
+// function to Set Custom Total Length to Current Item
+wjs.init.prototype.setTotalLength = function(mseconds) {
+	if (typeof mseconds !== "undefined") this.plugin.emitJsMessage("[set-total-length]"+mseconds);
+
+	return wjs(this.context);
+};
+// end function to Set Custom Total Length to Current Item
+
 // function to Start External Subtitle
 wjs.init.prototype.startSubtitle = function(suburl) {
-	if (typeof suburl !== "undefined") this.video.emitJsMessage("[start-subtitle]"+suburl);
+	if (typeof suburl !== "undefined") this.plugin.emitJsMessage("[start-subtitle]"+suburl);
+
+	return wjs(this.context);
 };
 // end function to Start External Subtitle
 
 // function to Clear External Subtitle
 wjs.init.prototype.clearSubtitle = function() {
-	this.video.emitJsMessage("[clear-subtitle]");
+	this.plugin.emitJsMessage("[clear-subtitle]");
+
+	return wjs(this.context);
 };
 // end function to Clear External Subtitle
 
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
-	if (typeof M3Uurl !== "undefined") this.video.emitJsMessage("[load-m3u]"+M3Uurl);
+	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);
+
+	return wjs(this.context);
 };
 // end function to load m3u files
 
 // function to Change Opening Text
 wjs.init.prototype.setOpeningText = function(openingtext) {
-	if (typeof openingtext !== "undefined") this.video.emitJsMessage("[opening-text]"+openingtext);
+	if (typeof openingtext !== "undefined") this.plugin.emitJsMessage("[opening-text]"+openingtext);
+
+	return wjs(this.context);
 };
 // end function to Change Opening Text
 
 // function to Send Download Percent (for buffering bar)
 wjs.init.prototype.setDownloaded = function(downloaded) {
-	if (typeof downloaded !== "undefined") this.video.emitJsMessage("[downloaded]"+downloaded);
+	if (typeof downloaded !== "undefined") this.plugin.emitJsMessage("[downloaded]"+downloaded);
+
+	return wjs(this.context);
 };
 // end function to Send Download Percent (for buffering bar)

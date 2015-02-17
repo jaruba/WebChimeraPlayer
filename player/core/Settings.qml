@@ -32,6 +32,8 @@ QtObject {
 	property var curAspect: "Default";
 	property var mouseevents: 0;
 	property var downloaded: 0;
+	property var customLength: 0;
+	property var newProgress: 0;
 	property var openingText: "Loading Resource";
 	property variant preventKey: [];
 	property variant preventClicked: [];
