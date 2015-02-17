@@ -48,11 +48,25 @@ Rectangle {
 		for (pli = 0; pli < vlcPlayer.playlist.itemCount; pli++) {
 			if (vlcPlayer.playlist.items[pli].title.indexOf("[custom]") == -1) {
 				var plstring = vlcPlayer.playlist.items[pli].title;
+				if (plstring.indexOf("http://") == 0) {
+					// extract filename from url
+					var tempPlstring = plstring.substring(plstring.lastIndexOf('/')+1);
+					if (tempPlstring.length > 3) plstring = tempPlstring;
+					delete tempPlstring;
+				}
+				if (plstring.indexOf(".") > -1) {
+					// remove extension
+					var tempPlstring = plstring.replace("."+plstring.split('.').pop(),"");
+					if (tempPlstring.length > 3) plstring = tempPlstring;
+					delete tempPlstring;
+				}
 				plstring = unescape(plstring);
 				plstring = plstring.split('_').join(' ');
+				plstring = plstring.split('.').join(' ');
 				plstring = plstring.split('  ').join(' ');
 				plstring = plstring.split('  ').join(' ');
 				plstring = plstring.split('  ').join(' ');
+				if (plstring != vlcPlayer.playlist.items[pli].title) vlcPlayer.playlist.items[pli].title = "[custom]"+plstring;
 			} else {
 				var plstring = vlcPlayer.playlist.items[pli].title.replace("[custom]","");
 			}
