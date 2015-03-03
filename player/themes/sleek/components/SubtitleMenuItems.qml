@@ -166,12 +166,13 @@ Rectangle {
 		 target: vlcPlayer
 		 onMediaPlayerTimeChanged: {
 			// Start show subtitle text (external subtitles)
+			var nowSecond = vlcPlayer.time /1000;
 			if (currentSubtitle > -2) {
 				var subtitle = -1;
 				
 				var os = 0;
 				for (os in subtitles) {
-					if (os > (seconds / 1000)) break;
+					if (os > (nowSecond / 1000)) break;
 					subtitle = os;
 				}
 				
@@ -179,7 +180,7 @@ Rectangle {
 					if(subtitle != currentSubtitle) {
 						subtitlebox.changeText = subtitles[subtitle].t;
 						currentSubtitle = subtitle;
-					} else if (subtitles[subtitle].o < (seconds / 1000)) {
+					} else if (subtitles[subtitle].o < (nowSecond / 1000)) {
 						subtitlebox.changeText = "";
 					}
 				}
