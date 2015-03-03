@@ -258,8 +258,8 @@ Rectangle {
 				}
 				if (settings.cursorX == 0 && settings.cursorY == 0) { } else {
 					if (settings.multiscreen == 1 && fullscreen === false) { } else {
-						contextblock.open();
 						contextblock.addContextItems();
+						contextblock.open();
 					}
 				}
 			} else {
@@ -299,7 +299,7 @@ Rectangle {
 						fireQmlMessage(JSON.stringify(sendjsdata));
 					}
 					contextblock.addContextItems();
-					contextblock.toggle();
+					contextblock.open();
 				} else {
 					if (settings.multiscreen == 0) {
 						if (vlcPlayer.state != 1) wjs.isbig(); // Toggle Pause if clicked on Surface
