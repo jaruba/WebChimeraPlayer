@@ -261,7 +261,7 @@ Rectangle {
 		}
 		
 		// if title changed, change title in top bar (did this to avoid the "non-NOTIFYable property" errors)
-		if (settings.title != vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","")) settings.title = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].title.replace("[custom]","");
+		if (settings.title != settings.titleCache[vlcPlayer.playlist.currentItem]) settings.title = settings.titleCache[vlcPlayer.playlist.currentItem];
 	}
 	// End on State Changed
 	
