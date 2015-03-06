@@ -59,6 +59,19 @@ Rectangle {
 	
 	// Start on Current Time Changed
 	function onTime( seconds ) {
+	
+		var itemSettings = {};
+		
+		if (isJson(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting)) {
+			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+			if (typeof itemSettings.runtime !== 'undefined' && itemSettings.runtime == Math.floor(seconds/1000)) {
+				if (vlcPlayer.playlist.currentItem == vlcPlayer.playlist.itemCount -1) {
+					vlcPlayer.stop();
+				} else {
+					vlcPlayer.playlist.next();
+				}
+			}
+		}
 		
 		settings.lastTime = tempSecond;
 		tempSecond = seconds;
@@ -429,22 +442,7 @@ Rectangle {
 	}
 	// End Refresh Mute Icon
 	
-	// Start Function to get Youtube Title with Youtube API
-	function setYoutubeTitle(xhr,pli) {
-		return function() {
-			if (xhr.readyState == 4) {
-				var plstring = xhr.responseText;
-				plstring = plstring.substr(plstring.indexOf('"title":"')+9);
-				plstring = plstring.substr(0,plstring.indexOf('"'));
-	
-				vlcPlayer.playlist.items[pli].title = "[custom]"+plstring;
-								
-				playlist.addPlaylistItems();
-			}
-		};
-	}
-	// End Function to get Youtube Title with Youtube API
-	
+		
 	// END CORE FUNCTIONS
 	
 	
@@ -869,16 +867,32 @@ Rectangle {
 	
 					var s = 0;
 					var st = "";
+
+					var tmpRuntime = 0;
 					for (s = 1; s < m3udatay.length; s++) {
-						if (m3udatay[s].charAt(0) == "#") {
+						if (m3udatay[s].substr(0,7) == "#EXTINF") {
 							// get video source title
 							st = m3udatay[s].split(',');
 							st.shift();
 							st = st.join(',');
 							// end get video source title
+						} else if (m3udatay[s].substr(0,20) == "#EXTVLCOPT:run-time=") {
+							tmpRuntime = parseInt(m3udatay[s].replace("#EXTVLCOPT:run-time=",""));
 						} else {
 							vlcPlayer.playlist.add(m3udatay[s]);
 							if (typeof st !== 'undefined' && typeof st === 'string') vlcPlayer.playlist.items[itemnr].title = "[custom]"+st;
+							if (typeof tmpRuntime !== 'undefined' && tmpRuntime > 0) {
+								var tmpSettings = {};
+								if (isJson(vlcPlayer.playlist.items[itemnr].setting)) {
+									tmpSettings = JSON.parse(vlcPlayer.playlist.items[itemnr].setting);
+									tmpSettings.runtime = tmpRuntime;
+								} else {
+									tmpSettings.runtime = tmpRuntime;
+								}
+								vlcPlayer.playlist.items[itemnr].setting = JSON.stringify(tmpSettings);
+								delete tmpSettings;
+								tmpRuntime = 0;
+							}
 							st = "";
 							itemnr++;
 						}
