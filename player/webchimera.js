@@ -238,7 +238,15 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	// check if plugin is installed
-	if (navigator.plugins["WebChimera Plugin"].name != "WebChimera Plugin") {
+	var isInstalled = false;
+	$.each(navigator.plugins, function() {
+		if (this.name == "WebChimera Plugin") isInstalled = true;
+		if (this.name == "WebChimera x86_64") isInstalled = true;
+	});
+	// end check if plugin is installed
+	
+	// check if plugin is installed
+	if (!isInstalled) {
 		this.plugin.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
 		return false;
 	}
