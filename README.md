@@ -1,4 +1,4 @@
-WebChimera Player v1.0
+WebChimera Player v1.04
 ==============
 
 An Open Source <b><a href="http://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
@@ -29,4 +29,6 @@ Current Features
 
 Upcoming Features
 ==============
+- Subtitle Correction Hotkeys
+- Picture in Picture Feature
 - Windowed Mode (Pop Out)
