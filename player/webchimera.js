@@ -239,8 +239,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	// check if plugin is installed
 	var isInstalled = false;
-	if (typeof navigator.plugins["WebChimera Plugin"] !== undefined) isInstalled = true;
-	if (typeof navigator.plugins["WebChimera x86_64"] !== undefined) isInstalled = true;
+	if (typeof navigator.plugins["WebChimera Plugin"] !== 'undefined') isInstalled = true;
+	if (typeof navigator.plugins["WebChimera x86_64"] !== 'undefined') isInstalled = true;
 	// end check if plugin is installed
 	
 	// check if plugin is installed
