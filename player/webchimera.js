@@ -241,9 +241,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	var isInstalled = false;
 	if (typeof navigator.plugins["WebChimera Plugin"] !== 'undefined') isInstalled = true;
 	if (typeof navigator.plugins["WebChimera x86_64"] !== 'undefined') isInstalled = true;
-	// end check if plugin is installed
-	
-	// check if plugin is installed
+
 	if (!isInstalled) {
 		this.plugin.style.zIndex = 1000;
 		this.plugin.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
