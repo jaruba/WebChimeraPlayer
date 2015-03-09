@@ -15,6 +15,8 @@ Rectangle {
 	property var oldRatioWidth: 0;
 	property var oldRatioHeight: 0;
 	property var itemnr: 0;
+	property var firstSecond: 0;
+	property var mediaChanged: 0;
 	
 	// Required for jump to seconds (while paused)
 	property var notmuted: 0;
@@ -57,18 +59,39 @@ Rectangle {
 	}
 	// End on Buffering Changed
 	
+	// Start on Media Changed
+	function onMediaChanged() {
+		mediaChanged = 1;
+	}
+	// End on Media Changed
+	
 	// Start on Current Time Changed
 	function onTime( seconds ) {
+	
+		if (mediaChanged == 1) {
+			mediaChanged = 0;
+			firstSecond = seconds;
+		}
 	
 		var itemSettings = {};
 		
 		if (isJson(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting)) {
 			itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
-			if (typeof itemSettings.runtime !== 'undefined' && itemSettings.runtime == Math.floor(seconds/1000)) {
-				if (vlcPlayer.playlist.currentItem == vlcPlayer.playlist.itemCount -1) {
-					vlcPlayer.stop();
-				} else {
-					vlcPlayer.playlist.next();
+			if (Math.floor(firstSecond/1000) == 0 || Math.floor(firstSecond/1000) == 1) {
+				if (typeof itemSettings.runtime !== 'undefined' && itemSettings.runtime == Math.floor(seconds/1000)) {
+					if (vlcPlayer.playlist.currentItem == vlcPlayer.playlist.itemCount -1) {
+						vlcPlayer.stop();
+					} else {
+						vlcPlayer.playlist.next();
+					}
+				}
+			} else {
+				if (typeof itemSettings.runtime !== 'undefined' && itemSettings.runtime == Math.floor(seconds/1000) - Math.floor(firstSecond/1000)) {
+					if (vlcPlayer.playlist.currentItem == vlcPlayer.playlist.itemCount -1) {
+						vlcPlayer.stop();
+					} else {
+						vlcPlayer.playlist.next();
+					}
 				}
 			}
 		}
@@ -272,6 +295,7 @@ Rectangle {
 	
 		vlcPlayer.onMediaPlayerBuffering.connect( onBuffering ); // Set Buffering Event Handler
 		vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
+		vlcPlayer.onMediaPlayerMediaChanged.connect( onMediaChanged );
 		vlcPlayer.onStateChanged.connect( onState ); // Set State Changed Event Handler
 		
 		plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
@@ -651,6 +675,7 @@ Rectangle {
 	
 	function getLengthTime() {
 		var tempHour = (("0" + Math.floor(getLength() / 3600000)).slice(-2));
+		if (isNaN(tempHour)) return "";
 		var tempMinute = (("0" + (Math.floor(getLength() / 60000) %60)).slice(-2));
 		var tempSecond = (("0" + (Math.floor(getLength() / 1000) %60)).slice(-2));
 		if (tempSecond < 0) tempSecond =  "00";
