@@ -675,6 +675,7 @@ Rectangle {
 	
 	function getLengthTime() {
 		var tempHour = (("0" + Math.floor(getLength() / 3600000)).slice(-2));
+		if (isNaN(tempHour)) return "";
 		var tempMinute = (("0" + (Math.floor(getLength() / 60000) %60)).slice(-2));
 		var tempSecond = (("0" + (Math.floor(getLength() / 1000) %60)).slice(-2));
 		if (tempSecond < 0) tempSecond =  "00";
