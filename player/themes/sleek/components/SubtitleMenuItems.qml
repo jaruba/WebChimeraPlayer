@@ -144,6 +144,7 @@ Rectangle {
 		subtitlebox.changeText = "";
 		currentSubtitle = -2;
 		subtitles = [];
+		vlcPlayer.subtitle.track = 0;
 	}
 	// End Clear External Subtitles (SRT, SUB)
 
