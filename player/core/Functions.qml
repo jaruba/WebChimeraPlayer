@@ -298,6 +298,8 @@ Rectangle {
 		vlcPlayer.onMediaPlayerMediaChanged.connect( onMediaChanged );
 		vlcPlayer.onStateChanged.connect( onState ); // Set State Changed Event Handler
 		
+		if (typeof plugin.version !== "undefined") vlcPlayer.subtitle.onLoadError.connect( subMenu.subtitleError );
+		
 		plugin.jsMessage.connect( onMessage ); // Catch On Page JS Messages
 		
 		fireQmlMessage("[qml-loaded]"); // Send message to JS that QML has Loaded
