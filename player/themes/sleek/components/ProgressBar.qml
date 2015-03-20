@@ -46,7 +46,8 @@ Rectangle {
 		}
 		Rectangle {
 			id: progressBackground
-			Layout.fillWidth: true
+			anchors.left: parent.left
+			anchors.right: parent.right
 			height: 8
 			anchors.verticalCenter: parent.verticalCenter
 			Rectangle {
