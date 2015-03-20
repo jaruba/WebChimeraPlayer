@@ -315,6 +315,7 @@ Rectangle {
 			var jsonMessage = JSON.parse(message);
 			ui = skinData.variables;
 			if (jsonMessage["settings"] === true) {
+				if (jsonMessage["toolbar"] == 0 || jsonMessage["toolbar"] === false) { settings.toolbar = 0; settings = settings; }
 				if (jsonMessage["caching"]) settings.cache = jsonMessage["caching"]; // Get network-caching parameter
 				if (jsonMessage["mouseevents"] == 1 || jsonMessage["mouseevents"] === true) settings.mouseevents = 1; // Set Mouse Events
 				if (jsonMessage["autoplay"] == 1 || jsonMessage["autoplay"] === true || jsonMessage["autostart"] == 1 || jsonMessage["autostart"] == true) {
