@@ -288,6 +288,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				onloadsettings["caching"] = qmlsettings[key];
 				didbuffer = 1;
 				playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
+			} else if (key == "hotkeys") {
+				if (qmlsettings[key] == 0 || qmlsettings[key] === false) removeHotkeys = 1;
 			} else {
 				if (key == "network-caching") {
 					onloadsettings["caching"] = qmlsettings[key];
@@ -309,17 +311,25 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	this.plugin.innerHTML = playerbody;
 	if (isNodeWebkit) {
-		wjs("#" + webchimeraid).loadSettings(onloadsettings);
-		ploaded["#" + webchimeraid] = true;
 		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).loadSettings(onloadsettings);
+			ploaded["#" + webchimeraid] = true;
 			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+			}
 		}
 		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).loadSettings(onloadsettings);
+			ploaded["." + webchimeraclass] = true;
 			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+			}
 		}
 	} else {
 		if (typeof webchimeraid !== "undefined") {
@@ -330,6 +340,13 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+					if (event == "[qml-loaded]") {
+						wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+					}
+				});
+			}
 		}
 		if (typeof webchimeraclass !== "undefined") {
 			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
@@ -339,6 +356,13 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+					if (event == "[qml-loaded]") {
+						wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+					}
+				});
+			}
 		}
 	}
 	return wjs(this.context);
