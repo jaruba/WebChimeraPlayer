@@ -240,7 +240,7 @@ Rectangle {
 				Loader.ToolbarTimeLength {
 					anchors.left: showtime.right
 					anchors.leftMargin: 0
-					text: " / "+ wjs.getLengthTime()
+					text: wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
 					color: ui.colors.toolbar.lengthTime
 				}
 				// End "Time / Length" Text in Toolbar
