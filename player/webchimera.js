@@ -131,6 +131,15 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 };
 // end function that loads webchimera player settings after qml has loaded
 
+// functions to hide/show toolbar
+wjs.init.prototype.hideToolbar = function() {
+	this.plugin.emitJsMessage("[hide-toolbar]");
+};
+wjs.init.prototype.showToolbar = function() {
+	this.plugin.emitJsMessage("[show-toolbar]");
+};
+// end functions to hide/show toolbar
+
 wjs.init.prototype.qmlLoaded = function(action) {
 	if (isNodeWebkit) {
 		action();
