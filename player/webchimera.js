@@ -140,9 +140,11 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 // functions to hide/show toolbar
 wjs.init.prototype.hideToolbar = function() {
 	this.plugin.emitJsMessage("[hide-toolbar]");
+	return wjs(this.context);
 };
 wjs.init.prototype.showToolbar = function() {
 	this.plugin.emitJsMessage("[show-toolbar]");
+	return wjs(this.context);
 };
 // end functions to hide/show toolbar
 
