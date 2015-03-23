@@ -112,13 +112,19 @@ wjs.init = function(context) {
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
 	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.plugin.attachEvent("on"+wjs_event, wjs_function);
+		this.plugin.attachEvent("on"+wjs_event, function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		});
 	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.plugin.addEventListener(wjs_event, wjs_function, false);
+		this.plugin.addEventListener(wjs_event, function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		}, false);
 	} else {
 		// DOM level 0
-		this.plugin["on"+wjs_event] = wjs_function;
+		this.plugin["on"+wjs_event] = function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		};
 	}
 	
 	return wjs(this.context);
@@ -145,18 +151,24 @@ wjs.init.prototype.qmlLoaded = function(action) {
 		action();
 	} else {
 		function wjs_function(event) {
-			if (event == "[qml-loaded]") action();
+			if (event == "[qml-loaded]") action.call(wjs(this.context));
 		}
 		
 		if (this.plugin.attachEvent) {
 			// Microsoft
-			this.plugin.attachEvent("onQmlMessage", wjs_function);
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			});
 		} else if (this.plugin.addEventListener) {
 			// Mozilla: DOM level 2
-			this.plugin.addEventListener("QmlMessage", wjs_function, false);
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			}, false);
 		} else {
 			// DOM level 0
-			this.plugin["onQmlMessage"] = wjs_function;
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			};
 		}
 	}
 	
@@ -165,18 +177,24 @@ wjs.init.prototype.qmlLoaded = function(action) {
 
 wjs.init.prototype.onClicked = function(target, action) {
 	function wjs_function(event) {
-		if (event == "[clicked]"+target) action();
+		if (event == "[clicked]"+target) action.call(wjs(this.context));
 	}
 	
 	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.plugin.attachEvent("onQmlMessage", wjs_function);
+		this.plugin.attachEvent("onQmlMessage", function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		});
 	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.plugin.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		}, false);
 	} else {
 		// DOM level 0
-		this.plugin["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = function(event) {
+			return wjs_function.call(wjs(this.context),event);
+		};
 	}
 	
 	return wjs(this.context);
@@ -198,9 +216,9 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 				qmlTarget = event.replace("[pressed-","").replace("]","");
 				if (qmlTarget.indexOf("+") > -1) {
 					qmlButtons = qmlTarget.split("+");
-					target(reverseKeyMap[qmlButtons[0]]+reverseKeyMap[qmlButtons[1]]);
+					target.call(wjs(this.context),reverseKeyMap[qmlButtons[0]]+reverseKeyMap[qmlButtons[1]]);
 				} else {
-					target(reverseKeyMap[qmlTarget]);
+					target.call(wjs(this.context),reverseKeyMap[qmlTarget]);
 				}
 			}
 			
@@ -208,13 +226,19 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 		
 		if (this.plugin.attachEvent) {
 			// Microsoft
-			this.plugin.attachEvent("onQmlMessage", wjs_function_reverse);
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function_reverse.call(wjs(this.context),event);
+			});
 		} else if (this.plugin.addEventListener) {
 			// Mozilla: DOM level 2
-			this.plugin.addEventListener("QmlMessage", wjs_function_reverse, false);
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function_reverse.call(wjs(this.context),event);
+			}, false);
 		} else {
 			// DOM level 0
-			this.plugin["onQmlMessage"] = wjs_function_reverse;
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function_reverse.call(wjs(this.context),event);
+			};
 		}
 		
 	} else {
@@ -223,23 +247,29 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 				var res = target.split("+");
 				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-				if (event == "[pressed-"+newtarget+"]") action();
+				if (event == "[pressed-"+newtarget+"]") action.call(wjs(this.context));
 			} else {
-				if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action();
+				if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action.call(wjs(this.context));
 			}
 		}
 		
 		if (this.plugin.attachEvent) {
 			// Microsoft
-			this.plugin.attachEvent("onQmlMessage", wjs_function);
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			});
 		} else if (this.plugin.addEventListener) {
 			// Mozilla: DOM level 2
-			this.plugin.addEventListener("QmlMessage", wjs_function, false);
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			}, false);
 		} else {
 			// DOM level 0
-			this.plugin["onQmlMessage"] = wjs_function;
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function.call(wjs(this.context),event);
+			};
 		}
-				
+		
 	}
 	
 	return wjs(this.context);
