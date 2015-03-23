@@ -97,7 +97,7 @@ wjs.init = function(context) {
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
 
 	// Save player parameters
-	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache"];
+	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar"];
 	
 	if (this.context.substring(0,1) == "#") {
 		this.plugin = document.getElementById(this.context.substring(1));
@@ -110,15 +110,22 @@ wjs.init = function(context) {
 
 // catch event function
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
+	var saveContext = wjs(this.context);
 	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.plugin.attachEvent("on"+wjs_event, wjs_function);
+		this.plugin.attachEvent("on"+wjs_event, function(event) {
+			return wjs_function.call(saveContext,event);
+		});
 	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.plugin.addEventListener(wjs_event, wjs_function, false);
+		this.plugin.addEventListener(wjs_event, function(event) {
+			return wjs_function.call(saveContext,event);
+		}, false);
 	} else {
 		// DOM level 0
-		this.plugin["on"+wjs_event] = wjs_function;
+		this.plugin["on"+wjs_event] = function(event) {
+			return wjs_function.call(saveContext,event);
+		};
 	}
 	
 	return wjs(this.context);
@@ -131,23 +138,44 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 };
 // end function that loads webchimera player settings after qml has loaded
 
+// functions to hide/show toolbar
+wjs.init.prototype.hideToolbar = function() {
+	this.plugin.emitJsMessage("[hide-toolbar]");
+	return wjs(this.context);
+};
+wjs.init.prototype.showToolbar = function() {
+	this.plugin.emitJsMessage("[show-toolbar]");
+	return wjs(this.context);
+};
+// end functions to hide/show toolbar
+
 wjs.init.prototype.qmlLoaded = function(action) {
+	var saveContext = wjs(this.context);
 	if (isNodeWebkit) {
-		action();
+		action.call(saveContext);
 	} else {
 		function wjs_function(event) {
-			if (event == "[qml-loaded]") action();
+			if (event == "[qml-loaded]") {
+				var saveContext = wjs(this.context);
+				action.call(saveContext);
+			}
 		}
 		
 		if (this.plugin.attachEvent) {
 			// Microsoft
-			this.plugin.attachEvent("onQmlMessage", wjs_function);
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			});
 		} else if (this.plugin.addEventListener) {
 			// Mozilla: DOM level 2
-			this.plugin.addEventListener("QmlMessage", wjs_function, false);
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			}, false);
 		} else {
 			// DOM level 0
-			this.plugin["onQmlMessage"] = wjs_function;
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function.call(saveContext,event);
+			};
 		}
 	}
 	
@@ -156,46 +184,107 @@ wjs.init.prototype.qmlLoaded = function(action) {
 
 wjs.init.prototype.onClicked = function(target, action) {
 	function wjs_function(event) {
-		if (event == "[clicked]"+target) action();
+		if (event == "[clicked]"+target) {
+			var saveContext = wjs(this.context);
+			action.call(saveContext);
+		}
 	}
 	
+	var saveContext = wjs(this.context);
+
 	if (this.plugin.attachEvent) {
 		// Microsoft
-		this.plugin.attachEvent("onQmlMessage", wjs_function);
+		this.plugin.attachEvent("onQmlMessage", function(event) {
+			return wjs_function.call(saveContext,event);
+		});
 	} else if (this.plugin.addEventListener) {
 		// Mozilla: DOM level 2
-		this.plugin.addEventListener("QmlMessage", wjs_function, false);
+		this.plugin.addEventListener("QmlMessage", function(event) {
+			return wjs_function.call(saveContext,event);
+		}, false);
 	} else {
 		// DOM level 0
-		this.plugin["onQmlMessage"] = wjs_function;
+		this.plugin["onQmlMessage"] = function(event) {
+			return wjs_function.call(saveContext,event);
+		};
 	}
 	
 	return wjs(this.context);
 };
 
 wjs.init.prototype.onKeyPressed = function(target, action) {
-	
-	var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
 
-	function wjs_function(event) {
-		if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
-			var res = target.split("+");
-			var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
-			if (event == "[pressed-"+newtarget+"]") action();
-		} else {
-			if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action();
-		}
-	}
+	var saveContext = wjs(this.context);
+
+	var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
 	
-	if (this.plugin.attachEvent) {
-		// Microsoft
-		this.plugin.attachEvent("onQmlMessage", wjs_function);
-	} else if (this.plugin.addEventListener) {
-		// Mozilla: DOM level 2
-		this.plugin.addEventListener("QmlMessage", wjs_function, false);
+	var reverseKeyMap = {};
+	
+	for (var prop in keyMap) if(keyMap.hasOwnProperty(prop)) reverseKeyMap[keyMap[prop]] = prop;
+
+	if (typeof target === 'function') {
+		
+		function wjs_function_reverse(event) {
+			var saveContext = wjs(this.context);
+			if (event.substr(0,9) == "[pressed-") {
+				qmlTarget = event.replace("[pressed-","").replace("]","");
+				if (qmlTarget.indexOf("+") > -1) {
+					qmlButtons = qmlTarget.split("+");
+					target.call(saveContext,reverseKeyMap[qmlButtons[0]]+reverseKeyMap[qmlButtons[1]]);
+				} else {
+					target.call(saveContext,reverseKeyMap[qmlTarget]);
+				}
+			}
+			
+		}
+		
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function_reverse.call(saveContext,event);
+			});
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function_reverse.call(saveContext,event);
+			}, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function_reverse.call(saveContext,event);
+			};
+		}
+		
 	} else {
-		// DOM level 0
-		this.plugin["onQmlMessage"] = wjs_function;
+	
+		function wjs_function(event) {
+			var saveContext = wjs(this.context);
+			if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
+				var res = target.split("+");
+				var newtarget = keyMap[res[0].toLowerCase() +"+"].toString() +"+"+ keyMap[res[1].toLowerCase()].toString();
+				if (event == "[pressed-"+newtarget+"]") action.call(saveContext);
+			} else {
+				if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action.call(saveContext);
+			}
+		}
+		
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			});
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			}, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function.call(saveContext,event);
+			};
+		}
+		
 	}
 	
 	return wjs(this.context);
@@ -288,6 +377,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				onloadsettings["caching"] = qmlsettings[key];
 				didbuffer = 1;
 				playerbody += '<param name="network-caching" value="' + qmlsettings[key] + '" />';
+			} else if (key == "hotkeys") {
+				if (qmlsettings[key] == 0 || qmlsettings[key] === false) removeHotkeys = 1;
 			} else {
 				if (key == "network-caching") {
 					onloadsettings["caching"] = qmlsettings[key];
@@ -309,17 +400,25 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	
 	this.plugin.innerHTML = playerbody;
 	if (isNodeWebkit) {
-		wjs("#" + webchimeraid).loadSettings(onloadsettings);
-		ploaded["#" + webchimeraid] = true;
 		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).loadSettings(onloadsettings);
+			ploaded["#" + webchimeraid] = true;
 			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+			}
 		}
 		if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).loadSettings(onloadsettings);
+			ploaded["." + webchimeraclass] = true;
 			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+			}
 		}
 	} else {
 		if (typeof webchimeraid !== "undefined") {
@@ -330,6 +429,13 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+					if (event == "[qml-loaded]") {
+						wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+					}
+				});
+			}
 		}
 		if (typeof webchimeraclass !== "undefined") {
 			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
@@ -339,6 +445,13 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
 			});
+			if (typeof removeHotkeys !== "undefined") {
+				wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+					if (event == "[qml-loaded]") {
+						wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true);
+					}
+				});
+			}
 		}
 	}
 	return wjs(this.context);

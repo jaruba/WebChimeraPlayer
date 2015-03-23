@@ -1,5 +1,4 @@
-WebChimera Player v1.05
-==============
+WebChimera Player v1.07
 
 An Open Source <b><a href="http://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
 
@@ -14,7 +13,7 @@ WebChimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 
 Current Features
 ==============
-- <a href="http://wiki.webchimera.org/Subtitles_Parameter" target="_blank">External HTTP Subtitle Support (Formats: SRT, SUB)</a>
+- <a href="http://wiki.webchimera.org/Subtitles_Parameter" target="_blank">External HTTP Subtitle Support (All VLC supported subtitle formats)</a>
 - <a href="http://wiki.webchimera.org/.addPlaylist()" target=_blank">Playlist Support</a> (JavaScript or M3U File)
 - <a href="http://wiki.webchimera.org/.addPlaylist()" target="_blank">Custom Video Titles and Artwork Support</a>
 - <a href="http://wiki.webchimera.org/Player_Hotkeys" target="_blank">Hotkeys and Mouse Actions</a>

@@ -17,6 +17,7 @@ Rectangle {
 	id: root
 	anchors.fill: parent
 	color: "transparent"
+	visible: settings.toolbar == 0 ? false : true
 	
 	RowLayout {
 		id: rowLayer
@@ -45,7 +46,8 @@ Rectangle {
 		}
 		Rectangle {
 			id: progressBackground
-			Layout.fillWidth: true
+			anchors.left: parent.left
+			anchors.right: parent.right
 			height: 8
 			anchors.verticalCenter: parent.verticalCenter
 			Rectangle {

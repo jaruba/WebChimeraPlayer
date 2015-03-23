@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<link rel="icon" href="http://www.webchimera.org/favicon.ico">
+<meta charset="UTF-8">
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+<title>JS Key Events Demo - WebChimera Player</title>
+
+</head>
+
+<body>
+
+<div id="close_wrapper"><a id="close_button" href="index.html"><img src="images/close_but.png"></a></div>
+
+<div id="page_title"><h1>JS Mouse Events Demo</h1></div>
+
+<div id="player_wrapper" style="background: #141414">
+<div style="height: 10%"><span id="textbox" style="display:block; padding:5px; background: #ecebeb; color: #333">Key Events</span></div>
+<div id="wrapper" style="height: 90%"></div>
+</div>
+
+<script src="player/webchimera.js" type="text/javascript"></script>
+<script>
+// create player
+wjs("#wrapper").addPlayer({ id: "webchimera", theme: "sleek", autoplay: 1 });
+
+// add video url
+wjs("#webchimera").addPlaylist("http://archive.org/download/CrayonDragonAnAnimatedShortFilmByTonikoPantoja/Crayon%20Dragon%20-%20An%20animated%20short%20film%20by%20Toniko%20Pantoja.mp4");
+
+// check for key presses
+var span = document.getElementById("textbox");
+
+wjs("#webchimera").qmlLoaded(function() {
+    wjs("#webchimera").onKeyPressed(function(key) {
+        span.innerHTML = "You Pressed: "+key;
+    });
+});
+
+</script>
+
+</body>
+
+</html>
