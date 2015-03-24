@@ -475,6 +475,12 @@ wjs.init.prototype.skin = function(skin) {
 }
 // end function for skinning
 
+// function to toggle playlist
+wjs.init.prototype.togglePlaylist = function() {
+	 this.plugin.emitJsMessage("[toggle-playlist]"); // send message to QML to toggle the playlist
+}
+// end function to toggle playlist
+
 // function to add playlist items
 wjs.init.prototype.addPlaylist = function(playlist) {
 

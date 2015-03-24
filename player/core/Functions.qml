@@ -398,6 +398,7 @@ Rectangle {
 		} else {
 			if (startsWith(message,"[hide-toolbar]")) { settings.toolbar = 0; settings = settings; } // Hide Toolbar
 			if (startsWith(message,"[show-toolbar]")) { settings.toolbar = 1; settings = settings; } // Show Toolbar
+			if (startsWith(message,"[toggle-playlist]")) { togglePlaylist(); } // Toggle Playlist
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
