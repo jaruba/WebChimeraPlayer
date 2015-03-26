@@ -334,6 +334,7 @@ Rectangle {
 				}
 				if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") ui.settings.titleBar = jsonMessage["titleBar"];
 				if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) ui.settings.caching = true;
+				if (jsonMessage["debugPlaylist"] == 1 || jsonMessage["debugPlaylist"] === true) { settings.debugPlaylist = true; settings = settings; }
 			}
 			if (jsonMessage["skinning"] === true) {
 				if (jsonMessage["fonts"]) {
@@ -398,6 +399,7 @@ Rectangle {
 		} else {
 			if (startsWith(message,"[hide-toolbar]")) { settings.toolbar = 0; settings = settings; } // Hide Toolbar
 			if (startsWith(message,"[show-toolbar]")) { settings.toolbar = 1; settings = settings; } // Show Toolbar
+			if (startsWith(message,"[toggle-playlist]")) { togglePlaylist(); } // Toggle Playlist
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
@@ -416,6 +418,10 @@ Rectangle {
 				if (changedSettings) settings = settings;
 				delete changedSettings;
 				// end Reset properties related to .setTotalLength()
+			}
+			if (startsWith(message,"[swap-items]")) {
+				vlcPlayer.playlist.advanceItem(message.replace("[swap-items]","").split("|")[0],message.replace("[swap-items]","").split("|")[1]);
+				playlist.addPlaylistItems(); // Refresh Playlist GUI
 			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
@@ -467,6 +473,7 @@ Rectangle {
 	
 	// Refresh Mute Icon
 	function refreshMuteIcon() {
+		volheat.volume = vlcPlayer.audio.mute ? 0 : (vlcPlayer.volume /200) * (volheat.width -4);
 		mutebut.icon = vlcPlayer.state == 0 ? ui.icon.volume.medium : vlcPlayer.position == 0 && vlcPlayer.playlist.currentItem == 0 ? settings.automute == 0 ? ui.icon.volume.medium : ui.icon.mute : vlcPlayer.audio.mute ? ui.icon.mute : vlcPlayer.volume == 0 ? ui.icon.mute : vlcPlayer.volume <= 30 ? ui.icon.volume.low : vlcPlayer.volume > 30 && vlcPlayer.volume <= 134 ? ui.icon.volume.medium : ui.icon.volume.high
 	}
 	// End Refresh Mute Icon
@@ -571,6 +578,7 @@ Rectangle {
 			vlcPlayer.volume = 200;
 			volheat.volume = 116;
 		}
+		if (vlcPlayer.audio.mute) vlcPlayer.audio.mute = false;
 		refreshMuteIcon();
 	}
 	function hoverVolume(mouseX,mouseY) {

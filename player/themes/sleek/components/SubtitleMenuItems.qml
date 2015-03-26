@@ -15,6 +15,8 @@ Rectangle {
 	
 	property variant subItems: [];
 	
+	property var subVersion: 1;
+	
 	// Start Toggle Subtitle Menu (open/close)
 	function toggleSubtitles() {
 		if (settings.subtitlemenu === false) {
@@ -46,8 +48,8 @@ Rectangle {
 	// End Convert Time to Seconds (needed for External Subtitles)
 		
 	function playSubtitles(subtitleElement) {
-		if (typeof plugin.version !== "undefined") {
-			wjs.setText("hello 1");
+//		if (typeof plugin.version !== "undefined") {
+		if (subVersion == 2) {
 			// new subtitle implementation, only works with WebChimera Plugin 0.2.5
 			vlcPlayer.subtitle.load(subtitleElement);
 		} else {
@@ -204,6 +206,14 @@ Rectangle {
 				
 				if (subtitle > 0) {
 					if(subtitle != currentSubtitle) {
+						if ((subtitles[subtitle].t.match(new RegExp("<", "g")) || []).length == 2) {
+							if (subtitles[subtitle].t.substr(0,1) == "<" && subtitles[subtitle].t.slice(-1) == ">") {
+							} else {
+								subtitles[subtitle].t = subtitles[subtitle].t.replace(/<\/?[^>]+(>|$)/g, "");
+							}
+						} else if ((subtitles[subtitle].t.match(new RegExp("<", "g")) || []).length > 2) {
+							subtitles[subtitle].t = subtitles[subtitle].t.replace(/<\/?[^>]+(>|$)/g, "");
+						}
 						subtitlebox.changeText = subtitles[subtitle].t;
 						currentSubtitle = subtitle;
 					} else if (subtitles[subtitle].o < nowSecond) {

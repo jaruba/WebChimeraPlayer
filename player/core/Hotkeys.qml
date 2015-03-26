@@ -33,7 +33,12 @@ Rectangle {
 		}
 		if (event.key == Qt.Key_Escape) {
 			if (typeof settings.preventKey[Qt.Key_Escape] === "undefined") {
-				if (fullscreen) {
+				if (subMenublock.visible === true || playlistblock.visible === true) {
+					subMenublock.visible = false;
+					settings.subtitlemenu = false;
+					playlistblock.visible = false;
+					settings.playlistmenu = false;
+				} else if (fullscreen) {
 					fullscreen = false;
 					if (settings.multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
 				}
@@ -74,6 +79,28 @@ Rectangle {
 			} else if (event.key == Qt.Key_L) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_L] === "undefined") {
 					wjs.togglePlaylist();
+				}
+			} else if (event.key == Qt.Key_D) {
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_D] === "undefined") {
+					if (settings.debugPlaylist) {
+						if (inputAddBox.visible) inputAddBox.visible = false;
+						settings.selectedItem = vlcPlayer.playlist.currentItem;
+						inputBox.textBox.text = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].mrl;
+						inputBox.textBox.selectAll();
+						inputBox.visible = true;
+						inputBox.textBox.forceActiveFocus();
+						return;
+					}
+				}
+			} else if (event.key == Qt.Key_A) {
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_A] === "undefined") {
+					if (settings.debugPlaylist) {
+						if (inputBox.visible) inputBox.visible = false
+						inputAddBox.textBox.text = "";
+						inputAddBox.visible = true;
+						inputAddBox.textBox.forceActiveFocus();
+						return;
+					}
 				}
 			}
 		}

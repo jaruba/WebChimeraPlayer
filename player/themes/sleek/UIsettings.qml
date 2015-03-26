@@ -62,7 +62,10 @@ Rectangle {
 			},
 			
 			// Close Playlist Button
-			'closePlaylist': "\ue896"
+			'closePlaylist': "\ue896",
+			
+			// Settings Button (for advanced playlist feature)
+			'settings': "\ue801"
 			
 		},
 		
