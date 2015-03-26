@@ -334,6 +334,7 @@ Rectangle {
 				}
 				if (jsonMessage["titleBar"] == "both" || jsonMessage["titleBar"] == "fullscreen" || jsonMessage["titleBar"] == "minimized" || jsonMessage["titleBar"] == "none") ui.settings.titleBar = jsonMessage["titleBar"];
 				if (jsonMessage["progressCache"] == 1 || jsonMessage["progressCache"] === true) ui.settings.caching = true;
+				if (jsonMessage["debugPlaylist"] == 1 || jsonMessage["debugPlaylist"] === true) { settings.debugPlaylist = true; settings = settings; }
 			}
 			if (jsonMessage["skinning"] === true) {
 				if (jsonMessage["fonts"]) {
@@ -417,6 +418,10 @@ Rectangle {
 				if (changedSettings) settings = settings;
 				delete changedSettings;
 				// end Reset properties related to .setTotalLength()
+			}
+			if (startsWith(message,"[swap-items]")) {
+				vlcPlayer.playlist.advanceItem(message.replace("[swap-items]","").split("|")[0],message.replace("[swap-items]","").split("|")[1]);
+				playlist.addPlaylistItems(); // Refresh Playlist GUI
 			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI

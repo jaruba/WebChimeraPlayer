@@ -75,6 +75,28 @@ Rectangle {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_L] === "undefined") {
 					wjs.togglePlaylist();
 				}
+			} else if (event.key == Qt.Key_D) {
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_D] === "undefined") {
+					if (settings.debugPlaylist) {
+						if (inputAddBox.visible) inputAddBox.visible = false;
+						settings.selectedItem = vlcPlayer.playlist.currentItem;
+						inputBox.textBox.text = vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].mrl;
+						inputBox.textBox.selectAll();
+						inputBox.visible = true;
+						inputBox.textBox.forceActiveFocus();
+						return;
+					}
+				}
+			} else if (event.key == Qt.Key_A) {
+				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_A] === "undefined") {
+					if (settings.debugPlaylist) {
+						if (inputBox.visible) inputBox.visible = false
+						inputAddBox.textBox.text = "";
+						inputAddBox.visible = true;
+						inputAddBox.textBox.forceActiveFocus();
+						return;
+					}
+				}
 			}
 		}
 		if(event.modifiers == Qt.AltModifier) {

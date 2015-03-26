@@ -75,7 +75,7 @@ function IsJsonString(str) {
 }
 // end function to check if a string is json
 
-// hack to remember variables until qml has loaded
+// hacks to remember variables in setTimeout()
 function delayLoadM3U(context,tempV) {
     return function(){
 		wjs(context).qmlLoaded(function() {
@@ -83,7 +83,26 @@ function delayLoadM3U(context,tempV) {
 		});
     }
 }
-// end hack to remember variables until qml has loaded
+function delayAdvance(plItem,swapFirst,swapDifference) {
+    return function() {
+        newDifference = plItem.plugin.playlist.itemCount-1;
+        plItem.plugin.emitJsMessage("[swap-items]"+newDifference+"|"+(-1)*swapDifference);
+        plItem.plugin.emitJsMessage("[refresh-playlist]");
+    }
+}
+function delaySwap(plItem,swapFirst) {
+    return function() {
+        newSwap = parseInt(swapFirst)+1;
+        plItem.plugin.playlist.playItem(swapFirst);
+    }
+}
+function delayRemove(plItem,rmItem) {
+    return function() {
+        plItem.plugin.playlist.removeItem(rmItem);
+    	plItem.plugin.emitJsMessage("[refresh-playlist]");
+    }
+}
+// end hacks to remember variables in setTimeout()
 
 var wjs = function(context) {
     // Call the constructor
@@ -97,7 +116,7 @@ wjs.init = function(context) {
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
 
 	// Save player parameters
-	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar"];
+	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar","debugPlaylist"];
 	
 	if (this.context.substring(0,1) == "#") {
 		this.plugin = document.getElementById(this.context.substring(1));
@@ -372,6 +391,9 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	for (key in qmlsettings) {
 		if (qmlsettings.hasOwnProperty(key)) {
 			if (this.basicParams.indexOf(key) > -1) {
+				if (key == "debugPlaylist") {
+					if (qmlsettings[key] == 1 || qmlsettings[key] === true) debugPlaylist = 1;
+				}
 				onloadsettings[key] = qmlsettings[key];
 			} else if (key == "buffer") {
 				onloadsettings["caching"] = qmlsettings[key];
@@ -399,6 +421,49 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	playerbody += '</object>';
 	
 	this.plugin.innerHTML = playerbody;
+
+	if (typeof debugPlaylist !== "undefined") {
+		if (typeof webchimeraid !== "undefined") {
+			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,9) == "[replace]") {
+					swapFirst = event.replace("[replace]","").split("[-|-]")[0];
+					swapMRL = event.replace("[replace]","").split("[-|-]")[1];
+					this.addPlaylist(swapMRL);
+					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+					setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
+				} else if (event.substr(0,18) == "[replace-and-swap]") {
+					swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
+					swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
+					this.addPlaylist(swapMRL);
+					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+					setTimeout(delaySwap(this,swapFirst),100);
+					setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
+				}
+			});
+		} else if (typeof webchimeraclass !== "undefined") {
+			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
+				if (event.substr(0,9) == "[replace]") {
+					swapFirst = event.replace("[replace]","").split("[-|-]")[0];
+					swapMRL = event.replace("[replace]","").split("[-|-]")[1];
+					this.addPlaylist(swapMRL);
+					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+					setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
+				} else if (event.substr(0,18) == "[replace-and-swap]") {
+					swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
+					swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
+					this.addPlaylist(swapMRL);
+					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+					setTimeout(delaySwap(this,swapFirst),100);
+					setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
+				}
+			});
+		}
+	}
+
 	if (isNodeWebkit) {
 		if (typeof webchimeraid !== "undefined") {
 			wjs("#" + webchimeraid).loadSettings(onloadsettings);

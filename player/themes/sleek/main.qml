@@ -276,7 +276,7 @@ Rectangle {
 					id: playlistButton
 					icon: settings.glyphsLoaded ? ui.icon.playlist : ""
 					iconSize: fullscreen ? 18 : 17
-					visible: vlcPlayer.playlist.itemCount > 1 ? true : false
+					visible: settings.debugPlaylist ? true : vlcPlayer.playlist.itemCount > 1 ? true : false
 					anchors.right: fullscreenButton.left
 					anchors.rightMargin: 1
 					glow: ui.settings.buttonGlow
@@ -379,6 +379,21 @@ Rectangle {
 			}
 		}
 		// End Playlist Menu
+
+		// Start Replace MRL Text Box (for debug playlist feature)
+		Loader.ReplaceMRL {
+			color: "#111111"
+			id: inputBox
+		}
+		// End Replace MRL Text Box (for debug playlist feature)
+
+		// Start Add MRL Text Box (for debug playlist feature)
+		Loader.AddMRL {
+			color: "#111111"
+			id: inputAddBox
+		}
+		// End Add MRL Text Box (for debug playlist feature)
+
 
 		// Start Subtitle Menu
 		Loader.Menu {
