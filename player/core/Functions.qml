@@ -423,6 +423,10 @@ Rectangle {
 				vlcPlayer.playlist.advanceItem(message.replace("[swap-items]","").split("|")[0],message.replace("[swap-items]","").split("|")[1]);
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 			}
+			if (startsWith(message,"[sub-size]")) {
+				settings.subSize = parseInt(message.replace("[sub-size]",""));
+				settings = settings;
+			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {

@@ -44,4 +44,5 @@ QtObject {
 	property variant titleCache: [];
 	property var debugPlaylist: false;
 	property var selectedItem: 0;
+	property var subSize: 0;
 }
