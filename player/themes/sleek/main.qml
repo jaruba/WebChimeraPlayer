@@ -119,7 +119,7 @@ Rectangle {
 			id: topText
 			fontColor: ui.colors.titleBar.font
 			backgroundColor: ui.colors.titleBar.background
-			isVisible: (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
+			isVisible: settings.uiVisible == 0 ? false : (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
 		}
 		// End Title Bar (top bar)
 						
