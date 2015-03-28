@@ -511,7 +511,7 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 			  var ext = re.exec(playlist[item].url)[1];
 			  if (typeof ext !== 'undefined' && ext == "m3u") {
 				  if (typeof ploaded[this.context] !== 'undefined') {
-					  wjs(this.context).loadM3U(playlist[item].url); // load m3u playlist
+					  this.loadM3U(playlist[item].url); // load m3u playlist
 				  } else {
 					  var context = this.context;
 					  var tempV = playlist[item].url;
