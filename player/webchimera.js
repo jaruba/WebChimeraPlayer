@@ -388,7 +388,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 			var targetid = ' class="'+newid.substring(1)+'"';
 		} else {
 			var targetid = ' id="'+newid+'"';
-			newid = "#webchimera";
+			newid = "#"+newid;
 		}
 	} else {
 		var targetid = ' id="webchimera"';
