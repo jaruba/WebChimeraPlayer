@@ -365,17 +365,15 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	if (typeof newid === 'string') {
 		if (newid.substring(0,1) == "#") {
 			var targetid = ' id="'+newid.substring(1)+'"';
-			var webchimeraid = newid.substring(1);
 		} else if (newid.substring(0,1) == ".") {
 			var targetid = ' class="'+newid.substring(1)+'"';
-			var webchimeraclass = newid.substring(1);
 		} else {
 			var targetid = ' id="'+newid+'"';
-			var webchimeraid = newid;
+			newid = "#webchimera";
 		}
 	} else {
 		var targetid = ' id="webchimera"';
-		var webchimeraid = "webchimera";
+		newid = "#webchimera";
 	}
 	playerbody += '<object' + targetid + ' type="application/x-chimera-plugin" width="100%" height="100%">';
 
@@ -421,120 +419,48 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 	playerbody += '</object>';
 	
 	this.plugin.innerHTML = playerbody;
-
+	
 	if (typeof debugPlaylist !== "undefined") {
-		if (typeof webchimeraid !== "undefined") {
-			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-				if (event.substr(0,9) == "[replace]") {
-					swapFirst = event.replace("[replace]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
-				} else if (event.substr(0,18) == "[replace-and-swap]") {
-					swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delaySwap(this,swapFirst),100);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
-				}
-			});
-		} else if (typeof webchimeraclass !== "undefined") {
-			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-				if (event.substr(0,9) == "[replace]") {
-					swapFirst = event.replace("[replace]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
-				} else if (event.substr(0,18) == "[replace-and-swap]") {
-					swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delaySwap(this,swapFirst),100);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
-				}
-			});
-		}
+		wjs(newid).catchEvent("QmlMessage",function(event) {
+			if (event.substr(0,9) == "[replace]") {
+				swapFirst = event.replace("[replace]","").split("[-|-]")[0];
+				swapMRL = event.replace("[replace]","").split("[-|-]")[1];
+				this.addPlaylist(swapMRL);
+				swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+				setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+				setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
+			} else if (event.substr(0,18) == "[replace-and-swap]") {
+				swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
+				swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
+				this.addPlaylist(swapMRL);
+				swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
+				setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
+				setTimeout(delaySwap(this,swapFirst),100);
+				setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
+			}
+		});
 	}
 
-	if (isNodeWebkit) {
-		if (typeof webchimeraid !== "undefined") {
-			wjs("#" + webchimeraid).loadSettings(onloadsettings);
-			ploaded["#" + webchimeraid] = true;
-			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-			if (typeof removeHotkeys !== "undefined") {
-				wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true).preventDefault("key","alt+up",true).preventDefault("key","alt+down",true).preventDefault("key","g",true).preventDefault("key","h",true).preventDefault("key","j",true).preventDefault("key","k",true);
-			}
-		}
-		if (typeof webchimeraclass !== "undefined") {
-			wjs("." + webchimeraclass).loadSettings(onloadsettings);
-			ploaded["." + webchimeraclass] = true;
-			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-			if (typeof removeHotkeys !== "undefined") {
-				wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true).preventDefault("key","alt+up",true).preventDefault("key","alt+down",true).preventDefault("key","g",true).preventDefault("key","h",true).preventDefault("key","j",true).preventDefault("key","k",true);;
-			}
-		}
-	} else {
-		if (typeof webchimeraid !== "undefined") {
-			wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-					wjs("#" + webchimeraid).loadSettings(onloadsettings);
-					ploaded["#" + webchimeraid] = true;
-				}
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-			if (typeof removeHotkeys !== "undefined") {
-				wjs("#" + webchimeraid).catchEvent("QmlMessage",function(event) {
-					if (event == "[qml-loaded]") {
-						wjs("#" + webchimeraid).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true).preventDefault("key","alt+up",true).preventDefault("key","alt+down",true).preventDefault("key","g",true).preventDefault("key","h",true).preventDefault("key","j",true).preventDefault("key","k",true);;
-					}
-				});
-			}
-		}
-		if (typeof webchimeraclass !== "undefined") {
-			wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-				if (event == "[qml-loaded]" && typeof onloadsettings !== "undefined") {
-					wjs("." + webchimeraclass).loadSettings(onloadsettings);
-					ploaded["." + webchimeraclass] = true;
-				}
-				if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
-			});
-			if (typeof removeHotkeys !== "undefined") {
-				wjs("." + webchimeraclass).catchEvent("QmlMessage",function(event) {
-					if (event == "[qml-loaded]") {
-						wjs("." + webchimeraclass).preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true).preventDefault("key","alt+up",true).preventDefault("key","alt+down",true).preventDefault("key","g",true).preventDefault("key","h",true).preventDefault("key","j",true).preventDefault("key","k",true);;
-					}
-				});
-			}
-		}
+	if (typeof onloadsettings !== "undefined") wjs(newid).qmlLoaded(function() {
+		this.loadSettings(onloadsettings);
+		ploaded[newid] = true;
+	});
+	wjs(newid).catchEvent("QmlMessage",function(event) {
+		if (event.substr(0,6) == "[href]") window.open(event.replace("[href]",""), '_blank');
+	});
+	if (typeof removeHotkeys !== "undefined") {
+		wjs(newid).qmlLoaded(function() {
+			this.preventDefault("key","f",true).preventDefault("key","F11",true).preventDefault("key","space",true).preventDefault("key","ctrl+up",true).preventDefault("key","ctrl+down",true).preventDefault("key","m",true).preventDefault("key","p",true).preventDefault("key","esc",true).preventDefault("key","plus",true).preventDefault("key","minus",true).preventDefault("key","equal",true).preventDefault("key","bracketLeft",true).preventDefault("key","bracketRight",true).preventDefault("key","a",true).preventDefault("key","c",true).preventDefault("key","z",true).preventDefault("key","t",true).preventDefault("key","e",true).preventDefault("key","shift+left",true).preventDefault("key","shift+right",true).preventDefault("key","alt+left",true).preventDefault("key","alt+right",true).preventDefault("key","ctrl+left",true).preventDefault("key","ctrl+right",true).preventDefault("key","ctrl+l",true).preventDefault("key","n",true).preventDefault("key","alt+up",true).preventDefault("key","alt+down",true).preventDefault("key","g",true).preventDefault("key","h",true).preventDefault("key","j",true).preventDefault("key","k",true);
+		});
 	}
+	
 	return wjs(this.context);
 };
 
 // function for skinning
 wjs.init.prototype.skin = function(skin) {
 	skin.skinning = true;
-	newid = this.context;
-	if (typeof newid === 'string') {
-		if (newid.substring(0,1) == "#") {
-			var webchimeraid = newid.substring(1);
-		} else if (newid.substring(0,1) == ".") {
-			var webchimeraclass = newid.substring(1);
-		} else var webchimeraid = newid;
-	}
-	if (typeof webchimeraid !== "undefined") wjs("#" + webchimeraid).qmlLoaded(function() { wjs("#" + webchimeraid).loadSettings(skin); });
-	if (typeof webchimeraclass !== "undefined") wjs("." + webchimeraclass).qmlLoaded(function() { wjs("." + webchimeraclass).loadSettings(skin); });
+	this.qmlLoaded(function() { this.loadSettings(skin); });
 	
 	return wjs(this.context);
 }
