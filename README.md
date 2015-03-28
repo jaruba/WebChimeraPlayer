@@ -29,6 +29,5 @@ Current Features
 
 Upcoming Features
 ==============
-- Subtitle Correction Hotkeys
 - Picture in Picture Feature
 - Windowed Mode (Pop Out)
