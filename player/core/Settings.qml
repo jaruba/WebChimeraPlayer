@@ -47,4 +47,5 @@ QtObject {
 	property var selectedItem: 0;
 	property var subSize: 2;
 	property var subDelay: 0;
+	property var audioDelay: 0;
 }

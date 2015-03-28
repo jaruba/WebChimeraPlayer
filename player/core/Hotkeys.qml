@@ -254,6 +254,20 @@ Rectangle {
 				vlcPlayer.subtitle.delay = settings.subDelay;
 			}
 		}
+		if (event.key == Qt.Key_J) {
+			if (typeof settings.preventKey[Qt.Key_J] === "undefined") {
+				settings.audioDelay = settings.audioDelay -50;
+				wjs.setText("Audio Delay: "+settings.audioDelay+" ms");
+				vlcPlayer.audio.delay = settings.audioDelay;
+			}
+		}
+		if (event.key == Qt.Key_K) {
+			if (typeof settings.preventKey[Qt.Key_K] === "undefined") {
+				settings.audioDelay = settings.audioDelay +50;
+				wjs.setText("Audio Delay: "+settings.audioDelay+" ms");
+				vlcPlayer.audio.delay = settings.audioDelay;
+			}
+		}
 	}
 	// END HOTKEYS
 	
