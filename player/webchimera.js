@@ -166,6 +166,10 @@ wjs.init.prototype.showToolbar = function() {
 	this.plugin.emitJsMessage("[show-toolbar]");
 	return wjs(this.context);
 };
+wjs.init.prototype.toggleToolbar = function() {
+	this.plugin.emitJsMessage("[toggle-toolbar]");
+	return wjs(this.context);
+};
 // end functions to hide/show toolbar
 
 wjs.init.prototype.qmlLoaded = function(action) {
