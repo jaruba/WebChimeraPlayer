@@ -172,6 +172,13 @@ wjs.init.prototype.toggleToolbar = function() {
 };
 // end functions to hide/show toolbar
 
+// functions to hide/show user interface
+wjs.init.prototype.toggleUI = function() {
+	this.plugin.emitJsMessage("[toggle-ui]");
+	return wjs(this.context);
+};
+// end functions to hide/show user interface
+
 wjs.init.prototype.qmlLoaded = function(action) {
 	var saveContext = wjs(this.context);
 	if (isNodeWebkit) {

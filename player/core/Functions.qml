@@ -402,6 +402,7 @@ Rectangle {
 			if (startsWith(message,"[hide-toolbar]")) { settings.toolbar = 0; settings = settings; } // Hide Toolbar
 			if (startsWith(message,"[show-toolbar]")) { settings.toolbar = 1; settings = settings; } // Show Toolbar
 			if (startsWith(message,"[toggle-toolbar]")) { toggleToolbar(); } // Toggle Toolbar Visibility
+			if (startsWith(message,"[toggle-ui]")) { toggleUI(); } // Toggle UI Visibility
 			if (startsWith(message,"[toggle-playlist]")) { togglePlaylist(); } // Toggle Playlist
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
@@ -564,6 +565,25 @@ Rectangle {
 		settings = settings;
 	}
 	// End Toggle Toolbar Visibility
+	
+	// Toggle UI Visibility
+	function toggleUI() {
+		if (settings.uiVisible) {
+			settings.uiVisible = 0;
+			if (settings.playlistmenu) {
+				playlistblock.visible = false;
+				settings.playlistmenu = false;
+			}
+			if (settings.subtitlemenu) {
+				subMenublock.visible = false;
+				settings.subtitlemenu = false;
+			}
+		} else {
+			settings.uiVisible = 1;
+		}
+		settings = settings;
+	}
+	// End Toggle UI Visibility
 	
 	// Start Toggle Mute
 	function toggleMute() {

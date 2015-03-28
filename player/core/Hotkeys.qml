@@ -109,21 +109,10 @@ Rectangle {
 				}
 			} else if (event.key == Qt.Key_H) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_H] === "undefined") {
+					wjs.toggleUI();
 					if (settings.uiVisible) {
-						settings.uiVisible = 0;
-						if (settings.playlistmenu) {
-							playlistblock.visible = false;
-							settings.playlistmenu = false;
-						}
-						if (settings.subtitlemenu) {
-							subMenublock.visible = false;
-							settings.subtitlemenu = false;
-						}
-						wjs.setText("UI Hidden");
-					} else {
-						settings.uiVisible = 1;
 						wjs.setText("UI Visible");
-					}
+					} else wjs.setText("UI Hidden");
 					settings = settings;
 					return;
 				}
