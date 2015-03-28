@@ -46,4 +46,5 @@ QtObject {
 	property var debugPlaylist: false;
 	property var selectedItem: 0;
 	property var subSize: 2;
+	property var subDelay: 0;
 }

@@ -240,6 +240,20 @@ Rectangle {
 				wjs.setText(showtime.text.trim());
 			}
 		}
+		if (event.key == Qt.Key_G) {
+			if (typeof settings.preventKey[Qt.Key_G] === "undefined") {
+				settings.subDelay = settings.subDelay -50;
+				wjs.setText("Subtitle Delay: "+settings.subDelay+" ms");
+				vlcPlayer.subtitle.delay = settings.subDelay;
+			}
+		}
+		if (event.key == Qt.Key_H) {
+			if (typeof settings.preventKey[Qt.Key_H] === "undefined") {
+				settings.subDelay = settings.subDelay +50;
+				wjs.setText("Subtitle Delay: "+settings.subDelay+" ms");
+				vlcPlayer.subtitle.delay = settings.subDelay;
+			}
+		}
 	}
 	// END HOTKEYS
 	

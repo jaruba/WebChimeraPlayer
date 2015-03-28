@@ -71,6 +71,8 @@ Rectangle {
 		if (mediaChanged == 1) {
 			mediaChanged = 0;
 			firstSecond = seconds;
+			settings.subDelay = 0;
+			vlcPlayer.subtitle.delay = 0;
 		}
 	
 		var itemSettings = {};
