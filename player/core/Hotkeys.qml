@@ -63,22 +63,27 @@ Rectangle {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Right] === "undefined") {
 					wjs.jumpTo(60000,"forward");
+					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Left] === "undefined") {
 					wjs.jumpTo(60000,"backward");
+					return;
 				}
 			} else if (event.key == Qt.Key_Up) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Up] === "undefined") {
 					wjs.volumeTo(8,"increase");
+					return;
 				}
 			} else if (event.key == Qt.Key_Down) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Down] === "undefined") {
 					wjs.volumeTo(8,"decrease");
+					return;
 				}
 			} else if (event.key == Qt.Key_L) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_L] === "undefined") {
 					wjs.togglePlaylist();
+					return;
 				}
 			} else if (event.key == Qt.Key_D) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_D] === "undefined") {
@@ -103,28 +108,35 @@ Rectangle {
 					}
 				}
 			}
+			return;
 		}
 		if(event.modifiers == Qt.AltModifier) {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Right] === "undefined") {
 					wjs.jumpTo(10000,"forward");
+					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Left] === "undefined") {
 					wjs.jumpTo(10000,"backward");
+					return;
 				}
 			}
+			return;
 		}
 		if(event.modifiers == Qt.ShiftModifier) {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Right] === "undefined") {
 					wjs.jumpTo(3000,"forward");
+					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Left] === "undefined") {
 					wjs.jumpTo(3000,"backward");
+					return;
 				}
 			}
+			return;
 		}
 		if (event.key == Qt.Key_M) {
 			if (typeof settings.preventKey[Qt.Key_M] === "undefined") {
