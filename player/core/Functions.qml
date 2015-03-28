@@ -403,6 +403,8 @@ Rectangle {
 			if (startsWith(message,"[show-toolbar]")) { settings.toolbar = 1; settings = settings; } // Show Toolbar
 			if (startsWith(message,"[toggle-toolbar]")) { toggleToolbar(); } // Toggle Toolbar Visibility
 			if (startsWith(message,"[toggle-ui]")) { toggleUI(); } // Toggle UI Visibility
+			if (startsWith(message,"[hide-ui]")) { hideUI(); } // Hide UI
+			if (startsWith(message,"[show-ui]")) { showUI(); } // Show UI
 			if (startsWith(message,"[toggle-playlist]")) { togglePlaylist(); } // Toggle Playlist
 			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
 			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
@@ -567,7 +569,7 @@ Rectangle {
 	// End Toggle Toolbar Visibility
 	
 	// Toggle UI Visibility
-	function toggleUI() {
+	function hideUI() {
 		if (settings.uiVisible) {
 			settings.uiVisible = 0;
 			if (settings.playlistmenu) {
@@ -578,10 +580,17 @@ Rectangle {
 				subMenublock.visible = false;
 				settings.subtitlemenu = false;
 			}
-		} else {
-			settings.uiVisible = 1;
 		}
 		settings = settings;
+	}
+	function showUI() {
+		if (!settings.uiVisible) settings.uiVisible = 1;
+		settings = settings;
+	}
+	function toggleUI() {
+		if (settings.uiVisible) {
+			hideUI();
+		} else showUI();
 	}
 	// End Toggle UI Visibility
 	

@@ -173,6 +173,14 @@ wjs.init.prototype.toggleToolbar = function() {
 // end functions to hide/show toolbar
 
 // functions to hide/show user interface
+wjs.init.prototype.hideUI = function() {
+	this.plugin.emitJsMessage("[hide-ui]");
+	return wjs(this.context);
+};
+wjs.init.prototype.showUI = function() {
+	this.plugin.emitJsMessage("[show-ui]");
+	return wjs(this.context);
+};
 wjs.init.prototype.toggleUI = function() {
 	this.plugin.emitJsMessage("[toggle-ui]");
 	return wjs(this.context);
