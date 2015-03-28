@@ -121,6 +121,20 @@ Rectangle {
 					wjs.jumpTo(10000,"backward");
 					return;
 				}
+			} else if (event.key == Qt.Key_Up) {
+				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Plus] === "undefined") {
+					if (settings.subSize < 4) settings.subSize++;
+					wjs.setText("Subtitle Size: "+(settings.subSize+1));
+					settings = settings;
+					return;
+				}
+			} else if (event.key == Qt.Key_Down) {
+				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Minus] === "undefined") {
+					if (settings.subSize > 0) settings.subSize--;
+					wjs.setText("Subtitle Size: "+(settings.subSize+1));
+					settings = settings;
+					return;
+				}
 			}
 			return;
 		}
