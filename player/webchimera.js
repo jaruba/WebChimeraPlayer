@@ -657,8 +657,8 @@ wjs.init.prototype.clearSubtitle = function() {
 // function to Set Subtitle Size
 wjs.init.prototype.subSize = function(newSize) {
 	
-	// check if it is a number and send to player
-	if (isNaN(newSize)) this.plugin.emitJsMessage("[sub-size]"+newSize);
+	// check if it is a number and in scope then send to player
+	if (!isNaN(newSize) && parseInt(newSize) > 0 && parseInt(newSize) < 6) this.plugin.emitJsMessage("[sub-size]"+(parseInt(newSize)-1));
 
 	return wjs(this.context);
 };
