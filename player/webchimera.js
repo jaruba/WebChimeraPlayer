@@ -543,7 +543,14 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 				  }
 			  } else {
 				  if (typeof pitem[this.context] === 'undefined') pitem[this.context] = 0;
-				  this.plugin.playlist.add(playlist[item].url);
+				  if (playlist[item].vlcArgs) {
+					  if (!Array.isArray(playlist[item].vlcArgs)) {
+						  if (playlist[item].vlcArgs.indexOf(" ") > -1) {
+							  playlist[item].vlcArgs = playlist[item].vlcArgs.split(" ");
+						  } else playlist[item].vlcArgs = [playlist[item].vlcArgs];
+					  }
+					  this.plugin.playlist.addWithOptions(playlist[item].url,playlist[item].vlcArgs);
+				  } else this.plugin.playlist.add(playlist[item].url);
 	  			  var playerSettings = {};
 				  if (typeof playlist[item].title !== 'undefined' && typeof playlist[item].title === 'string') this.plugin.playlist.items[pitem[this.context]].title = "[custom]"+playlist[item].title;
 				  if (typeof playlist[item].art !== 'undefined' && typeof playlist[item].art === 'string') playerSettings.art = playlist[item].art;
