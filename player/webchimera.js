@@ -650,6 +650,16 @@ wjs.init.prototype.subSize = function(newSize) {
 };
 // end function to Set Subtitle Size
 
+// function to Set Subtitle Delay
+wjs.init.prototype.subDelay = function(newDelay) {
+	
+	// check if it is a number then send to player
+	if (!isNaN(newDelay)) this.plugin.emitJsMessage("[sub-delay]"+(parseInt(newDelay)));
+
+	return wjs(this.context);
+};
+// end function to Set Subtitle Delay
+
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);

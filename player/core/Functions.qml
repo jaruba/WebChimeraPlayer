@@ -433,6 +433,9 @@ Rectangle {
 				settings.subSize = parseInt(message.replace("[sub-size]",""));
 				settings = settings;
 			}
+			if (startsWith(message,"[sub-delay]")) {
+				vlcPlayer.subtitle.delay = settings.subDelay;
+			}
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {
