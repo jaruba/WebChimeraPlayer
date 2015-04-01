@@ -660,6 +660,13 @@ wjs.init.prototype.subDelay = function(newDelay) {
 };
 // end function to Set Subtitle Delay
 
+// function to Toggle Mute
+wjs.init.prototype.toggleMute = function() {
+	this.plugin.emitJsMessage("[toggle-mute]");
+	return wjs(this.context);
+};
+// end function to Toggle Mute
+
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);
