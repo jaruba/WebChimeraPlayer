@@ -226,30 +226,59 @@ wjs.init.prototype.qmlLoaded = function(action) {
 };
 
 wjs.init.prototype.onClicked = function(target, action) {
-	function wjs_function(event) {
-		if (event == "[clicked]"+target) {
-			var saveContext = wjs(this.context);
-			action.call(saveContext);
-		}
-	}
-	
-	var saveContext = wjs(this.context);
 
-	if (this.plugin.attachEvent) {
-		// Microsoft
-		this.plugin.attachEvent("onQmlMessage", function(event) {
-			return wjs_function.call(saveContext,event);
-		});
-	} else if (this.plugin.addEventListener) {
-		// Mozilla: DOM level 2
-		this.plugin.addEventListener("QmlMessage", function(event) {
-			return wjs_function.call(saveContext,event);
-		}, false);
+	var saveContext = wjs(this.context);
+	
+	if (typeof target === 'function') {
+		
+		function wjs_function_alt(event) {
+			var saveContext = wjs(this.context);
+			if (event.substr(0,9) == "[clicked]") target.call(saveContext,event.replace("[clicked]",""));
+		}
+
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function_alt.call(saveContext,event);
+			});
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function_alt.call(saveContext,event);
+			}, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function_alt.call(saveContext,event);
+			};
+		}
+
 	} else {
-		// DOM level 0
-		this.plugin["onQmlMessage"] = function(event) {
-			return wjs_function.call(saveContext,event);
-		};
+		
+		function wjs_function(event) {
+			if (event == "[clicked]"+target) {
+				var saveContext = wjs(this.context);
+				action.call(saveContext);
+			}
+		}
+	
+		if (this.plugin.attachEvent) {
+			// Microsoft
+			this.plugin.attachEvent("onQmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			});
+		} else if (this.plugin.addEventListener) {
+			// Mozilla: DOM level 2
+			this.plugin.addEventListener("QmlMessage", function(event) {
+				return wjs_function.call(saveContext,event);
+			}, false);
+		} else {
+			// DOM level 0
+			this.plugin["onQmlMessage"] = function(event) {
+				return wjs_function.call(saveContext,event);
+			};
+		}
+		
 	}
 	
 	return wjs(this.context);
