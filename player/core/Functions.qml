@@ -437,6 +437,10 @@ Rectangle {
 				settings.subDelay = parseInt(message.replace("[sub-delay]",""));
 				vlcPlayer.subtitle.delay = settings.subDelay;
 			}
+			if (startsWith(message,"[audio-delay]")) {
+				settings.audioDelay = parseInt(message.replace("[audio-delay]",""));
+				vlcPlayer.audio.delay = settings.audioDelay;
+			}
 			if (startsWith(message,"[toggle-mute]")) toggleMute();
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI

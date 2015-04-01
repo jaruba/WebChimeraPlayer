@@ -660,6 +660,16 @@ wjs.init.prototype.subDelay = function(newDelay) {
 };
 // end function to Set Subtitle Delay
 
+// function to Set Delay for Audio Tracks
+wjs.init.prototype.audioDelay = function(newDelay) {
+	
+	// check if it is a number then send to player
+	if (!isNaN(newDelay)) this.plugin.emitJsMessage("[audio-delay]"+(parseInt(newDelay)));
+
+	return wjs(this.context);
+};
+// end function to Set Delay for Audio Tracks
+
 // function to Toggle Mute
 wjs.init.prototype.toggleMute = function() {
 	this.plugin.emitJsMessage("[toggle-mute]");
