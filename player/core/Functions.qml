@@ -441,6 +441,7 @@ Rectangle {
 				settings.audioDelay = parseInt(message.replace("[audio-delay]",""));
 				vlcPlayer.audio.delay = settings.audioDelay;
 			}
+			if (startsWith(message,"[notify]")) setText(message.replace("[notify]",""));
 			if (startsWith(message,"[toggle-mute]")) toggleMute();
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI

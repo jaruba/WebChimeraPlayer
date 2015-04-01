@@ -677,6 +677,13 @@ wjs.init.prototype.toggleMute = function() {
 };
 // end function to Toggle Mute
 
+// function to Notify on Screen
+wjs.init.prototype.notify = function(message) {
+	this.plugin.emitJsMessage("[notify]"+message);
+	return wjs(this.context);
+};
+// end function to Notify on Screen
+
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);
