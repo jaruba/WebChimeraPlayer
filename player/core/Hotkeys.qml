@@ -72,12 +72,12 @@ Rectangle {
 				}
 			} else if (event.key == Qt.Key_Up) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Up] === "undefined") {
-					wjs.volumeTo(8,"increase");
+					wjs.volumeTo(8);
 					return;
 				}
 			} else if (event.key == Qt.Key_Down) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Down] === "undefined") {
-					wjs.volumeTo(8,"decrease");
+					wjs.volumeTo(-8);
 					return;
 				}
 			} else if (event.key == Qt.Key_L) {
@@ -284,8 +284,8 @@ Rectangle {
 	// MOUSE ACTIONS
 	function mouseScroll(mouseX,mouseY) {
 		// Change Volume on Mouse Scroll
-		if (mouseY > 0) wjs.volumeTo(8,"increase");
-		if (mouseY < 0) wjs.volumeTo(8,"decrease");
+		if (mouseY > 0) wjs.volumeTo(8);
+		if (mouseY < 0) wjs.volumeTo(-8);
 		// End Change Volume on Mouse Scroll
 	}
 	function mouseMoved(mouseX,mouseY) {
