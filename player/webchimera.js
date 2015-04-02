@@ -684,6 +684,13 @@ wjs.init.prototype.notify = function(message) {
 };
 // end function to Notify on Screen
 
+// function to Toggle Subtitle Menu
+wjs.init.prototype.toggleSubtitles = function() {
+	this.plugin.emitJsMessage("[toggle-subtitles]");
+	return wjs(this.context);
+};
+// end function to Toggle Subtitle Menu
+
 // functon to load m3u files
 wjs.init.prototype.loadM3U = function(M3Uurl) {
 	if (typeof M3Uurl !== "undefined") this.plugin.emitJsMessage("[load-m3u]"+M3Uurl);

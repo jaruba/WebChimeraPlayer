@@ -406,8 +406,8 @@ Rectangle {
 			if (startsWith(message,"[hide-ui]")) { hideUI(); } // Hide UI
 			if (startsWith(message,"[show-ui]")) { showUI(); } // Show UI
 			if (startsWith(message,"[toggle-playlist]")) { togglePlaylist(); } // Toggle Playlist
-			if (startsWith(message,"[start-subtitle]")) subMenu.playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
-			if (startsWith(message,"[clear-subtitle]")) subMenu.clearSubtitles(); // Clear Loaded External Subtitle
+			if (startsWith(message,"[start-subtitle]")) playSubtitles(message.replace("[start-subtitle]","")); // Get Subtitle URL and Play Subtitle
+			if (startsWith(message,"[clear-subtitle]")) clearSubtitles(); // Clear Loaded External Subtitle
 			if (startsWith(message,"[load-m3u]")) playM3U(message.replace("[load-m3u]","")); // Load M3U Playlist URL
 			if (startsWith(message,"[set-total-length]")) settings.customLength = message.replace("[set-total-length]",""); // Set custom total length
 			if (startsWith(message,"[reset-progress]")) {
@@ -443,6 +443,7 @@ Rectangle {
 			}
 			if (startsWith(message,"[notify]")) setText(message.replace("[notify]",""));
 			if (startsWith(message,"[toggle-mute]")) toggleMute();
+			if (startsWith(message,"[toggle-subtitles]")) toggleSubtitles();
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {
@@ -566,8 +567,6 @@ Rectangle {
 		}
 	}
 	// End Toggle Playlist Menu (open/close)
-	
-	// TOGGLE SUBTITLE MENU FUNCTION MOVED TO "/themes/sleek/components/SubtitleMenuItems.qml" (can be called with "subMenu." prefix)
 	
 	// Toggle Toolbar Visibility
 	function toggleToolbar() {
@@ -937,6 +936,18 @@ Rectangle {
 	// START FUNCTIONS FOR EXTERNAL FILE SUPPORT (SRT, SUB, M3U)
 	
 	// EXTERNAL SUBTITLE FUNCTIONS MOVED TO "themes/sleek/components/SubtitleMenuItems.qml" (can be called with "subMenu." prefix)
+	
+	// Proxy functions to expose the subtitle functions from "subMenu." prefix
+	function toggleSubtitles() {
+		subMenu.toggleSubtitles();
+	}
+	function playSubtitles(subtitleElement) {
+		subMenu.playSubtitles(subtitleElement);
+	}
+	function clearSubtitles() {
+		subMenu.clearSubtitles();
+	}
+	// End proxy functions to expose the subtitle functions from "subMenu." prefix
 	
 	function strip(s) {
 		return s.replace(/^\s+|\s+$/g,"");
