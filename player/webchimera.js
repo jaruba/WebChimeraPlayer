@@ -16,6 +16,8 @@
 * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 *****************************************************************************/
 
+// WebChimera Player v1.09
+
 
 // if page on local machine, add warning
 var globalurlstring = " ";
