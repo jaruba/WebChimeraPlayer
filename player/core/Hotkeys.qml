@@ -62,12 +62,12 @@ Rectangle {
 		if(event.modifiers == Qt.ControlModifier) {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Right] === "undefined") {
-					wjs.jumpTo(60000,"forward");
+					wjs.jumpTo(60000);
 					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.ControlModifier+"+"+Qt.Key_Left] === "undefined") {
-					wjs.jumpTo(60000,"backward");
+					wjs.jumpTo(-60000);
 					return;
 				}
 			} else if (event.key == Qt.Key_Up) {
@@ -122,12 +122,12 @@ Rectangle {
 		if(event.modifiers == Qt.AltModifier) {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Right] === "undefined") {
-					wjs.jumpTo(10000,"forward");
+					wjs.jumpTo(10000);
 					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.AltModifier+"+"+Qt.Key_Left] === "undefined") {
-					wjs.jumpTo(10000,"backward");
+					wjs.jumpTo(-10000);
 					return;
 				}
 			} else if (event.key == Qt.Key_Up) {
@@ -150,12 +150,12 @@ Rectangle {
 		if(event.modifiers == Qt.ShiftModifier) {
 			if (event.key == Qt.Key_Right) {
 				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Right] === "undefined") {
-					wjs.jumpTo(3000,"forward");
+					wjs.jumpTo(3000);
 					return;
 				}
 			} else if (event.key == Qt.Key_Left) {
 				if (typeof settings.preventKey[Qt.ShiftModifier+"+"+Qt.Key_Left] === "undefined") {
-					wjs.jumpTo(3000,"backward");
+					wjs.jumpTo(-3000);
 					return;
 				}
 			}

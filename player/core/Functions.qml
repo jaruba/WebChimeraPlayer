@@ -847,7 +847,7 @@ Rectangle {
 	
 	
 	// Start Jump to Seconds (difference from current position)
-	function jumpTo(newtime,direction) {
+	function jumpTo(newtime) {
 		if (vlcPlayer.state == 3 || vlcPlayer.state == 4) {
 			if (notmuted == 0) if (vlcPlayer.audio.mute === false) {
 				wjs.toggleMute();
@@ -857,8 +857,7 @@ Rectangle {
 				vlcPlayer.togglePause();
 				pauseAfterBuffer = 1;
 			}
-			if (direction == "forward") prevtime = vlcPlayer.time +newtime;
-			if (direction == "backward") prevtime = vlcPlayer.time -newtime;
+			prevtime = vlcPlayer.time +newtime;
 			vlcPlayer.time = prevtime;
 		}		
 	}
