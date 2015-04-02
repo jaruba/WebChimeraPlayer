@@ -194,7 +194,7 @@ Rectangle {
 		 target: vlcPlayer
 		 onMediaPlayerTimeChanged: {
 			// Start show subtitle text (external subtitles)
-			var nowSecond = vlcPlayer.time /1000;
+			var nowSecond = (vlcPlayer.time - settings.subDelay) /1000;
 			if (currentSubtitle > -2) {
 				var subtitle = -1;
 				

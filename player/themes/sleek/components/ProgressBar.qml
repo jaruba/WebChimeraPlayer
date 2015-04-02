@@ -17,7 +17,7 @@ Rectangle {
 	id: root
 	anchors.fill: parent
 	color: "transparent"
-	visible: settings.toolbar == 0 ? false : true
+	visible: settings.uiVisible == 0 ? false : settings.toolbar == 0 ? false : true
 	
 	RowLayout {
 		id: rowLayer
