@@ -16,7 +16,7 @@
 * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 *****************************************************************************/
 
-// WebChimera Player v1.09
+// WebChimera Player v1.11
 
 
 // if page on local machine, add warning
@@ -42,6 +42,9 @@ if (isNodeWebkit) {
 } else {
 	var webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
 }
+
+// a function to detect IE (we can't check if the plugin is installed in IE, so we will remove the check if it's IE)
+function isIE() { return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null))); }
 
 switch(window.location.protocol) {
    case 'http:': break;
@@ -421,6 +424,9 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		var isInstalled = false;
 		if (typeof navigator.plugins["WebChimera Plugin"] !== 'undefined') isInstalled = true;
 		if (typeof navigator.plugins["WebChimera x86_64"] !== 'undefined') isInstalled = true;
+		
+		// remove the check if it's IE (there's no sure way of checking if the plugin is installed/enabled in IE11)
+		if (isIE()) isInstalled = true;
 	
 		if (!isInstalled) {
 			this.plugin.style.zIndex = 1000;
@@ -665,6 +671,17 @@ wjs.init.prototype.stopPlayer = function() {
 	return this;
 };
 // end function to Stop Playback
+
+// function to Clear the Playlist
+wjs.init.prototype.clearPlaylist = function() {
+	if (this.allElements.length == 1) {
+		pitem[this.context] = 0;
+		this.plugin.playlist.clear();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).clearPlaylist();
+
+	return this;
+};
+// end function to Clear the Playlist
 
 // function to Set Custom Total Length to Current Item
 wjs.init.prototype.setTotalLength = function(mseconds) {
