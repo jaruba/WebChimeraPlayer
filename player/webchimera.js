@@ -666,6 +666,14 @@ wjs.init.prototype.stopPlayer = function() {
 };
 // end function to Stop Playback
 
+// function to Clear the Playlist
+wjs.init.prototype.clearPlaylist = function() {
+	pitem[this.context] = 0;
+	this.plugin.playlist.clear();
+	return this;
+};
+// end function to Clear the Playlist
+
 // function to Set Custom Total Length to Current Item
 wjs.init.prototype.setTotalLength = function(mseconds) {
 	if (this.allElements.length == 1) {
