@@ -43,6 +43,9 @@ if (isNodeWebkit) {
 	var webchimeraFolder = webchimeraSrc.substring(0, webchimeraSrc.lastIndexOf("/"));
 }
 
+// a function to detect IE (we can't check if the plugin is installed in IE, so we will remove the check if it's IE)
+function isIE() { return ((navigator.appName == 'Microsoft Internet Explorer') || ((navigator.appName == 'Netscape') && (new RegExp("Trident/.*rv:([0-9]{1,}[\.0-9]{0,})").exec(navigator.userAgent) != null))); }
+
 switch(window.location.protocol) {
    case 'http:': break;
    case 'https:': break;
@@ -421,6 +424,9 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		var isInstalled = false;
 		if (typeof navigator.plugins["WebChimera Plugin"] !== 'undefined') isInstalled = true;
 		if (typeof navigator.plugins["WebChimera x86_64"] !== 'undefined') isInstalled = true;
+		
+		// remove the check if it's IE (there's no sure way of checking if the plugin is installed/enabled in IE11)
+		if (isIE()) isInstalled = true;
 	
 		if (!isInstalled) {
 			this.plugin.style.zIndex = 1000;
