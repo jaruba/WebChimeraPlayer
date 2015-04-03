@@ -668,8 +668,11 @@ wjs.init.prototype.stopPlayer = function() {
 
 // function to Clear the Playlist
 wjs.init.prototype.clearPlaylist = function() {
-	pitem[this.context] = 0;
-	this.plugin.playlist.clear();
+	if (this.allElements.length == 1) {
+		pitem[this.context] = 0;
+		this.plugin.playlist.clear();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).clearPlaylist();
+
 	return this;
 };
 // end function to Clear the Playlist
