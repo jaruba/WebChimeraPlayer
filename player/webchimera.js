@@ -805,6 +805,24 @@ wjs.init.prototype.fullscreen = function(newFullscreen) {
 };
 // end function to Get/Set Fullscreen
 
+// function to iterate to the next playlist item
+wjs.init.prototype.next = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.playlist.next();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).next();
+	return this;
+};
+// end function to iterate to the next playlist item
+
+// function to iterate to the next playlist item
+wjs.init.prototype.prev = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.playlist.prev();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).prev();
+	return this;
+};
+// end function to iterate to the next playlist item
+
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[notify]"+message);
