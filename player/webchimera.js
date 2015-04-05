@@ -140,7 +140,11 @@ wjs.init = function(context) {
 	}
 	
 	// proxy properties from .plugin to root
-	if (this.plugin.playlist) this.isPlaying = this.plugin.playlist.isPlaying;
+	if (this.plugin.playlist) {
+		this.isPlaying = this.plugin.playlist.isPlaying;
+		this.itemCount = this.plugin.playlist.itemCount;
+		this.currentItem = this.plugin.playlist.currentItem;
+	}
 	// end proxy properties from .plugin to root
 };
 
