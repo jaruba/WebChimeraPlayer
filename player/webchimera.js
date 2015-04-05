@@ -746,6 +746,22 @@ wjs.init.prototype.audioDelay = function(newDelay) {
 };
 // end function to Set Delay for Audio Tracks
 
+// function to Get/Set Volume
+wjs.init.prototype.volume = function(newVolume) {
+	if (this.allElements.length == 1) {
+		if (newVolume && !isNaN(newVolume) && newVolume >= 0 && newVolume <= 200) {
+			// set volume
+			this.plugin.emitJsMessage("[set-volume]"+(parseInt(newVolume)));
+		} else {
+			// get volume
+			return this.plugin.volume;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).volume(newVolume);
+
+	return this;
+};
+// end function to Get/Set Volume
+
 // function to Toggle Mute
 wjs.init.prototype.toggleMute = function() {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[toggle-mute]");
@@ -753,6 +769,19 @@ wjs.init.prototype.toggleMute = function() {
 	return this;
 };
 // end function to Toggle Mute
+
+// function to Get/Set Mute
+wjs.init.prototype.mute = function(newMute) {
+	if (this.allElements.length == 1) {
+		if (typeof newMute === "boolean") {
+			this.plugin.emitJsMessage("[set-mute]"+newMute);
+		} else {
+			return this.plugin.audio.mute;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).mute(newMute);
+	return this;
+};
+// end function to Get/Set Mute
 
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
