@@ -867,6 +867,18 @@ wjs.init.prototype.togglePause = function() {
 };
 // end function to toggle pause
 
+// function to remove a specific playlist item
+wjs.init.prototype.removeItem = function(remItem) {
+	if (this.allElements.length == 1) {
+		if (!isNaN(remItem)) {
+			this.plugin.playlist.removeItem(remItem);
+			pitem[this.context]--;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).removeItem(remItem);
+	return this;
+};
+// end function to remove a specific playlist item
+
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[notify]"+message);
