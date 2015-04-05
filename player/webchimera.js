@@ -783,6 +783,15 @@ wjs.init.prototype.mute = function(newMute) {
 };
 // end function to Get/Set Mute
 
+// function to Toggle Fullscreen
+wjs.init.prototype.toggleFullscreen = function(newMute) {
+	if (this.allElements.length == 1) {
+		this.plugin.toggleFullscreen();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).toggleFullscreen();
+	return this;
+};
+// end function to Toggle Fullscreen
+
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[notify]"+message);
