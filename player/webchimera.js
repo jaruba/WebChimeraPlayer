@@ -840,6 +840,15 @@ wjs.init.prototype.play = function() {
 };
 // end function to play current item
 
+// function to play a specific item
+wjs.init.prototype.playItem = function(newItem) {
+	if (this.allElements.length == 1) {
+		if (!isNaN(newItem)) this.plugin.playlist.playItem(newItem);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).playItem(newItem);
+	return this;
+};
+// end function to play a specific item
+
 // function to play current item
 wjs.init.prototype.pause = function() {
 	if (this.allElements.length == 1) {
@@ -848,6 +857,15 @@ wjs.init.prototype.pause = function() {
 	return this;
 };
 // end function to play current item
+
+// function to toggle pause
+wjs.init.prototype.togglePause = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.playlist.togglePause();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).togglePause();
+	return this;
+};
+// end function to toggle pause
 
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
