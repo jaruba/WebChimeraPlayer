@@ -138,6 +138,10 @@ wjs.init = function(context) {
 		this.allElements = document.getElementsByTagName(this.context);
 		this.plugin = this.allElements[0];
 	}
+	
+	// proxy properties from .plugin to root
+	if (this.plugin.playlist) this.isPlaying = this.plugin.playlist.isPlaying;
+	// end proxy properties from .plugin to root
 };
 
 // catch event function
