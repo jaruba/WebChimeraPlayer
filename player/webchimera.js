@@ -784,13 +784,26 @@ wjs.init.prototype.mute = function(newMute) {
 // end function to Get/Set Mute
 
 // function to Toggle Fullscreen
-wjs.init.prototype.toggleFullscreen = function(newMute) {
+wjs.init.prototype.toggleFullscreen = function() {
 	if (this.allElements.length == 1) {
 		this.plugin.toggleFullscreen();
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).toggleFullscreen();
 	return this;
 };
 // end function to Toggle Fullscreen
+
+// function to Get/Set Fullscreen
+wjs.init.prototype.fullscreen = function(newFullscreen) {
+	if (this.allElements.length == 1) {
+		if (typeof newFullscreen === "boolean") {
+			this.plugin.fullscreen = newFullscreen;
+		} else {
+			return this.plugin.fullscreen;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).fullscreen(newFullscreen);
+	return this;
+};
+// end function to Get/Set Fullscreen
 
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
