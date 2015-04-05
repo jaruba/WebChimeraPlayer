@@ -831,6 +831,24 @@ wjs.init.prototype.prev = function() {
 };
 // end function to iterate to the next playlist item
 
+// function to play current item
+wjs.init.prototype.play = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.playlist.play();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).play();
+	return this;
+};
+// end function to play current item
+
+// function to play current item
+wjs.init.prototype.pause = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.playlist.pause();
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).pause();
+	return this;
+};
+// end function to play current item
+
 // function to Notify on Screen
 wjs.init.prototype.notify = function(message) {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[notify]"+message);
