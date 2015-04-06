@@ -187,6 +187,40 @@ wjs.init.prototype.currentItem = function() {
 	if (this.allElements.length == 1) return this.plugin.playlist.currentItem;
 	return this;
 }
+wjs.init.prototype.width = function() {
+	if (this.allElements.length == 1) return parseInt(this.plugin.video.width);
+	return this;
+}
+wjs.init.prototype.height = function() {
+	if (this.allElements.length == 1) return parseInt(this.plugin.video.height);
+	return this;
+}
+wjs.init.prototype.hasVout = function() {
+	if (this.allElements.length == 1) return this.plugin.input.hasVout;
+	return this;
+}
+wjs.init.prototype.length = function() {
+	if (this.allElements.length == 1) return this.plugin.length;
+	return this;
+}
+wjs.init.prototype.fps = function() {
+	if (this.allElements.length == 1) return this.plugin.input.fps;
+	return this;
+}
+wjs.init.prototype.state = function() {
+	if (this.allElements.length == 1) {
+		reqState = this.plugin.state;
+		if (reqState == 0) return "idle";
+		else if (reqState == 1) return "opening";
+		else if (reqState == 2) return "buffering";
+		else if (reqState == 3) return "playing";
+		else if (reqState == 4) return "paused";
+		else if (reqState == 5) return "stopping";
+		else if (reqState == 6) return "ended";
+		else if (reqState == 7) return "error";
+	}
+	return this;
+}
 // end proxy properties from .plugin to root functions
 
 // functions to hide/show toolbar
