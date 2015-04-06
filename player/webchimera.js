@@ -139,13 +139,6 @@ wjs.init = function(context) {
 		this.plugin = this.allElements[0];
 	}
 	
-	// proxy properties from .plugin to root
-	if (this.plugin.playlist) {
-		this.isPlaying = this.plugin.playlist.isPlaying;
-		this.itemCount = this.plugin.playlist.itemCount;
-		this.currentItem = this.plugin.playlist.currentItem;
-	}
-	// end proxy properties from .plugin to root
 };
 
 // catch event function
@@ -180,6 +173,21 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 	return this;
 };
 // end function that loads webchimera player settings after qml has loaded
+
+// proxy properties from .plugin to root functions
+wjs.init.prototype.isPlaying = function() {
+	if (this.allElements.length == 1) return this.plugin.playlist.isPlaying;
+	return this;
+}
+wjs.init.prototype.itemCount = function() {
+	if (this.allElements.length == 1) return this.plugin.playlist.itemCount;
+	return this;
+}
+wjs.init.prototype.currentItem = function() {
+	if (this.allElements.length == 1) return this.plugin.playlist.currentItem;
+	return this;
+}
+// end proxy properties from .plugin to root functions
 
 // functions to hide/show toolbar
 wjs.init.prototype.hideToolbar = function() {
