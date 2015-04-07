@@ -237,6 +237,27 @@ wjs.init.prototype.position = function(newPosition) {
 }
 // end proxy properties from .plugin to root functions
 
+// video resize functions
+wjs.init.prototype.aspectRatio = function(newRatio) {
+	if (this.allElements.length == 1) {
+		if (typeof newRatio === 'string') this.plugin.emitJsMessage("[aspect-ratio]"+newRatio);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).aspectRatio(newRatio);
+	return this;
+}
+wjs.init.prototype.crop = function(newCrop) {
+	if (this.allElements.length == 1) {
+		if (typeof newCrop === 'string') this.plugin.emitJsMessage("[crop]"+newCrop);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).crop(newCrop);
+	return this;
+}
+wjs.init.prototype.zoom = function(newZoom) {
+	if (this.allElements.length == 1) {
+		if (typeof newZoom === 'number') this.plugin.emitJsMessage("[zoom]"+newZoom);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).zoom(newZoom);
+	return this;
+}
+// end video resize functions
+
 // functions to hide/show toolbar
 wjs.init.prototype.hideToolbar = function() {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[hide-toolbar]");

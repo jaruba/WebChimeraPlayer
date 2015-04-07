@@ -446,6 +446,9 @@ Rectangle {
 			if (startsWith(message,"[set-mute]")) { setMute(message.replace("[set-mute]","")); }
 			if (startsWith(message,"[toggle-subtitles]")) toggleSubtitles();
 			if (startsWith(message,"[set-volume]")) { vlcPlayer.volume = parseInt(message.replace("[set-volume]","")); volheat.volume = (parseInt(message.replace("[set-volume]","")) /200) * volheat.width; }
+			if (startsWith(message,"[aspect-ratio]")) changeAspect(message.replace("[aspect-ratio]",""),"ratio");
+			if (startsWith(message,"[crop]")) changeAspect(message.replace("[crop]",""),"crop");
+			if (startsWith(message,"[zoom]")) changeZoom(parseFloat(message.replace("[zoom]","")));
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {
