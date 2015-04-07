@@ -256,6 +256,12 @@ wjs.init.prototype.zoom = function(newZoom) {
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).zoom(newZoom);
 	return this;
 }
+wjs.init.prototype.resetSize = function() {
+	if (this.allElements.length == 1) {
+		this.plugin.emitJsMessage("[reset-size]");
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).resetSize();
+	return this;
+}
 // end video resize functions
 
 wjs.init.prototype.nextFrame = function(newFrame) {
