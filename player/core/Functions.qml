@@ -449,6 +449,7 @@ Rectangle {
 			if (startsWith(message,"[aspect-ratio]")) changeAspect(message.replace("[aspect-ratio]",""),"ratio");
 			if (startsWith(message,"[crop]")) changeAspect(message.replace("[crop]",""),"crop");
 			if (startsWith(message,"[zoom]")) changeZoom(parseFloat(message.replace("[zoom]","")));
+			if (startsWith(message,"[next-frame]")) nextFrame(parseInt(message.replace("[next-frame]","")));
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {

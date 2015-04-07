@@ -258,6 +258,13 @@ wjs.init.prototype.zoom = function(newZoom) {
 }
 // end video resize functions
 
+wjs.init.prototype.nextFrame = function(newFrame) {
+	if (this.allElements.length == 1) {
+		if (typeof newFrame === 'number') this.plugin.emitJsMessage("[next-frame]"+newFrame);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).nextFrame(newFrame);
+	return this;
+}
+
 // functions to hide/show toolbar
 wjs.init.prototype.hideToolbar = function() {
 	if (this.allElements.length == 1) this.plugin.emitJsMessage("[hide-toolbar]");
