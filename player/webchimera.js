@@ -221,6 +221,20 @@ wjs.init.prototype.state = function() {
 	}
 	return this;
 }
+wjs.init.prototype.time = function(newTime) {
+	if (this.allElements.length == 1) {
+		if (typeof newTime === 'number') this.plugin.time = newTime;
+		else return this.plugin.time;
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).time(newTime);
+	return this;
+}
+wjs.init.prototype.position = function(newPosition) {
+	if (this.allElements.length == 1) {
+		if (typeof newPosition === 'number') this.plugin.position = newPosition;
+		else return this.plugin.position;
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).progress(newPosition);
+	return this;
+}
 // end proxy properties from .plugin to root functions
 
 // functions to hide/show toolbar
