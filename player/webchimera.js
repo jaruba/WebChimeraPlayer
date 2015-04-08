@@ -175,6 +175,21 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 // end function that loads webchimera player settings after qml has loaded
 
 // proxy properties from .plugin to root functions
+wjs.init.prototype.audioCount = function() {
+	if (this.allElements.length == 1) return this.plugin.audio.count;
+	return this;
+}
+wjs.init.prototype.audioTrack = function(newTrack) {
+	if (this.allElements.length == 1) {
+		if (typeof newTrack === 'number') this.plugin.audio.track = newTrack;
+		else return this.plugin.audio.track;
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).audioTrack(newTrack);
+	return this;
+}
+wjs.init.prototype.audioDesc = function(getDesc) {
+	if (typeof getDesc === 'number') return this.plugin.audio.description(getDesc);
+	return this;
+}
 wjs.init.prototype.isPlaying = function() {
 	if (this.allElements.length == 1) return this.plugin.playlist.isPlaying;
 	return this;
@@ -197,10 +212,6 @@ wjs.init.prototype.height = function() {
 }
 wjs.init.prototype.hasVout = function() {
 	if (this.allElements.length == 1) return this.plugin.input.hasVout;
-	return this;
-}
-wjs.init.prototype.length = function() {
-	if (this.allElements.length == 1) return this.plugin.length;
 	return this;
 }
 wjs.init.prototype.fps = function() {
@@ -780,6 +791,35 @@ wjs.init.prototype.clearPlaylist = function() {
 	return this;
 };
 // end function to Clear the Playlist
+
+// function to Get/Set Total Length of Current Item
+wjs.init.prototype.length = function(mseconds) {
+	if (this.allElements.length == 1) {
+		if (typeof mseconds === "number") {
+			if (this.plugin.length == 0) {
+				this.plugin.emitJsMessage("[set-total-length]"+mseconds);
+				if (IsJsonString(this.plugin.playlist.items[this.currentItem()].setting)) {
+					newSettings = JSON.parse(this.plugin.playlist.items[this.currentItem()].setting);
+					newSettings.totalLength = mseconds;
+					this.plugin.playlist.items[this.currentItem()].setting = JSON.stringify(newSettings);
+				} else {
+					newSettings = {};
+					newSettings.totalLength = mseconds;
+					this.plugin.playlist.items[this.currentItem()].setting = JSON.stringify(newSettings);
+				}
+			} else return console.error("In order to set a Custom Total Length, .length() needs to be 0.");
+		} else {
+			if (IsJsonString(this.plugin.playlist.items[this.currentItem()].setting)) {
+				newSettings = JSON.parse(this.plugin.playlist.items[this.currentItem()].setting);
+				if (newSettings.totalLength) return newSettings.totalLength;
+				else return this.plugin.length;
+			} else return this.plugin.length;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).length(mseconds);
+
+	return this;
+};
+// end function to Get/Set Total Length of Current Item
 
 // function to Set Custom Total Length to Current Item
 wjs.init.prototype.setTotalLength = function(mseconds) {
