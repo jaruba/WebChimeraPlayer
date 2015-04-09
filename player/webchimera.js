@@ -16,7 +16,7 @@
 * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 *****************************************************************************/
 
-// WebChimera Player v1.12
+// WebChimera Player v1.13
 
 
 // if page on local machine, add warning
@@ -122,6 +122,8 @@ var wjs = function(context) {
 // Static methods
 wjs.init = function(context) {
 
+	this.version = "v1.13";
+
     // Save the context
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
 
@@ -139,6 +141,90 @@ wjs.init = function(context) {
 		this.plugin = this.allElements[0];
 	}
 	
+};
+
+wjs.init.prototype.onMediaChanged = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerMediaChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onMediaChanged(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onIdle = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerNothingSpecial",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onIdle(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onOpening = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerOpening",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onOpening(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onBuffering = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerBuffering",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onBuffering(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPlaying = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPlaying",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPlaying(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPaused = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPaused",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPaused(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onEnded = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerEndReached",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onEnded(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onError = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerEncounteredError",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onError(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onStopped = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerStopped",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onStopped(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onTime = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerTimeChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onTime(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPosition = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPositionChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPosition(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onMessage = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("QmlMessage",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onMessage(wjs_function);
+	return this;
 };
 
 // catch event function
@@ -175,6 +261,21 @@ wjs.init.prototype.loadSettings = function(wjs_localsettings) {
 // end function that loads webchimera player settings after qml has loaded
 
 // proxy properties from .plugin to root functions
+wjs.init.prototype.audioCount = function() {
+	if (this.allElements.length == 1) return this.plugin.audio.count;
+	return this;
+}
+wjs.init.prototype.audioTrack = function(newTrack) {
+	if (this.allElements.length == 1) {
+		if (typeof newTrack === 'number') this.plugin.audio.track = newTrack;
+		else return this.plugin.audio.track;
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).audioTrack(newTrack);
+	return this;
+}
+wjs.init.prototype.audioDesc = function(getDesc) {
+	if (typeof getDesc === 'number') return this.plugin.audio.description(getDesc);
+	return this;
+}
 wjs.init.prototype.isPlaying = function() {
 	if (this.allElements.length == 1) return this.plugin.playlist.isPlaying;
 	return this;
@@ -197,10 +298,6 @@ wjs.init.prototype.height = function() {
 }
 wjs.init.prototype.hasVout = function() {
 	if (this.allElements.length == 1) return this.plugin.input.hasVout;
-	return this;
-}
-wjs.init.prototype.length = function() {
-	if (this.allElements.length == 1) return this.plugin.length;
 	return this;
 }
 wjs.init.prototype.fps = function() {
@@ -781,6 +878,35 @@ wjs.init.prototype.clearPlaylist = function() {
 };
 // end function to Clear the Playlist
 
+// function to Get/Set Total Length of Current Item
+wjs.init.prototype.length = function(mseconds) {
+	if (this.allElements.length == 1) {
+		if (typeof mseconds === "number") {
+			if (this.plugin.length == 0) {
+				this.plugin.emitJsMessage("[set-total-length]"+mseconds);
+				if (IsJsonString(this.plugin.playlist.items[this.currentItem()].setting)) {
+					newSettings = JSON.parse(this.plugin.playlist.items[this.currentItem()].setting);
+					newSettings.totalLength = mseconds;
+					this.plugin.playlist.items[this.currentItem()].setting = JSON.stringify(newSettings);
+				} else {
+					newSettings = {};
+					newSettings.totalLength = mseconds;
+					this.plugin.playlist.items[this.currentItem()].setting = JSON.stringify(newSettings);
+				}
+			} else return console.error("In order to set a Custom Total Length, .length() needs to be 0.");
+		} else {
+			if (IsJsonString(this.plugin.playlist.items[this.currentItem()].setting)) {
+				newSettings = JSON.parse(this.plugin.playlist.items[this.currentItem()].setting);
+				if (newSettings.totalLength) return newSettings.totalLength;
+				else return this.plugin.length;
+			} else return this.plugin.length;
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).length(mseconds);
+
+	return this;
+};
+// end function to Get/Set Total Length of Current Item
+
 // function to Set Custom Total Length to Current Item
 wjs.init.prototype.setTotalLength = function(mseconds) {
 	if (this.allElements.length == 1) {
@@ -832,6 +958,79 @@ wjs.init.prototype.subDelay = function(newDelay) {
 	return this;
 };
 // end function to Set Subtitle Delay
+
+// function to Get Subtitle Description
+wjs.init.prototype.subDesc = function(getDesc) {
+	if (this.allElements.length == 1) {
+		// check if it is a number then return description
+		if (!isNaN(getDesc)) {
+			if (getDesc < this.plugin.subtitle.count) {
+				wjs_subResponse = {};
+				wjs_subResponse.language = this.plugin.subtitle.description(getDesc);
+				wjs_subResponse.type = "internal";
+				return wjs_subResponse;
+			} else {
+				var getSettings = {};
+				if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+				if (getSettings.subtitles) {
+					wjs_target = getSettings.subtitles;
+					wjs_keepIndex = this.plugin.subtitle.count;
+					if (wjs_keepIndex == 0) wjs_keepIndex = 1;
+					for (var newDesc in wjs_target) if (wjs_target.hasOwnProperty(newDesc)) {
+						if (getDesc == wjs_keepIndex) {
+							wjs_subResponse = {};
+							wjs_subResponse.language = newDesc;
+							wjs_subResponse.type = "external";
+							wjs_subResponse.url = wjs_target[newDesc];
+							wjs_subResponse.ext = wjs_target[newDesc].split('.').pop().toLowerCase();
+							return wjs_subResponse;
+						}
+						wjs_keepIndex++;
+					}
+					return;
+				}
+			}
+			return;
+		} else return console.error("Value sent to .subDesc() needs to be a number.");
+	}
+
+	return this;
+};
+// end function to Get Subtitle Description
+
+// function to Get Subtitle Count
+wjs.init.prototype.subCount = function() {
+	if (this.allElements.length == 1) {
+		wjs_keepIndex = this.plugin.subtitle.count;
+		var getSettings = {};
+		if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+		if (getSettings.subtitles) {
+			wjs_target = getSettings.subtitles;
+			if (wjs_keepIndex == 0) wjs_keepIndex = 1;
+			for (var newDesc in wjs_target) if (wjs_target.hasOwnProperty(newDesc)) wjs_keepIndex++;
+			return wjs_keepIndex;
+		}
+		return wjs_keepIndex;
+	}
+	return this;
+};
+// end function to Get Subtitle Count
+
+// function to Get Subtitle Count
+wjs.init.prototype.subTrack = function(newTrack) {
+	if (this.allElements.length == 1) {
+		if (typeof newTrack === 'number') {
+			this.plugin.emitJsMessage("[select-subtitle]"+(parseInt(newTrack)));
+		} else {
+			var getSettings = {};
+			if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+			if (typeof getSettings.subPlaying !== 'undefined') return getSettings.subPlaying;
+		}
+		return this;
+	}
+	return this;
+};
+// end function to Get Subtitle Count
 
 // function to Set Delay for Audio Tracks
 wjs.init.prototype.audioDelay = function(newDelay) {
