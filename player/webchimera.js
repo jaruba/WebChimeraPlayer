@@ -141,6 +141,90 @@ wjs.init = function(context) {
 	
 };
 
+wjs.init.prototype.onMediaChanged = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerMediaChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onMediaChanged(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onIdle = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerNothingSpecial",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onIdle(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onOpening = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerOpening",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onOpening(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onBuffering = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerBuffering",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onBuffering(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPlaying = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPlaying",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPlaying(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPaused = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPaused",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPaused(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onEnded = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerEndReached",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onEnded(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onError = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerEncounteredError",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onError(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onStopped = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerStopped",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onStopped(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onTime = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerTimeChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onTime(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onPosition = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("MediaPlayerPositionChanged",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onPosition(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.onMessage = function(wjs_function) {
+	if (this.allElements.length == 1) {
+		this.catchEvent("QmlMessage",wjs_function);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onMessage(wjs_function);
+	return this;
+};
+
 // catch event function
 wjs.init.prototype.catchEvent = function(wjs_event,wjs_function) {
 	if (this.allElements.length == 1) {
