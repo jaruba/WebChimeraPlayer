@@ -451,6 +451,7 @@ Rectangle {
 			if (startsWith(message,"[zoom]")) changeZoom(parseFloat(message.replace("[zoom]","")));
 			if (startsWith(message,"[next-frame]")) nextFrame(parseInt(message.replace("[next-frame]","")));
 			if (startsWith(message,"[reset-size]")) resetAspect();
+			if (startsWith(message,"[select-subtitle]")) selectSubtitle(parseInt(message.replace("[select-subtitle]","")));
 			if (startsWith(message,"[refresh-playlist]")) {
 				playlist.addPlaylistItems(); // Refresh Playlist GUI
 				if (vlcPlayer.playlist.itemCount > 1) {
@@ -953,6 +954,9 @@ Rectangle {
 	// Proxy functions to expose the subtitle functions from "subMenu." prefix
 	function toggleSubtitles() {
 		subMenu.toggleSubtitles();
+	}
+	function selectSubtitle(selSub) {
+		subMenu.selectSubtitle(selSub);
 	}
 	function playSubtitles(subtitleElement) {
 		subMenu.playSubtitles(subtitleElement);

@@ -873,6 +873,79 @@ wjs.init.prototype.subDelay = function(newDelay) {
 };
 // end function to Set Subtitle Delay
 
+// function to Get Subtitle Description
+wjs.init.prototype.subDesc = function(getDesc) {
+	if (this.allElements.length == 1) {
+		// check if it is a number then return description
+		if (!isNaN(getDesc)) {
+			if (getDesc < this.plugin.subtitle.count) {
+				wjs_subResponse = {};
+				wjs_subResponse.language = this.plugin.subtitle.description(getDesc);
+				wjs_subResponse.type = "internal";
+				return wjs_subResponse;
+			} else {
+				var getSettings = {};
+				if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+				if (getSettings.subtitles) {
+					wjs_target = getSettings.subtitles;
+					wjs_keepIndex = this.plugin.subtitle.count;
+					if (wjs_keepIndex == 0) wjs_keepIndex = 1;
+					for (var newDesc in wjs_target) if (wjs_target.hasOwnProperty(newDesc)) {
+						if (getDesc == wjs_keepIndex) {
+							wjs_subResponse = {};
+							wjs_subResponse.language = newDesc;
+							wjs_subResponse.type = "external";
+							wjs_subResponse.url = wjs_target[newDesc];
+							wjs_subResponse.ext = wjs_target[newDesc].split('.').pop().toLowerCase();
+							return wjs_subResponse;
+						}
+						wjs_keepIndex++;
+					}
+					return;
+				}
+			}
+			return;
+		} else return console.error("Value sent to .subDesc() needs to be a number.");
+	}
+
+	return this;
+};
+// end function to Get Subtitle Description
+
+// function to Get Subtitle Count
+wjs.init.prototype.subCount = function() {
+	if (this.allElements.length == 1) {
+		wjs_keepIndex = this.plugin.subtitle.count;
+		var getSettings = {};
+		if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+		if (getSettings.subtitles) {
+			wjs_target = getSettings.subtitles;
+			if (wjs_keepIndex == 0) wjs_keepIndex = 1;
+			for (var newDesc in wjs_target) if (wjs_target.hasOwnProperty(newDesc)) wjs_keepIndex++;
+			return wjs_keepIndex;
+		}
+		return wjs_keepIndex;
+	}
+	return this;
+};
+// end function to Get Subtitle Count
+
+// function to Get Subtitle Count
+wjs.init.prototype.subTrack = function(newTrack) {
+	if (this.allElements.length == 1) {
+		if (typeof newTrack === 'number') {
+			this.plugin.emitJsMessage("[select-subtitle]"+(parseInt(newTrack)));
+		} else {
+			var getSettings = {};
+			if (IsJsonString(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting)) getSettings = JSON.parse(this.plugin.playlist.items[this.plugin.playlist.currentItem].setting);
+			if (typeof getSettings.subPlaying !== 'undefined') return getSettings.subPlaying;
+		}
+		return this;
+	}
+	return this;
+};
+// end function to Get Subtitle Count
+
 // function to Set Delay for Audio Tracks
 wjs.init.prototype.audioDelay = function(newDelay) {
 	if (this.allElements.length == 1) {
