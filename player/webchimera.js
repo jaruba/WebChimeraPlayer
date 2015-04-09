@@ -122,6 +122,8 @@ var wjs = function(context) {
 // Static methods
 wjs.init = function(context) {
 
+	this.version = "v1.13";
+
     // Save the context
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
 
