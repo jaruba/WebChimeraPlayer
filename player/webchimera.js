@@ -329,11 +329,41 @@ wjs.init.prototype.position = function(newPosition) {
 	if (this.allElements.length == 1) {
 		if (typeof newPosition === 'number') this.plugin.position = newPosition;
 		else return this.plugin.position;
-	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).progress(newPosition);
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).position(newPosition);
+	return this;
+}
+wjs.init.prototype.rate = function(newRate) {
+	if (this.allElements.length == 1) {
+		if (typeof newRate === 'number') this.plugin.input.rate = newRate;
+		else return this.plugin.input.rate;
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).rate(newRate);
 	return this;
 }
 // end proxy properties from .plugin to root functions
-
+wjs.init.prototype.swapItems = function(newX,newY) {
+	if (this.allElements.length == 1) {
+		if (typeof newX === 'number' && typeof newY === 'number' && newX < this.itemCount() && newY < this.itemCount()) {
+			if (newY >= newX) {
+				this.plugin.playlist.advanceItem(newY,(newY-newX)*(-1));
+				this.plugin.playlist.advanceItem(newX+1,newY-newX-1);
+			} else if (newX > newY) {
+				this.plugin.playlist.advanceItem(newX,(newX-newY)*(-1));
+				this.plugin.playlist.advanceItem(newY+1,newX-newY-1);
+			}
+			this.plugin.emitJsMessage("[refresh-playlist]");
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).swapItems(newX,newY);
+	return this;
+}
+wjs.init.prototype.advanceItem = function(newX,newY) {
+	if (this.allElements.length == 1) {
+		if (typeof newX === 'number' && typeof newY === 'number') {
+			this.plugin.playlist.advanceItem(newX,newY);
+			this.plugin.emitJsMessage("[refresh-playlist]");
+		}
+	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).advanceItem(newX,newY);
+	return this;
+}
 // video resize functions
 wjs.init.prototype.aspectRatio = function(newRatio) {
 	if (this.allElements.length == 1) {
@@ -705,20 +735,8 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		if (typeof debugPlaylist !== "undefined") {
 			wjs(newid).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,9) == "[replace]") {
-					swapFirst = event.replace("[replace]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),100);
-				} else if (event.substr(0,18) == "[replace-and-swap]") {
-					swapFirst = event.replace("[replace-and-swap]","").split("[-|-]")[0];
-					swapMRL = event.replace("[replace-and-swap]","").split("[-|-]")[1];
-					this.addPlaylist(swapMRL);
-					swapDifference = this.plugin.playlist.itemCount - swapFirst -1;
-					setTimeout(delayAdvance(this,swapFirst,swapDifference),50);
-					setTimeout(delaySwap(this,swapFirst),100);
-					setTimeout(delayRemove(this,parseInt(swapFirst)+1),150);
+					wjs_swap = event.replace("[replace]","").split("[-|-]");
+					this.replaceMRL(wjs_swap[0],wjs_swap[1]);
 				}
 			});
 		}
@@ -759,8 +777,20 @@ wjs.init.prototype.skin = function(skin) {
 		this.qmlLoaded(function() { this.loadSettings(skin); });
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).skin(skin);
 	return this;
-}
+};
 // end function for skinning
+
+wjs.init.prototype.replaceMRL = function(newX,newMRL) {
+	this.addPlaylist(newMRL);
+	swapDifference = this.itemCount() - newX -1;
+	setTimeout(delayAdvance(this,newX,swapDifference),50);
+	if (newX == this.currentItem()) {
+		setTimeout(delaySwap(this,newX),100);
+		setTimeout(delayRemove(this,parseInt(newX)+1),150);
+	} else {
+		setTimeout(delayRemove(this,parseInt(newX)+1),100);
+	}
+};
 
 // function to toggle playlist
 wjs.init.prototype.togglePlaylist = function() {
@@ -871,7 +901,9 @@ wjs.init.prototype.stopPlayer = function() {
 wjs.init.prototype.clearPlaylist = function() {
 	if (this.allElements.length == 1) {
 		pitem[this.context] = 0;
+		this.plugin.stop();
 		this.plugin.playlist.clear();
+		this.plugin.emitJsMessage("[refresh-playlist]");
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).clearPlaylist();
 
 	return this;
@@ -1162,6 +1194,7 @@ wjs.init.prototype.removeItem = function(remItem) {
 		if (!isNaN(remItem)) {
 			this.plugin.playlist.removeItem(remItem);
 			pitem[this.context]--;
+			this.plugin.emitJsMessage("[refresh-playlist]");
 		}
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).removeItem(remItem);
 	return this;
