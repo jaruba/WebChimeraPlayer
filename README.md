@@ -1,4 +1,4 @@
-WebChimera Player v1.15
+WebChimera Player v1.16
 ==============
 
 An Open Source <b><a href="http://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
