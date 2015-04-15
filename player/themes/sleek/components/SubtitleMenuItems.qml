@@ -64,34 +64,32 @@ Rectangle {
 					subtitles = [];
 					
 					var extension = subtitleElement.split('.').pop();
-					if (extension.toLowerCase() == "srt") {
+					if (extension.toLowerCase() == "srt" || extension.toLowerCase() == "vtt") {
 											
 						srt = srt.replace(/\r\n|\r|\n/g, '\n');
 						
 						srt = wjs.strip(srt);
 						var srty = srt.split('\n\n');
-		
+						
 						var s = 0;
-						for (s = 0; s < srty.length; s++) {
+						
+						if (srty[0].substr(0,6).toLowerCase() == "webvtt") var startPoint = 1;
+						else var startPoint = 0;
+						
+						for (s = startPoint; s < srty.length; s++) {
 							var st = srty[s].split('\n');
 							if (st.length >=2) {
-						
-							  var n = st[0];
-							  var is = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[0])));
-							  var os = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[1])));
-							  var t = st[2];
-							  
-							  if( st.length > 2) {
+							var n = st[0];
+							var is = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[0])));
+							var os = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[1])));
+							var t = st[2];
+							if( st.length > 2) {
 								var j = 3;
-								for (j=3; j<st.length; j++) {
-									t = t + '\n'+st[j];
-								}
-		
-							  }
-							  subtitles[is] = {i:is, o: os, t: t};
+								for (j=3; j<st.length; j++) t = t + '\n'+st[j];
+							}
+							subtitles[is] = {i:is, o: os, t: t};
 							}
 						}
-						
 					} else if (extension.toLowerCase() == "sub") {
 						srt = srt.replace(/\r\n|\r|\n/g, '\n');
 						
