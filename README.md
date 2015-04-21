@@ -30,4 +30,5 @@ Current Features
 Upcoming Features
 ==============
 - Picture in Picture Feature
+- Digital Zoom ([details](http://ask.webchimera.org/427/digital-zoom-in-webchimera))
 - Windowed Mode (Pop Out)
