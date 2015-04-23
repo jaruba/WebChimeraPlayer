@@ -63,7 +63,14 @@ Rectangle {
 		}
 		Timer {
 			interval: 1010; running: checkWheel ? true : false; repeat: true
-			onTriggered: { if (lastTimestamp + 1000 < Date.now()) { checkWheel = false; if (!vlcPlayer.playing) vlcPlayer.togglePause(); wjs.jumpTo(lastCalc); lastCalc = 0; } }
+			onTriggered: {
+				if (lastTimestamp + 1000 < Date.now()) {
+					checkWheel = false;
+					if (!vlcPlayer.playing) vlcPlayer.togglePause();
+					vlcPlayer.time = wjs.getLength() * settings.newProgress;
+					lastCalc = 0;
+				}
+			}
 		}
 		Rectangle {
 			id: progressBackground
