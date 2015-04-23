@@ -64,34 +64,49 @@ Rectangle {
 					subtitles = [];
 					
 					var extension = subtitleElement.split('.').pop();
-					if (extension.toLowerCase() == "srt") {
+					if (extension.toLowerCase() == "srt" || extension.toLowerCase() == "vtt") {
 											
 						srt = srt.replace(/\r\n|\r|\n/g, '\n');
 						
 						srt = wjs.strip(srt);
 						var srty = srt.split('\n\n');
-		
-						var s = 0;
-						for (s = 0; s < srty.length; s++) {
-							var st = srty[s].split('\n');
-							if (st.length >=2) {
 						
-							  var n = st[0];
-							  var is = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[0])));
-							  var os = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[1])));
-							  var t = st[2];
-							  
-							  if( st.length > 2) {
-								var j = 3;
-								for (j=3; j<st.length; j++) {
-									t = t + '\n'+st[j];
+						var s = 0;
+						
+						if (srty[0].substr(0,6).toLowerCase() == "webvtt") {
+							for (s = 0; s < srty.length; s++) {
+								var st = srty[s].split('\n');
+								if (st.length >=2) {
+									if (st[0].split(' --> ')[0]) if (st[0].split(' --> ')[1]) {
+										var is = Math.round(toSeconds(wjs.strip(st[0].split(' --> ')[0])));
+										var os = Math.round(toSeconds(wjs.strip(st[0].split(' --> ')[1])));
+										var t = st[2];
+										if( st.length > 2) {
+											var j = 3;
+											for (j=3; j<st.length; j++) t = t + '\n'+st[j];
+										}
+										subtitles[is] = {i:is, o: os, t: t};
+									}
 								}
-		
-							  }
-							  subtitles[is] = {i:is, o: os, t: t};
+							}
+						} else {
+							for (s = 0; s < srty.length; s++) {
+								var st = srty[s].split('\n');
+								if (st.length >=2) {
+									var n = st[0];
+									if (st[1].split(' --> ')[0]) if (st[1].split(' --> ')[1]) {
+										var is = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[0])));
+										var os = Math.round(toSeconds(wjs.strip(st[1].split(' --> ')[1])));
+										var t = st[2];
+										if( st.length > 2) {
+											var j = 3;
+											for (j=3; j<st.length; j++) t = t + '\n'+st[j];
+										}
+										subtitles[is] = {i:is, o: os, t: t};
+									}
+								}
 							}
 						}
-						
 					} else if (extension.toLowerCase() == "sub") {
 						srt = srt.replace(/\r\n|\r|\n/g, '\n');
 						
@@ -201,7 +216,7 @@ Rectangle {
 		var plstring = "None";
 		var pli = 0;
 		
-		subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { toggleSubtitles(); clearSubtitles(); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle Unloaded"); vlcPlayer.subtitle.track = 0; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
+		subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onWheel: { if (wheel.angleDelta.y > 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) -5); if (wheel.angleDelta.y < 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) +5); } onClicked: { toggleSubtitles(); clearSubtitles(); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle Unloaded"); vlcPlayer.subtitle.track = 0; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
 		pli++;
 		
 		var jli = 1;
@@ -215,7 +230,7 @@ Rectangle {
 				}
 			}
 			if (showThisSub === true) {
-				subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { toggleSubtitles(); clearSubtitles(); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle: '+ vlcPlayer.subtitle.description(jli) +'"); vlcPlayer.subtitle.track = '+ jli +'; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ vlcPlayer.subtitle.description(jli) +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
+				subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onWheel: { if (wheel.angleDelta.y > 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) -5); if (wheel.angleDelta.y < 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) +5); } onClicked: { toggleSubtitles(); clearSubtitles(); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle: '+ vlcPlayer.subtitle.description(jli) +'"); vlcPlayer.subtitle.track = '+ jli +'; } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ vlcPlayer.subtitle.description(jli) +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
 				pli++;
 			}
 			jli++;
@@ -226,7 +241,7 @@ Rectangle {
 			if (plstring.length > 85) plstring = plstring.substr(0,85) +'...';
 			var slink = target[k];
 			
- 			subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { vlcPlayer.subtitle.track = 0; toggleSubtitles(); playSubtitles("'+ slink +'"); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle: '+ plstring +'"); } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
+ 			subItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: dstitem'+ pli +'; anchors.left: parent.left; anchors.top: parent.top; anchors.topMargin: 32 + ('+ pli +' *40); color: "transparent"; width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; height: 40; MouseArea { id: sitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onWheel: { if (wheel.angleDelta.y > 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) -5); if (wheel.angleDelta.y < 0) wjs.moveSubMenu(parseInt(subMenuScroll.dragger.anchors.topMargin) + (parseInt(subMenuScroll.dragger.height) /2) +5); } onClicked: { vlcPlayer.subtitle.track = 0; toggleSubtitles(); playSubtitles("'+ slink +'"); subPlaying = '+ pli +'; saveSub('+ pli +'); wjs.setText("Subtitle: '+ plstring +'"); } } Rectangle { width: subMenublock.width < 694 ? (subMenublock.width -56) : 638; clip: true; height: 40; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#3D3D3D" : "#e5e5e5" : sitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 12; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 10; color: vlcPlayer.state == 1 ? subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5" : subPlaying == '+ pli +' ? sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#2f2f2f" : sitem'+ pli +'.containsMouse ? "#e5e5e5" : "#e5e5e5"; } } }', root, 'smenustr' +pli);
 			pli++
 		}
 		settings.totalSubs = pli;

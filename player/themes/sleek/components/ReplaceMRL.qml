@@ -1,7 +1,7 @@
 import QtQuick 2.1
-import QtQuick.Controls 1.3
+import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.0
-import QtQuick.Controls.Styles 1.3
+import QtQuick.Controls.Styles 1.1
 import QmlVlc 0.1
 
 Rectangle {
@@ -79,11 +79,7 @@ Rectangle {
 		Keys.onReturnPressed: {
 			mousesurface.forceActiveFocus();
 			inputBox.visible = false;
-			if (settings.selectedItem == vlcPlayer.playlist.currentItem) {
-				fireQmlMessage("[replace-and-swap]"+settings.selectedItem+"[-|-]"+newURL.text);
-			} else {
-				fireQmlMessage("[replace]"+settings.selectedItem+"[-|-]"+newURL.text);
-			}
+			fireQmlMessage("[replace]"+settings.selectedItem+"[-|-]"+newURL.text);
 		}
 		Keys.onEscapePressed: {
 			mousesurface.forceActiveFocus();
@@ -127,11 +123,7 @@ Rectangle {
 			onClicked: {
 				mousesurface.forceActiveFocus();
 				inputBox.visible = false;
-				if (settings.selectedItem == vlcPlayer.playlist.currentItem) {
-					fireQmlMessage("[replace-and-swap]"+settings.selectedItem+"[-|-]"+newURL.text);
-				} else {
-					fireQmlMessage("[replace]"+settings.selectedItem+"[-|-]"+newURL.text);
-				}
+				fireQmlMessage("[replace]"+settings.selectedItem+"[-|-]"+newURL.text);
 			}
 		}
 	}
