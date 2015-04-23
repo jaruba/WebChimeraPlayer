@@ -725,9 +725,14 @@ Rectangle {
 	
 	// Start Change Volume to New Volume (difference from current volume)
 	function volumeTo(newvolume) {
-		var curvolume = vlcPlayer.volume +newvolume;
-		if (newvolume >= 0 && vlcPlayer.volume < 200 && curvolume > 200) curvolume = 200;
-		if (newvolume < 0 && vlcPlayer.volume > 0 && curvolume < 0) curvolume = 0;
+		if (newvolume >= 0 && vlcPlayer.volume < 200) {
+			var curvolume = vlcPlayer.volume +newvolume;
+			if (curvolume > 200) curvolume = 200;
+		}
+		if (newvolume < 0 && vlcPlayer.volume > 0) {
+			var curvolume = vlcPlayer.volume +newvolume;
+			if (curvolume < 0) curvolume = 0;
+		}
 		if (vlcPlayer.audio.mute) wjs.toggleMute();
 		vlcPlayer.volume = curvolume;
 		refreshMuteIcon();
