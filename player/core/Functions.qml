@@ -63,9 +63,6 @@ Rectangle {
 	function onMediaChanged() {
 		mediaChanged = 1;
 		
-		if (lastItem != vlcPlayer.playlist.currentItem) lastItem = vlcPlayer.playlist.currentItem;
-		if (lastItem == -1) lastItem = 0;
-		
 		settings.ismoving = 1;
 		lastSecond = 0;
 	
@@ -90,64 +87,7 @@ Rectangle {
 		delete changedSettings;
 		// end Reset properties related to .setTotalLength()
 
-		settings.curAspect = "Default";
-		settings.curCrop = "Default";
-		settings.curZoom = 0;
-		
-		resetAspect();
-						
-		var itemSettings = {};
-
-		if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
-
-		if (typeof itemSettings !== 'undefined') {
-			if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
-				videoSource.visible = false;
-				artwork.source = itemSettings.art;
-				artwork.visible = true;
-			} else {
-				artwork.source = "";
-				artwork.visible = false;
-				videoSource.visible = true;			
-			}
-			if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
-				var kl = 0;
-				for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == itemSettings.aspectRatio) {
-					settings.curAspect = settings.aspectRatios[kl];
-					if (settings.curAspect == "Default") {
-						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-						videoSource.width = videoSource.parent.width;
-						videoSource.height = videoSource.parent.height;
-					} else changeAspect(settings.curAspect,"ratio");
-					break;
-				}
-			} else if (vlcPlayer.playlist.currentItem > 0) {
-				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-				videoSource.width = videoSource.parent.width;
-				videoSource.height = videoSource.parent.height;
-				settings.curAspect = settings.aspectRatios[0];
-			}
-			if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
-				var kl = 0;
-				for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == itemSettings.crop) {
-					settings.curCrop = settings.crops[kl];
-					if (settings.curCrop == "Default") {
-						videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-						videoSource.width = videoSource.parent.width;
-						videoSource.height = videoSource.parent.height;
-						settings.curCrop = settings.crops[0];
-					} else {
-						changeAspect(settings.curCrop,"crop");
-					}
-					break;
-				}
-			} else if (vlcPlayer.playlist.currentItem > 0) {
-				videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
-				videoSource.width = videoSource.parent.width;
-				videoSource.height = videoSource.parent.height;
-				settings.curCrop = settings.crops[0];
-			}
-		}
+		resetAspect(); // set to default aspect ratio
 	}
 	// End on Media Changed
 	
@@ -247,7 +187,67 @@ Rectangle {
 	
 	// Start on State Changed
 	function onState() {
-		if (vlcPlayer.state == 1) buftext.changeText = "Opening";
+		if (vlcPlayer.state == 1) {
+			buftext.changeText = "Opening";
+			
+			if (lastItem != vlcPlayer.playlist.currentItem) lastItem = vlcPlayer.playlist.currentItem;
+			if (lastItem == -1) lastItem = 0;
+			
+			// set aspect ratio
+			var itemSettings = {};
+	
+			if (vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting) itemSettings = JSON.parse(vlcPlayer.playlist.items[vlcPlayer.playlist.currentItem].setting);
+	
+			if (typeof itemSettings !== 'undefined') {
+				if (typeof itemSettings.art !== 'undefined' && typeof itemSettings.art === 'string') {
+					videoSource.visible = false;
+					artwork.source = itemSettings.art;
+					artwork.visible = true;
+				} else {
+					artwork.source = "";
+					artwork.visible = false;
+					videoSource.visible = true;			
+				}
+				if (typeof itemSettings.aspectRatio !== 'undefined' && typeof itemSettings.aspectRatio === 'string') {
+					var kl = 0;
+					for (kl = 0; typeof settings.aspectRatios[kl] !== 'undefined'; kl++) if (settings.aspectRatios[kl] == itemSettings.aspectRatio) {
+						settings.curAspect = settings.aspectRatios[kl];
+						if (settings.curAspect == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+						} else changeAspect(settings.curAspect,"ratio");
+						break;
+					}
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					settings.curAspect = settings.aspectRatios[0];
+				}
+				if (typeof itemSettings.crop !== 'undefined' && typeof itemSettings.crop === 'string') {
+					var kl = 0;
+					for (kl = 0; typeof settings.crops[kl] !== 'undefined'; kl++) if (settings.crops[kl] == itemSettings.crop) {
+						settings.curCrop = settings.crops[kl];
+						if (settings.curCrop == "Default") {
+							videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+							videoSource.width = videoSource.parent.width;
+							videoSource.height = videoSource.parent.height;
+							settings.curCrop = settings.crops[0];
+						} else {
+							changeAspect(settings.curCrop,"crop");
+						}
+						break;
+					}
+				} else if (vlcPlayer.playlist.currentItem > 0) {
+					videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
+					videoSource.width = videoSource.parent.width;
+					videoSource.height = videoSource.parent.height;
+					settings.curCrop = settings.crops[0];
+				}
+			}
+			// end set aspect ratio
+		}
 		
 		// Load Internal and External Subtitles (when playback starts)
 		if (vlcPlayer.state == 3 && subButton.visible === false) {
@@ -949,9 +949,14 @@ Rectangle {
 	}
 	
 	function resetAspect() {
+		settings.curAspect = "Default";
+		settings.curCrop = "Default";
+		settings.curZoom = 0;
 		videoSource.fillMode = VlcVideoSurface.PreserveAspectFit;
 		videoSource.width = videoSource.parent.width;
 		videoSource.height = videoSource.parent.height;
+		oldRatioWidth = 0;
+		oldRatioHeight = 0;
 	}
 	// End Change Aspect Ratio
 	
