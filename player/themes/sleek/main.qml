@@ -1,5 +1,5 @@
 /*****************************************************************************
-* Copyright (c) 2014 Branza Victor-Alexandru <branza.alex[at]gmail.com>
+* Copyright (c) 2014-2015 Branza Victor-Alexandru <branza.alex[at]gmail.com>
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License as published by

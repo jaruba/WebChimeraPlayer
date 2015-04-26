@@ -1,5 +1,5 @@
 /*****************************************************************************
-* Copyright (c) 2014 Branza Victor-Alexandru <branza.alex[at]gmail.com>
+* Copyright (c) 2014-2015 Branza Victor-Alexandru <branza.alex[at]gmail.com>
 *
 * This program is free software; you can redistribute it and/or modify it
 * under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
 * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 *****************************************************************************/
 
-// WebChimera Player v1.17
+// WebChimera Player v1.18
 
 
 // if page on local machine, add warning
@@ -122,7 +122,7 @@ var wjs = function(context) {
 // Static methods
 wjs.init = function(context) {
 
-	this.version = "v1.17";
+	this.version = "v1.18";
 
     // Save the context
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
@@ -224,6 +224,12 @@ wjs.init.prototype.onMessage = function(wjs_function) {
 	if (this.allElements.length == 1) {
 		this.catchEvent("QmlMessage",wjs_function);
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onMessage(wjs_function);
+	return this;
+};
+
+wjs.init.prototype.emitJsMessage = function(wjs_message) {
+	if (this.allElements.length == 1) this.plugin.emitJsMessage(wjs_message);
+	else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).emitJsMessage(wjs_message);
 	return this;
 };
 
