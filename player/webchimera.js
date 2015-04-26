@@ -227,6 +227,12 @@ wjs.init.prototype.onMessage = function(wjs_function) {
 	return this;
 };
 
+wjs.init.prototype.emitJsMessage = function(wjs_message) {
+	if (this.allElements.length == 1) this.plugin.emitJsMessage(wjs_message);
+	else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).emitJsMessage(wjs_message);
+	return this;
+};
+
 wjs.init.prototype.onState = function(wjs_function) {
 	if (this.allElements.length == 1) {
 		this.catchEvent("MediaPlayerStateChanged",wjs_function);
