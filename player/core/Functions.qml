@@ -145,6 +145,9 @@ Rectangle {
 			if (vlcPlayer.playlist.itemCount > 1) {
 				prevBut.visible = true;
 				nextBut.visible = true;
+			} else {
+				prevBut.visible = false;
+				nextBut.visible = false;
 			}
 			// End Show Previous/Next Buttons if Playlist available
 			
@@ -155,7 +158,7 @@ Rectangle {
 		if (Math.floor(seconds /1000) > lastSecond) {
 			// Don't Hide Toolbar if it's Hovered
 			lastSecond = Math.floor(seconds /1000);
-			if (progressBar.dragpos.containsMouse === false && toolbarBackground.bottomtab.containsMouse === false && playButton.hover.containsMouse === false && prevBut.hover.containsMouse === false && nextBut.hover.containsMouse === false && fullscreenButton.hover.containsMouse === false && playlistButton.hover.containsMouse === false && mutebut.hover.containsMouse === false && volumeMouse.dragger.containsMouse === false && volumeMouse.hover.containsMouse === false) settings.ismoving++;
+			if (progressBar.dragpos.containsMouse === false && toolbarBackground.bottomtab.containsMouse === false && playButton.hover.containsMouse === false && prevBut.hover.containsMouse === false && nextBut.hover.containsMouse === false && fullscreenButton.hover.containsMouse === false && playlistButton.hover.containsMouse === false && mutebut.hover.containsMouse === false && volumeMouse.dragger.containsMouse === false && volumeMouse.hover.containsMouse === false) { settings.ismoving++; settings = settings; }
 		}
 		// End if mouse is moving above the Video Surface increase "settings.ismoving"
 	}
@@ -458,6 +461,10 @@ Rectangle {
 					playlistButton.visible = 1;
 					prevBut.visible = true;
 					nextBut.visible = true;
+				} else {
+					playlistButton.visible = 0;
+					prevBut.visible = false;
+					nextBut.visible = false;
 				}
 				if (settings.autoplay == 1 && vlcPlayer.state == 0 && vlcPlayer.playlist.itemCount > 0) vlcPlayer.playlist.playItem(0); 
 			}
@@ -1028,6 +1035,10 @@ Rectangle {
 						playlistButton.visible = 1;
 						prevBut.visible = true;
 						nextBut.visible = true;
+					} else {
+						playlistButton.visible = 0;
+						prevBut.visible = false;
+						nextBut.visible = false;
 					}
 					if (vlcPlayer.state == 0) vlcPlayer.play();
 				}
