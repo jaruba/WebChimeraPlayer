@@ -68,7 +68,6 @@ Rectangle {
 	
 		// remove previous subtitles
 		subMenublock.visible = false;
-		settings.subtitlemenu = false;
 		subMenu.clearAll();
 		subButton.visible = false;
 		// end remove previous subtitles
@@ -188,6 +187,11 @@ Rectangle {
 	// Start on State Changed
 	function onState() {
 		if (vlcPlayer.state == 1) {
+			if (settings.refreshPlaylistItems) settings.refreshPlaylistItems = false;
+			else settings.refreshPlaylistItems = true;
+			
+			settings = settings;
+		
 			buftext.changeText = "Opening";
 			
 			if (lastItem != vlcPlayer.playlist.currentItem) lastItem = vlcPlayer.playlist.currentItem;
@@ -302,6 +306,7 @@ Rectangle {
 		vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
 		vlcPlayer.onMediaPlayerMediaChanged.connect( onMediaChanged );
 		vlcPlayer.onStateChanged.connect( onState ); // Set State Changed Event Handler
+		pip.vSource.onMediaPlayerPositionChanged.connect( pip.keepMuted ); // Keep Picture in Picture Video Muted
 		
 		if (typeof plugin.version !== "undefined") vlcPlayer.subtitle.onLoadError.connect( subMenu.subtitleError );
 		
@@ -332,7 +337,9 @@ Rectangle {
 				}
 				if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) settings.autoloop = 1; // Autoloop
 				if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) settings.automute = 1; // Automute
-				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0; // Allowfullscreen
+				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0;
+				if (jsonMessage["digitalZoom"] == 1 || jsonMessage["digitalZoom"] === true) { settings.digitalzoom = 1; settings = settings; }
+				if (jsonMessage["pip"] == 1 || jsonMessage["pip"] === true) { settings.pip = 1; settings = settings; }
 				if (jsonMessage["multiscreen"] == 1 || jsonMessage["multiscreen"] === true) {
 					settings.multiscreen = 1;
 					settings.automute = 1;
@@ -569,17 +576,10 @@ Rectangle {
 	
 	// Start Toggle Playlist Menu (open/close)
 	function togglePlaylist() {
-		if (settings.playlistmenu === false) {
-			if (settings.subtitlemenu === true) {
-				subMenublock.visible = false;
-				settings.subtitlemenu = false;
-			}
+		if (!playlistblock.visible) {
+			if (subMenublock.visible) subMenublock.visible = false;
 			playlistblock.visible = true;
-			settings.playlistmenu = true;
-		} else {
-			playlistblock.visible = false;
-			settings.playlistmenu = false;
-		}
+		} else playlistblock.visible = false;
 	}
 	// End Toggle Playlist Menu (open/close)
 	
@@ -596,14 +596,8 @@ Rectangle {
 	function hideUI() {
 		if (settings.uiVisible) {
 			settings.uiVisible = 0;
-			if (settings.playlistmenu) {
-				playlistblock.visible = false;
-				settings.playlistmenu = false;
-			}
-			if (settings.subtitlemenu) {
-				subMenublock.visible = false;
-				settings.subtitlemenu = false;
-			}
+			if (playlistblock.visible) playlistblock.visible = false;
+			if (subMenublock.visible) subMenublock.visible = false;
 		}
 		settings = settings;
 	}

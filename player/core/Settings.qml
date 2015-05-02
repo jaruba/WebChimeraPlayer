@@ -49,4 +49,10 @@ QtObject {
 	property var subSize: 2;
 	property var subDelay: 0;
 	property var audioDelay: 0;
+	property var digitalzoom: 0;
+	property var digiZoomClosed: false;
+	property var pip: 0;
+	property var pipClosed: false;
+	property var refreshTime: false;
+	property var refreshPlaylistItems: false;
 }

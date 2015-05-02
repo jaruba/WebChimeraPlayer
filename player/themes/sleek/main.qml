@@ -94,14 +94,6 @@ Rectangle {
 	}
 	// End Loading Screen
 	
-	// Start Top Right Text Box
-	Loader.TopRightText {
-		id: volumebox
-		fontColor: ui.colors.font
-		fontShadow: ui.colors.fontShadow
-	}
-	// End Top Right Text Box
-			
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
 	Loader.MouseSurface {
 		id: mousesurface
@@ -113,15 +105,6 @@ Rectangle {
 		onPositionChanged: hotkeys.mouseMoved(mouse.x,mouse.y);
 		onWheel: hotkeys.mouseScroll(wheel.angleDelta.x,wheel.angleDelta.y);
 		Keys.onPressed: hotkeys.keys(event);		
-		
-		// Title Bar (top bar)
-		Loader.TitleBar {
-			id: topText
-			fontColor: ui.colors.titleBar.font
-			backgroundColor: ui.colors.titleBar.background
-			isVisible: settings.uiVisible == 0 ? false : (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
-		}
-		// End Title Bar (top bar)
 						
 		// Draw Toolbar
 		Loader.Toolbar {
@@ -240,7 +223,7 @@ Rectangle {
 				Loader.ToolbarTimeLength {
 					anchors.left: showtime.right
 					anchors.leftMargin: 0
-					text: wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
+					text: settings.refreshTime ? wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : "" : wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
 					color: ui.colors.toolbar.lengthTime
 				}
 				// End "Time / Length" Text in Toolbar
@@ -333,7 +316,27 @@ Rectangle {
 		}
 		// End Draw Progress Bar
 		
+		Loader.DigitalZoom { id: digiZoom } // Digital Zoom Feature
 
+		Loader.PIP { id: pip } // Picture in Picture Feature
+		
+		// Start Top Right Text Box
+		Loader.TopRightText {
+			id: volumebox
+			fontColor: ui.colors.font
+			fontShadow: ui.colors.fontShadow
+		}
+		// End Top Right Text Box
+
+		// Title Bar (top bar)
+		Loader.TitleBar {
+			id: topText
+			fontColor: ui.colors.titleBar.font
+			backgroundColor: ui.colors.titleBar.background
+			isVisible: settings.uiVisible == 0 ? false : (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
+		}
+		// End Title Bar (top bar)
+		
 		// Start Playlist Menu
 		Loader.Menu {
 			id: playlistblock
@@ -367,10 +370,7 @@ Rectangle {
 						iconSize: 9
 						iconColor: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
-						hover.onClicked: {
-							playlistblock.visible = false;
-							settings.playlistmenu = false
-						}
+						hover.onClicked: { playlistblock.visible = false; }
 					}
 					// End Close Playlist Button
 				}
@@ -428,10 +428,7 @@ Rectangle {
 						iconSize: 9
 						iconColor: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
-						hover.onClicked: {
-							subMenublock.visible = false;
-							settings.subtitlemenu = false;
-						}
+						hover.onClicked: { subMenublock.visible = false; }
 					}
 					// End Close Subtitle Menu Button
 				}
