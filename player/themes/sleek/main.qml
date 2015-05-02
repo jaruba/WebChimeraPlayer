@@ -94,14 +94,6 @@ Rectangle {
 	}
 	// End Loading Screen
 	
-	// Start Top Right Text Box
-	Loader.TopRightText {
-		id: volumebox
-		fontColor: ui.colors.font
-		fontShadow: ui.colors.fontShadow
-	}
-	// End Top Right Text Box
-			
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
 	Loader.MouseSurface {
 		id: mousesurface
@@ -231,7 +223,7 @@ Rectangle {
 				Loader.ToolbarTimeLength {
 					anchors.left: showtime.right
 					anchors.leftMargin: 0
-					text: wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
+					text: settings.refreshTime ? wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : "" : wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
 					color: ui.colors.toolbar.lengthTime
 				}
 				// End "Time / Length" Text in Toolbar
@@ -325,6 +317,16 @@ Rectangle {
 		// End Draw Progress Bar
 		
 		Loader.DigitalZoom { id: digiZoom } // Digital Zoom Feature
+
+		Loader.PIP { id: pip } // Picture in Picture Feature
+		
+		// Start Top Right Text Box
+		Loader.TopRightText {
+			id: volumebox
+			fontColor: ui.colors.font
+			fontShadow: ui.colors.fontShadow
+		}
+		// End Top Right Text Box
 
 		// Title Bar (top bar)
 		Loader.TitleBar {

@@ -128,7 +128,7 @@ wjs.init = function(context) {
     this.context = (typeof context === "undefined") ? "#webchimera" : context;  // if no playerid set, default to "webchimera"
 
 	// Save player parameters
-	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar","debugPlaylist", "digitalZoom"];
+	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar","debugPlaylist", "digitalZoom", "pip"];
 	
 	if (this.context.substring(0,1) == "#") {
 		this.plugin = document.getElementById(this.context.substring(1));

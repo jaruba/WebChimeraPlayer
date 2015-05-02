@@ -14,7 +14,7 @@ Rectangle {
 		width: parent.width
 		height: 34
 		anchors.top: parent.top
-		opacity: vlcPlayer.Playing === false && vlcPlayer.Paused === false && vlcPlayer.Buffering === false ? 0 : fullscreen ? settings.ismoving > 5 ? 0 : 0.7 : 0.7
+		opacity: pip.closeBut.containsMouse ? false : pip.hover.containsMouse ? false : digiZoom.mousepos.containsMouse ? false : vlcPlayer.Playing === false && vlcPlayer.Paused === false && vlcPlayer.Buffering === false ? 0 : fullscreen ? settings.ismoving > 5 ? 0 : 0.7 : 0.7
 		Behavior on opacity { PropertyAnimation { duration: 250} }
 	}
 	Rectangle {
@@ -23,7 +23,7 @@ Rectangle {
 		height: 34
 		color: 'transparent'
 		anchors.top: parent.top
-		opacity: vlcPlayer.Playing === false && vlcPlayer.Paused === false && vlcPlayer.Buffering === false? 0 : fullscreen ? settings.ismoving > 5 ? 0 : 1 : 1
+		opacity: pip.closeBut.containsMouse ? false : pip.hover.containsMouse ? false : digiZoom.mousepos.containsMouse ? false : vlcPlayer.Playing === false && vlcPlayer.Paused === false && vlcPlayer.Buffering === false? 0 : fullscreen ? settings.ismoving > 5 ? 0 : 1 : 1
 		Behavior on opacity { PropertyAnimation { duration: 250} }
 		Text {
 			id: toptext

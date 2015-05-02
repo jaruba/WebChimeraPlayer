@@ -51,4 +51,7 @@ QtObject {
 	property var audioDelay: 0;
 	property var digitalzoom: 0;
 	property var digiZoomClosed: false;
+	property var pip: 0;
+	property var pipClosed: false;
+	property var refreshTime: false;
 }
