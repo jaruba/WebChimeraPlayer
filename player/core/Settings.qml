@@ -54,4 +54,5 @@ QtObject {
 	property var pip: 0;
 	property var pipClosed: false;
 	property var refreshTime: false;
+	property var refreshPlaylistItems: false;
 }

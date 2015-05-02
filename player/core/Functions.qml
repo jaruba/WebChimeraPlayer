@@ -188,6 +188,11 @@ Rectangle {
 	// Start on State Changed
 	function onState() {
 		if (vlcPlayer.state == 1) {
+			if (settings.refreshPlaylistItems) settings.refreshPlaylistItems = false;
+			else settings.refreshPlaylistItems = true;
+			
+			settings = settings;
+		
 			buftext.changeText = "Opening";
 			
 			if (lastItem != vlcPlayer.playlist.currentItem) lastItem = vlcPlayer.playlist.currentItem;

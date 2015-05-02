@@ -109,8 +109,10 @@ VlcVideoSurface {
 		if (settings.refreshTime) settings.refreshTime = false;
 		else settings.refreshTime = true;
 		
+		if (settings.refreshPlaylistItems) settings.refreshPlaylistItems = false;
+		else settings.refreshPlaylistItems = true;
+		
 		settings = settings;
-		if (playlistblock.visible) playlist.addPlaylistItems();
 		if (settings.digitalzoom > 0) {
 			settings.digitalzoom = 1;
 			digiZoom.zoomResetPosition();
