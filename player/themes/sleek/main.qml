@@ -113,15 +113,6 @@ Rectangle {
 		onPositionChanged: hotkeys.mouseMoved(mouse.x,mouse.y);
 		onWheel: hotkeys.mouseScroll(wheel.angleDelta.x,wheel.angleDelta.y);
 		Keys.onPressed: hotkeys.keys(event);		
-		
-		// Title Bar (top bar)
-		Loader.TitleBar {
-			id: topText
-			fontColor: ui.colors.titleBar.font
-			backgroundColor: ui.colors.titleBar.background
-			isVisible: settings.uiVisible == 0 ? false : (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
-		}
-		// End Title Bar (top bar)
 						
 		// Draw Toolbar
 		Loader.Toolbar {
@@ -333,7 +324,17 @@ Rectangle {
 		}
 		// End Draw Progress Bar
 		
+		Loader.DigitalZoom { id: digiZoom } // Digital Zoom Feature
 
+		// Title Bar (top bar)
+		Loader.TitleBar {
+			id: topText
+			fontColor: ui.colors.titleBar.font
+			backgroundColor: ui.colors.titleBar.background
+			isVisible: settings.uiVisible == 0 ? false : (vlcPlayer.state == 3 || vlcPlayer.state == 4 || vlcPlayer.state == 6) ? ui.settings.titleBar == "fullscreen" ? fullscreen ? true : false : ui.settings.titleBar == "minimized" ? fullscreen === false ? true : false : ui.settings.titleBar == "both" ? true : ui.settings.titleBar == "none" ? false : false : false
+		}
+		// End Title Bar (top bar)
+		
 		// Start Playlist Menu
 		Loader.Menu {
 			id: playlistblock

@@ -246,6 +246,26 @@ Rectangle {
 			}
 		}
 		
+		if (settings.digitalzoom >= 1) {
+
+			if (digiZoom.visible) {
+				var plstring = "Hide Digital Zoom";
+				
+				conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { close(); settings.digiZoomClosed = true; settings = settings; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } }', root, 'cmenustr' +pli);
+		
+		
+				pli++;
+			} else {
+				var plstring = "Show Digital Zoom";
+				
+				conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { close(); settings.digiZoomClosed = false; settings = settings; } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } }', root, 'cmenustr' +pli);
+		
+		
+				pli++;			
+			}
+
+		}
+		
 		var plstring = "About WebChimera";
 		
 		conItems[pli] = Qt.createQmlObject('import QtQuick 2.1; import QtQuick.Layouts 1.0; import QmlVlc 0.1; Rectangle { id: ctxitem'+ pli +'; anchors.left: parent.left; anchors.leftMargin: 1; anchors.top: parent.top; anchors.topMargin: 1+ ('+ pli +' *30); color: "transparent"; width: root.width -2; height: 30; MouseArea { id: cmitem'+ pli +'; cursorShape: Qt.PointingHandCursor; hoverEnabled: true; anchors.fill: parent; onClicked: { close(); goHome(); if (vlcPlayer.playing) vlcPlayer.togglePause(); } } Rectangle { width: root.width -2; clip: true; height: 30; color: cmitem'+ pli +'.containsMouse ? "#3D3D3D" : "transparent"; Text { anchors.left: parent.left; anchors.leftMargin: 9; anchors.verticalCenter: parent.verticalCenter; text: "'+ plstring +'"; font.pointSize: 9; color: "#e5e5e5"; } } }', root, 'cmenustr' +pli);
@@ -255,12 +275,6 @@ Rectangle {
 		totalCons = pli;
 		
 		// End Adding Context Menu Items
-	}	
-	
-	 Connections {
-		 target: vlcPlayer
-		 onMediaPlayerTimeChanged: {
-		 }
 	}
 	
 	// This is where the Context Menu Items will be loaded

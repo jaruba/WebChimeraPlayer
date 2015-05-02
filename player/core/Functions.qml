@@ -332,7 +332,8 @@ Rectangle {
 				}
 				if (jsonMessage["autoloop"] == 1 || jsonMessage["autoloop"] == true || jsonMessage["loop"] == 1 || jsonMessage["loop"] == true) settings.autoloop = 1; // Autoloop
 				if (jsonMessage["mute"] == 1 || jsonMessage["mute"] === true) settings.automute = 1; // Automute
-				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0; // Allowfullscreen
+				if (jsonMessage["allowfullscreen"] == 0 || jsonMessage["allowfullscreen"] === false) settings.allowfullscreen = 0;
+				if (jsonMessage["digitalZoom"] == 1 || jsonMessage["digitalZoom"] === true) { settings.digitalzoom = 1; settings = settings; }
 				if (jsonMessage["multiscreen"] == 1 || jsonMessage["multiscreen"] === true) {
 					settings.multiscreen = 1;
 					settings.automute = 1;
