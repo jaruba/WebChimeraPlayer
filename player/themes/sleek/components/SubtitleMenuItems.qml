@@ -19,17 +19,10 @@ Rectangle {
 	
 	// Start Toggle Subtitle Menu (open/close)
 	function toggleSubtitles() {
-		if (settings.subtitlemenu === false) {
-			if (settings.playlistmenu === true) {
-				playlistblock.visible = false;
-				settings.playlistmenu = false;
-			}
+		if (!subMenublock.visible) {
+			if (playlistblock.visible) playlistblock.visible = false;
 			subMenublock.visible = true;
-			settings.subtitlemenu = true;
-		} else {
-			subMenublock.visible = false;
-			settings.subtitlemenu = false;
-		}
+		} else subMenublock.visible = false;
 	}
 	// End Toggle Subtitle Menu (open/close)
 

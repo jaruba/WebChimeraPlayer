@@ -370,10 +370,7 @@ Rectangle {
 						iconSize: 9
 						iconColor: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: playlistClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
-						hover.onClicked: {
-							playlistblock.visible = false;
-							settings.playlistmenu = false
-						}
+						hover.onClicked: { playlistblock.visible = false; }
 					}
 					// End Close Playlist Button
 				}
@@ -431,10 +428,7 @@ Rectangle {
 						iconSize: 9
 						iconColor: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeHover : ui.colors.playlistMenu.close
 						color: subMenuClose.hover.containsMouse ? ui.colors.playlistMenu.closeBackgroundHover : ui.colors.playlistMenu.closeBackground
-						hover.onClicked: {
-							subMenublock.visible = false;
-							settings.subtitlemenu = false;
-						}
+						hover.onClicked: { subMenublock.visible = false; }
 					}
 					// End Close Subtitle Menu Button
 				}

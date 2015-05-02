@@ -68,7 +68,6 @@ Rectangle {
 	
 		// remove previous subtitles
 		subMenublock.visible = false;
-		settings.subtitlemenu = false;
 		subMenu.clearAll();
 		subButton.visible = false;
 		// end remove previous subtitles
@@ -577,17 +576,10 @@ Rectangle {
 	
 	// Start Toggle Playlist Menu (open/close)
 	function togglePlaylist() {
-		if (settings.playlistmenu === false) {
-			if (settings.subtitlemenu === true) {
-				subMenublock.visible = false;
-				settings.subtitlemenu = false;
-			}
+		if (!playlistblock.visible) {
+			if (subMenublock.visible) subMenublock.visible = false;
 			playlistblock.visible = true;
-			settings.playlistmenu = true;
-		} else {
-			playlistblock.visible = false;
-			settings.playlistmenu = false;
-		}
+		} else playlistblock.visible = false;
 	}
 	// End Toggle Playlist Menu (open/close)
 	
@@ -604,14 +596,8 @@ Rectangle {
 	function hideUI() {
 		if (settings.uiVisible) {
 			settings.uiVisible = 0;
-			if (settings.playlistmenu) {
-				playlistblock.visible = false;
-				settings.playlistmenu = false;
-			}
-			if (settings.subtitlemenu) {
-				subMenublock.visible = false;
-				settings.subtitlemenu = false;
-			}
+			if (playlistblock.visible) playlistblock.visible = false;
+			if (subMenublock.visible) subMenublock.visible = false;
 		}
 		settings = settings;
 	}

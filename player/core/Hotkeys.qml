@@ -35,9 +35,7 @@ Rectangle {
 			if (typeof settings.preventKey[Qt.Key_Escape] === "undefined") {
 				if (subMenublock.visible === true || playlistblock.visible === true) {
 					subMenublock.visible = false;
-					settings.subtitlemenu = false;
 					playlistblock.visible = false;
-					settings.playlistmenu = false;
 				} else if (fullscreen) {
 					fullscreen = false;
 					if (settings.multiscreen == 1) if (vlcPlayer.audio.mute === false) vlcPlayer.toggleMute(); // Multiscreen - Mute on Playback Start
