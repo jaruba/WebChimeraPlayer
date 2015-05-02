@@ -1,4 +1,4 @@
-WebChimera Player v1.18
+WebChimera Player v1.19
 ==============
 
 An Open Source <b><a href="http://www.webchimera.org/" target="_blank">WebChimera Player</a></b>
@@ -12,7 +12,7 @@ WebChimera is a VLC Web Plugin based on FireBreath that offers the possibility o
 <b>And the <a href="http://editor.webchimera.org/default_skin" target="_blank">Online Editor</a></b>
 
 
-Current Features
+Features
 ==============
 - <a href="http://wiki.webchimera.org/Subtitles_Parameter" target="_blank">External HTTP Subtitle Support (supports SUB, SRT and WebVTT subtitle formats)</a>
 - <a href="http://wiki.webchimera.org/.addPlaylist()" target=_blank">Playlist Support</a> (JavaScript or M3U File)
@@ -20,15 +20,11 @@ Current Features
 - <a href="http://wiki.webchimera.org/Player_Hotkeys" target="_blank">Hotkeys and Mouse Actions</a>
 - <a href="http://wiki.webchimera.org/Player_Skinning" target="_blank">Skinning and Themes</a>
 - <a href="http://www.webchimera.org/demos/internal_subtitles" target="_blank">Internal Video Subtitle</a> and Audio Track Support
-- Advanced Playlist Menu (drag and drop, skip)
+- [Picture in Picture](http://wiki.webchimera.org/PIP_Parameter)
+- [Digital Interactive Zoom](http://wiki.webchimera.org/DigitalZoom_Parameter)
+- Advanced Playlist Menu ([debugging](http://wiki.webchimera.org/DebugPlaylist_Parameter), drag and drop, scroll with mouse, skip items)
+- [Key Press and Mouse Tracking Events](http://wiki.webchimera.org/Player_JavaScript_API#Events)
 - Context Menu with: Audio Tracks, Aspect Ratio, Crop and Zoom.
 - Supported Video Formats: AVI, MP4, MKV, MPEG, Flash and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Streams: RTMP, RTSP, HTTP, FTP, File, YouTube and <a href="http://www.videolan.org/vlc/features.php?cat=input" target="_blank">more</a>
 - Supported Audio Formats: MP3, AAC, MPEG3, FLAC, WAV and <a href="http://www.videolan.org/vlc/features.php?cat=audio" target="_blank">more</a>
-
-
-Upcoming Features
-==============
-- Picture in Picture Feature
-- Digital Zoom ([details](http://ask.webchimera.org/427/digital-zoom-in-webchimera))
-- Windowed Mode (Pop Out)
