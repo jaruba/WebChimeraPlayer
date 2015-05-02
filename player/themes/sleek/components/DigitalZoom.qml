@@ -48,45 +48,47 @@ VlcVideoSurface {
 	}
 	
 	function zoomNewPosition() {
-		var lastZoomWidth = zoomWidth;
-		var lastZoomHeight = zoomHeight;
-
-		if (vlcPlayer.video.width > 0 && vlcPlayer.video.height > 0) {
-			var iW = vlcPlayer.video.width,
-				iH = vlcPlayer.video.height,
-				oW = theview.width,
-				oH = theview.height;
-		
-			if (fullscreen) var zoomDiff = 4; else { if (theview.width < 700) var zoomDiff = 3; else var zoomDiff = 3.5; }
-			if(oH/iH > oW/iW){
-				zoomTop = (oH - iH*(oW/iW)) /2;
-				zoomLeft = 0;
-				zoomHeight = iH*(oW/iW) / zoomDiff;
-				zoomWidth = oW / zoomDiff;
-			} else {
-				zoomTop = 0;
-				zoomLeft = (oW - iW*(oH/iH)) /2;
-				zoomHeight = oH / zoomDiff;
-				zoomWidth = iW*(oH/iH) / zoomDiff;
-			}
-			zoomPreview.width = zoomPreview.width / (lastZoomWidth / zoomWidth);
-			zoomPreview.height = zoomPreview.height / (lastZoomHeight / zoomHeight);
-			zoomPreview.anchors.leftMargin = zoomPreview.anchors.leftMargin / (lastZoomWidth / zoomWidth);
-			zoomPreview.anchors.topMargin = zoomPreview.anchors.topMargin / (lastZoomHeight / zoomHeight);
-			
-			lastMouseX = zoomPreview.anchors.leftMargin + (zoomPreview.width /2);
-			lastMouseY = zoomPreview.anchors.topMargin + (zoomPreview.height /2);
-			
-			videoSource.scale.origin.x = ((zoomPreview.anchors.leftMargin + (zoomPreview.width/2)) * (videoSource.width / root.width)) + ((videoSource.width * (((zoomPreview.anchors.leftMargin + (zoomPreview.width/2)) - (root.width /2)) / root.width))/settings.digitalzoom);
-			videoSource.scale.origin.y = ((zoomPreview.anchors.topMargin + (zoomPreview.height/2)) * (videoSource.height / root.height)) + ((videoSource.height * (((zoomPreview.anchors.topMargin + (zoomPreview.height/2)) - (root.height /2)) / root.height))/settings.digitalzoom);
-			
-			if (videoSource.scale.origin.x > videoSource.width) videoSource.scale.origin.x = videoSource.width;
-			if (videoSource.scale.origin.y > videoSource.height) videoSource.scale.origin.y = videoSource.height;
+		if (settings.digitalzoom > 0) {
+			var lastZoomWidth = zoomWidth;
+			var lastZoomHeight = zoomHeight;
 	
-			if (videoSource.scale.origin.x < 0) videoSource.scale.origin.x = 0;
-			if (videoSource.scale.origin.y < 0) videoSource.scale.origin.y = 0;
-
-			zoomVisible = true;
+			if (vlcPlayer.video.width > 0 && vlcPlayer.video.height > 0) {
+				var iW = vlcPlayer.video.width,
+					iH = vlcPlayer.video.height,
+					oW = theview.width,
+					oH = theview.height;
+			
+				if (fullscreen) var zoomDiff = 4; else { if (theview.width < 700) var zoomDiff = 3; else var zoomDiff = 3.5; }
+				if(oH/iH > oW/iW){
+					zoomTop = (oH - iH*(oW/iW)) /2;
+					zoomLeft = 0;
+					zoomHeight = iH*(oW/iW) / zoomDiff;
+					zoomWidth = oW / zoomDiff;
+				} else {
+					zoomTop = 0;
+					zoomLeft = (oW - iW*(oH/iH)) /2;
+					zoomHeight = oH / zoomDiff;
+					zoomWidth = iW*(oH/iH) / zoomDiff;
+				}
+				zoomPreview.width = zoomPreview.width / (lastZoomWidth / zoomWidth);
+				zoomPreview.height = zoomPreview.height / (lastZoomHeight / zoomHeight);
+				zoomPreview.anchors.leftMargin = zoomPreview.anchors.leftMargin / (lastZoomWidth / zoomWidth);
+				zoomPreview.anchors.topMargin = zoomPreview.anchors.topMargin / (lastZoomHeight / zoomHeight);
+				
+				lastMouseX = zoomPreview.anchors.leftMargin + (zoomPreview.width /2);
+				lastMouseY = zoomPreview.anchors.topMargin + (zoomPreview.height /2);
+				
+				videoSource.scale.origin.x = ((zoomPreview.anchors.leftMargin + (zoomPreview.width/2)) * (videoSource.width / root.width)) + ((videoSource.width * (((zoomPreview.anchors.leftMargin + (zoomPreview.width/2)) - (root.width /2)) / root.width))/settings.digitalzoom);
+				videoSource.scale.origin.y = ((zoomPreview.anchors.topMargin + (zoomPreview.height/2)) * (videoSource.height / root.height)) + ((videoSource.height * (((zoomPreview.anchors.topMargin + (zoomPreview.height/2)) - (root.height /2)) / root.height))/settings.digitalzoom);
+				
+				if (videoSource.scale.origin.x > videoSource.width) videoSource.scale.origin.x = videoSource.width;
+				if (videoSource.scale.origin.y > videoSource.height) videoSource.scale.origin.y = videoSource.height;
+		
+				if (videoSource.scale.origin.x < 0) videoSource.scale.origin.x = 0;
+				if (videoSource.scale.origin.y < 0) videoSource.scale.origin.y = 0;
+	
+				zoomVisible = true;
+			}
 		}
 	}
 	
