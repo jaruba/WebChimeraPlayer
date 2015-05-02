@@ -13,6 +13,7 @@ VlcVideoSurface {
 	property var pipWidth: 0;
 	property var pipVisible: false;
 	property var hasMediaChanged: 1;
+	property var instantPipButEffect: 0; // for settings button
 	
 	function keepMuted() {
 		if (!vlcPlayer2.audio.mute) vlcPlayer2.audio.mute = true;
@@ -185,8 +186,8 @@ VlcVideoSurface {
 		width: 20
 		height: 20
 		
-		Behavior on visible { PropertyAnimation { duration: instantButEffect == 1 ? 0 : fullscreen ? 0: mousesurface.containsMouse ? 100 : 0 } }
-		Behavior on opacity { PropertyAnimation { duration: instantButEffect == 1 ? 0 : fullscreen ? 0: 100 } }
+		Behavior on visible { PropertyAnimation { duration: instantPipButEffect == 1 ? 0 : fullscreen ? 0: mousesurface.containsMouse ? 100 : 0 } }
+		Behavior on opacity { PropertyAnimation { duration: instantPipButEffect == 1 ? 0 : fullscreen ? 0: 100 } }
 		
 		Text {
 			anchors.centerIn: parent
@@ -206,8 +207,8 @@ VlcVideoSurface {
 		}
 
 		Timer {
-			interval: 50; running: instantButEffect == 1 ? true : false; repeat: false
-			onTriggered: { instantButEffect = 0; }
+			interval: 50; running: instantPipButEffect == 1 ? true : false; repeat: false
+			onTriggered: { instantPipButEffect = 0; }
 		}
 	}
 }
