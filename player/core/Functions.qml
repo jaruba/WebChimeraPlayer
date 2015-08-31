@@ -124,14 +124,13 @@ Rectangle {
 			}
 		}
 		// end implementation for m3u runtime
-		
 		settings.lastTime = tempSecond;
 		tempSecond = seconds;
 		
 		settings.newProgress = vlcPlayer.time / getLength();
 		settings = settings;
-			
-		if (vlcPlayer.time > 0) lastPos = vlcPlayer.position;
+		
+        if (vlcPlayer.time > 0) lastPos = vlcPlayer.position;
 		
 		// Solution to jump to time while video is paused
 		if (prevtime > 0 && seconds > prevtime) {
@@ -673,11 +672,10 @@ Rectangle {
 	function progressDrag(mouseX,mouseY) {
 		settings.dragging = true;
 		var newtime = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
-		if (newtime > 0) timeBubble.srctime = getTime(newtime);
 	}
 	function progressChanged(mouseX,mouseY) {
 		var newtime = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
-		if (newtime > 0) timeBubble.srctime = getTime(newtime);
+        fireQmlMessage("{\"type\": \"progressChange\", \"x\": " + mouseX + ", \"y\": " + mouseY + "}");
 	}
 	function progressReleased(mouseX,mouseY) {
 		lastPos = (mouseX -4) / theview.width;
@@ -687,7 +685,8 @@ Rectangle {
 		}
 		// calculate new player time and set it in the player
 		vlcPlayer.time = (vlcPlayer.time * (1 / settings.newProgress)) * ((mouseX -4) / theview.width);
-		settings.dragging = false;
+        settings.dragging = false;
+        fireQmlMessage("{\"type\": \"progressReleased\", \"x\": " + mouseX + ", \"y\": " + mouseY + "}");
 	}
 	// End Progress Bar Seek Functionality
 	

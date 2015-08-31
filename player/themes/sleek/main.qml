@@ -292,14 +292,14 @@ Rectangle {
 		// End Draw Toolbar
 		
 		// Draw Time Bubble (visible when hovering over Progress Bar)
-		Loader.TimeBubble {
-			id: timeBubble
-			fontColor: ui.colors.timeBubble.font
-			backgroundIcon: settings.glyphsLoaded ? timeBubble.srctime.length > 5 ? ui.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : ui.icon.timeBubble.small : ""
-			backgroundColor: ui.colors.timeBubble.background
-			backgroundBorder: ui.colors.timeBubble.border
-			backgroundOpacity: 0.9
-		}
+	//	Loader.TimeBubble {
+	//		id: timeBubble
+	//		fontColor: ui.colors.timeBubble.font
+	//		backgroundIcon: settings.glyphsLoaded ? ui.icon.timeBubble.small : ""
+	//		backgroundColor: ui.colors.timeBubble.background
+	//		backgroundBorder: ui.colors.timeBubble.border
+	//		backgroundOpacity: 0.9
+	//	}
 		// End Time Bubble
 
 		// Draw Progression Bar
