@@ -305,6 +305,10 @@ Rectangle {
 		vlcPlayer.onMediaPlayerTimeChanged.connect( onTime ); // Set Time Changed Event Handler
 		vlcPlayer.onMediaPlayerMediaChanged.connect( onMediaChanged );
 		vlcPlayer.onStateChanged.connect( onState ); // Set State Changed Event Handler
+
+        //SEND SNAPSHOT BACK TO CLIENT
+        plugin.onSnapshotReady.connect(function(snapshot) { fireQmlMessage("[snapshot]" + snapshot); });
+
 		pip.vSource.onMediaPlayerPositionChanged.connect( pip.keepMuted ); // Keep Picture in Picture Video Muted
 		
 		if (typeof plugin.version !== "undefined") vlcPlayer.subtitle.onLoadError.connect( subMenu.subtitleError );
@@ -452,6 +456,10 @@ Rectangle {
 			}
 			if (startsWith(message,"[notify]")) setText(message.replace("[notify]",""));
 			if (startsWith(message,"[toggle-mute]")) toggleMute();
+
+            //TAKE A SNAPSHOT
+			if (startsWith(message,"[snapshot]")) snapshot();
+
 			if (startsWith(message,"[set-mute]")) { setMute(message.replace("[set-mute]","")); }
 			if (startsWith(message,"[toggle-subtitles]")) toggleSubtitles();
 			if (startsWith(message,"[set-volume]")) { vlcPlayer.volume = parseInt(message.replace("[set-volume]","")); volheat.volume = (parseInt(message.replace("[set-volume]","")) /200) * volheat.width; }
@@ -490,6 +498,10 @@ Rectangle {
 	// End Check On Page JS Message
 	
 	// END EVENT FUNCTIONS
+
+    function snapshot() {
+        takeSnapshot( videoSource );
+    }
 	
 	// Start Set Text to Upper Right Text Element (fades out after 300ms)
 	function setText(newtext) {
