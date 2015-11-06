@@ -303,17 +303,17 @@ Rectangle {
 		// End Time Bubble
 
 		// Draw Progression Bar
-        //Loader.ProgressBar {
-		//	id: progressBar
-		//	backgroundColor: ui.colors.progress.background
-		//	viewedColor: ui.colors.progress.viewed
-		//	positionColor: ui.colors.progress.position
-		//	cache.visible: vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
-		//	cache.color: ui.colors.progress.cache
-		//	onPressed: wjs.progressDrag(mouseX,mouseY);
-		//	onChanged: wjs.progressChanged(mouseX,mouseY);
-		//	onReleased: wjs.progressReleased(mouseX,mouseY);
-		//}
+        Loader.ProgressBar {
+			id: progressBar
+			backgroundColor: ui.colors.progress.background
+			viewedColor: ui.colors.progress.viewed
+			positionColor: ui.colors.progress.position
+			cache.visible: false // vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
+			cache.color: ui.colors.progress.cache
+			//onPressed: wjs.progressDrag(mouseX,mouseY);
+			onChanged: wjs.progressChanged(mouseX,mouseY);
+			//onReleased: wjs.progressReleased(mouseX,mouseY);
+		}
 		// End Draw Progress Bar
 		
 		Loader.DigitalZoom { id: digiZoom } // Digital Zoom Feature
