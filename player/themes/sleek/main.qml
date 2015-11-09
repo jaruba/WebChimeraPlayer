@@ -292,14 +292,14 @@ Rectangle {
 		// End Draw Toolbar
 		
 		// Draw Time Bubble (visible when hovering over Progress Bar)
-		Loader.TimeBubble {
-			id: timeBubble
-			fontColor: ui.colors.timeBubble.font
-			backgroundIcon: settings.glyphsLoaded ? timeBubble.srctime.length > 5 ? ui.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : ui.icon.timeBubble.small : ""
-			backgroundColor: ui.colors.timeBubble.background
-			backgroundBorder: ui.colors.timeBubble.border
-			backgroundOpacity: 0.9
-		}
+	//	Loader.TimeBubble {
+	//		id: timeBubble
+	//		fontColor: ui.colors.timeBubble.font
+	//		backgroundIcon: settings.glyphsLoaded ? ui.icon.timeBubble.small : ""
+	//		backgroundColor: ui.colors.timeBubble.background
+	//		backgroundBorder: ui.colors.timeBubble.border
+	//		backgroundOpacity: 0.9
+	//	}
 		// End Time Bubble
 
 		// Draw Progression Bar
@@ -308,11 +308,11 @@ Rectangle {
 			backgroundColor: ui.colors.progress.background
 			viewedColor: ui.colors.progress.viewed
 			positionColor: ui.colors.progress.position
-			cache.visible: vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
+			cache.visible: false // vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
 			cache.color: ui.colors.progress.cache
-			onPressed: wjs.progressDrag(mouseX,mouseY);
+			//onPressed: wjs.progressDrag(mouseX,mouseY);
 			onChanged: wjs.progressChanged(mouseX,mouseY);
-			onReleased: wjs.progressReleased(mouseX,mouseY);
+			//onReleased: wjs.progressReleased(mouseX,mouseY);
 		}
 		// End Draw Progress Bar
 		
