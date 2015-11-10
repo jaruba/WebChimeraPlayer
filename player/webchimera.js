@@ -26,7 +26,7 @@ var wjsScripts = document.getElementsByTagName("script"),
     webchimeraSrc = wjsScripts[wjsScripts.length-1].src;
 var isNode = (typeof process !== "undefined" && typeof require !== "undefined");
 var isNodeWebkit = false;
-	
+
 //Is this Node.js?
 if(isNode) {
   //If so, test for Node-Webkit
@@ -53,7 +53,7 @@ switch(window.location.protocol) {
    case 'file:':
 	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 	 break;
-   default: 
+   default:
 	 if (isNodeWebkit === false) document.body.innerHTML += localwarning;
 }
 // end if page on local machine, add warning
@@ -129,7 +129,7 @@ wjs.init = function(context) {
 
 	// Save player parameters
 	this.basicParams = ["allowfullscreen","multiscreen","mouseevents","autoplay","autostart","autoloop","loop","mute","titleBar","progressCache","toolbar","debugPlaylist", "digitalZoom", "pip"];
-	
+
 	if (this.context.substring(0,1) == "#") {
 		this.plugin = document.getElementById(this.context.substring(1));
 		this.allElements = [this.plugin];
@@ -140,7 +140,7 @@ wjs.init = function(context) {
 		this.allElements = document.getElementsByTagName(this.context);
 		this.plugin = this.allElements[0];
 	}
-	
+
 };
 
 wjs.init.prototype.onMediaChanged = function(wjs_function) {
@@ -507,7 +507,7 @@ wjs.init.prototype.qmlLoaded = function(action) {
 					action.call(saveContext);
 				}
 			}
-			
+
 			if (this.plugin.attachEvent) {
 				// Microsoft
 				this.plugin.attachEvent("onQmlMessage", function(event) {
@@ -532,14 +532,14 @@ wjs.init.prototype.qmlLoaded = function(action) {
 wjs.init.prototype.onClicked = function(target, action) {
 	if (this.allElements.length == 1) {
 		var saveContext = wjs(this.context);
-		
+
 		if (typeof target === 'function') {
-			
+
 			function wjs_function_alt(event) {
 				var saveContext = wjs(this.context);
 				if (event.substr(0,9) == "[clicked]") target.call(saveContext,event.replace("[clicked]",""));
 			}
-	
+
 			if (this.plugin.attachEvent) {
 				// Microsoft
 				this.plugin.attachEvent("onQmlMessage", function(event) {
@@ -556,16 +556,16 @@ wjs.init.prototype.onClicked = function(target, action) {
 					return wjs_function_alt.call(saveContext,event);
 				};
 			}
-	
+
 		} else {
-			
+
 			function wjs_function(event) {
 				if (event == "[clicked]"+target) {
 					var saveContext = wjs(this.context);
 					action.call(saveContext);
 				}
 			}
-		
+
 			if (this.plugin.attachEvent) {
 				// Microsoft
 				this.plugin.attachEvent("onQmlMessage", function(event) {
@@ -582,25 +582,25 @@ wjs.init.prototype.onClicked = function(target, action) {
 					return wjs_function.call(saveContext,event);
 				};
 			}
-			
+
 		}
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onClicked(target, action);
-	
+
 	return this;
 };
 
 wjs.init.prototype.onKeyPressed = function(target, action) {
 	if (this.allElements.length == 1) {
 		var saveContext = wjs(this.context);
-	
+
 		var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
-		
+
 		var reverseKeyMap = {};
-		
+
 		for (var prop in keyMap) if(keyMap.hasOwnProperty(prop)) reverseKeyMap[keyMap[prop]] = prop;
-	
+
 		if (typeof target === 'function') {
-			
+
 			function wjs_function_reverse(event) {
 				var saveContext = wjs(this.context);
 				if (event.substr(0,9) == "[pressed-") {
@@ -612,9 +612,9 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 						target.call(saveContext,reverseKeyMap[qmlTarget]);
 					}
 				}
-				
+
 			}
-			
+
 			if (this.plugin.attachEvent) {
 				// Microsoft
 				this.plugin.attachEvent("onQmlMessage", function(event) {
@@ -631,9 +631,9 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 					return wjs_function_reverse.call(saveContext,event);
 				};
 			}
-			
+
 		} else {
-		
+
 			function wjs_function(event) {
 				var saveContext = wjs(this.context);
 				if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
@@ -644,7 +644,7 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 					if (event == "[pressed-"+keyMap[target.toLowerCase()]+"]") action.call(saveContext);
 				}
 			}
-			
+
 			if (this.plugin.attachEvent) {
 				// Microsoft
 				this.plugin.attachEvent("onQmlMessage", function(event) {
@@ -661,10 +661,10 @@ wjs.init.prototype.onKeyPressed = function(target, action) {
 					return wjs_function.call(saveContext,event);
 				};
 			}
-			
+
 		}
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).onKeyPressed(target, action);
-	
+
 	return this;
 };
 
@@ -672,7 +672,7 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 	if (this.allElements.length == 1) {
 		if (type.toLowerCase() == "key") {
 			var keyMap = { 0:48, 1:49, 2:50, 3:51, 4:52, 5:53, 6:54, 7:55, 8:56, 9:57, a:65, b:66, c:67, d:68, e:69, f:70, g:71, h:72, i:73, j:74, k:75, l:76, m:77, n:78, o:79, p:80, q:81, r:82, s:83, t:84, u:85, v:86, w:87, x:88, y:89, z:90, space:32, f1:16777264, f2:16777265, f3:16777266, f4:16777267, f5:16777268, f6:16777269, f7:16777270, f8:16777271, f9:16777272, f10:16777273, f11:16777274, f12:16777275, left:16777234, up:16777235, right:16777236, down:16777237, plus:43, minus:45, equal:61, bracketleft:91, bracketright:93, esc:16777216, "shift":16777248, ctrl:16777249, meta:16777250, alt:16777251, "ctrl+":67108864, "alt+":134217728, "shift+":33554432, "meta+":268435456 };
-			
+
 			if (action === true) {
 				if (target.toLowerCase().indexOf("ctrl+") > -1 || target.toLowerCase().indexOf("alt+") > -1 || target.toLowerCase().indexOf("shift+") > -1 || target.toLowerCase().indexOf("meta+") > -1) {
 					var res = target.split("+");
@@ -698,9 +698,9 @@ wjs.init.prototype.preventDefault = function(type, target, action) {
 			}
 		}
 	} else for (z = 0; z < this.allElements.length; z++) wjs("#"+this.allElements[z].id).preventDefault(type, target, action);
-	
+
 	return this;
-	
+
 };
 
 wjs.init.prototype.addPlayer = function(qmlsettings) {
@@ -710,30 +710,35 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 		var isInstalled = false;
 		if (typeof navigator.plugins["WebChimera Plugin"] !== 'undefined') isInstalled = true;
 		if (typeof navigator.plugins["WebChimera x86_64"] !== 'undefined') isInstalled = true;
-		
+
 		// remove the check if it's IE (there's no sure way of checking if the plugin is installed/enabled in IE11)
 		if (isIE()) isInstalled = true;
-	
+
 		if (!isInstalled) {
-			this.plugin.style.zIndex = 1000;
-			this.plugin.innerHTML = '<iframe src="http://www.webchimera.org/no_plugin.php" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
-			return false;
+      //$.popupWindow('/webChrimera.msi', { height: 300, width: 200 });
+
+      this.plugin.style.zIndex = 1000;
+			this.plugin.innerHTML = '<iframe src="/resources/WebChimeraPlayer/index.html" scrolling="no" width="100%" height="100%" style="border: none"></iframe>';
+
+//      this.plugin.innerHTML = '"/resources/WebChimeraPlayer/WebChimera_0.2.9_vlc_2.2.1.msi"><H1>Download WebChrimera</H1><br>Web Chrimera is not installed and is required to run Videx</a></body></html>';
+
+      return false;
 		}
 		// end check if plugin is installed
-	
+
 		newid = (typeof qmlsettings["id"] === "undefined") ? "webchimera" : qmlsettings["id"]; // if no id set, default to "webchimera"
-		
+
 		// check id availability
 		changeid = newid;
 		changeCounter = 0;
 		while (!!document.getElementById(changeid)) { changeCounter++; changeid = newid + changeCounter; }
 		newid = changeid;
 		// end check id availability
-		
+
 		newclass = (typeof qmlsettings["class"] === "undefined") ? "webchimeras" : qmlsettings["class"]; // if no class set, default to "webchimeras"
-	
+
 		qmlsource = (typeof qmlsettings["theme"] === "undefined") ? "http://www.webchimera.org/player/themes/sleek/main.qml" : qmlsettings["theme"]; // if no qmlsource set, default to latest Webchimera Player Default QML
-		
+
 		var playerbody = "";
 		if (typeof newid === 'string') {
 			if (newid.substring(0,1) == "#") {
@@ -749,15 +754,15 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 			newid = "#webchimera";
 		}
 		playerbody += '<object' + targetid + ' class="' + newclass + '" type="application/x-chimera-plugin" width="100%" height="100%">';
-	
+
 		suffix = ".qml";
 		if (qmlsource.indexOf(suffix, qmlsource.length - suffix.length) === -1) qmlsource = webchimeraFolder+"/themes/"+qmlsource+"/main.qml";
 		playerbody += '<param name="qmlsrc" value="' + qmlsource.replace("https://","http://") + '" />'; // if QML Source is using SSL, replace protocol
-		
+
 		var onloadsettings = {};
-		
+
 		onloadsettings["settings"] = true;
-		
+
 		var didbuffer = 0;
 		for (key in qmlsettings) {
 			if (qmlsettings.hasOwnProperty(key)) {
@@ -781,18 +786,18 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 			}
 		}
-			
+
 		// default buffer is 10 seconds (10000 milliseconds)
 		if (didbuffer == 0) {
 			onloadsettings["caching"] = 10000;
 			playerbody += '<param name="network-caching" value="10000" />';
 		}
-	
-			
+
+
 		playerbody += '</object>';
-		
+
 		this.plugin.innerHTML = playerbody;
-		
+
 		if (typeof debugPlaylist !== "undefined") {
 			wjs(newid).catchEvent("QmlMessage",function(event) {
 				if (event.substr(0,9) == "[replace]") {
@@ -801,7 +806,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 				}
 			});
 		}
-	
+
 		if (typeof onloadsettings !== "undefined") wjs(newid).qmlLoaded(function() {
 			this.loadSettings(onloadsettings);
 			ploaded[newid] = true;
@@ -827,7 +832,7 @@ wjs.init.prototype.addPlayer = function(qmlsettings) {
 			wjs("#"+this.allElements[z].id).addPlayer(qmlsettings);
 		}
 	}
-	
+
 	return this;
 };
 
@@ -893,7 +898,7 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 			 delete tempPlaylist;
 		 }
 		 // end convert all strings to json object
-	
+
 		 if (Array.isArray(playlist) === true && typeof playlist[0] === 'object') {
 			 var item = 0;
 			 for (item = 0; item < playlist.length; item++) {
@@ -923,7 +928,7 @@ wjs.init.prototype.addPlaylist = function(playlist) {
 					  if (typeof playlist[item].subtitles !== 'undefined') playerSettings.subtitles = playlist[item].subtitles;
 					  if (typeof playlist[item].aspectRatio !== 'undefined' && typeof playlist[item].aspectRatio === 'string') playerSettings.aspectRatio = playlist[item].aspectRatio;
 					  if (typeof playlist[item].crop !== 'undefined' && typeof playlist[item].crop === 'string') playerSettings.crop = playlist[item].crop;
-					  
+
 					  if (Object.keys(playerSettings).length > 0) this.plugin.playlist.items[pitem[this.context]].setting = JSON.stringify(playerSettings);
 					  pitem[this.context]++;
 				  }
