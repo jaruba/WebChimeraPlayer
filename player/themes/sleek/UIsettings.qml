@@ -92,10 +92,10 @@ Rectangle {
 		
 			// Progress Bar Colors
 			'progress': {
-				//'background': "#262626",
-				//'viewed': "#08758F",
-				//'position': "#e5e5e5",
-				//'cache': "#3e3e3e"
+			//	'background': "#262626",
+			//	'viewed': "#08758F",
+			//	'position': "#e5e5e5",
+			//	'cache': "#3e3e3e"
 				'background': "transparent",
 				'viewed': "transparent",
 				'position': "transparent",

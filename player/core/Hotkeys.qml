@@ -365,7 +365,7 @@ Rectangle {
 						if (fullscreen) {
 							wjs.isbig();
 						} else {
-							wjs.gobig();
+						//	wjs.gobig();
 						}
 					}
 				}
@@ -400,7 +400,7 @@ Rectangle {
 						if (fullscreen) {
 							wjs.isbig();
 						} else {
-							wjs.gobig();
+						//	wjs.gobig();
 						}
 					}
 				}

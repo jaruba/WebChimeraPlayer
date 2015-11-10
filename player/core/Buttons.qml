@@ -32,7 +32,7 @@ Rectangle {
 		if (action == "fullscreen") if (typeof settings.preventClicked[action] === "undefined") {
 			if (settings.allowfullscreen == 1) {
 				wjs.togFullscreen();
-				if (settings.multiscreen == 1) wjs.toggleMute(); // Multiscreen - Edit
+			//	if (settings.multiscreen == 1) wjs.toggleMute(); // Multiscreen - Edit
 			}
 		}
 	}

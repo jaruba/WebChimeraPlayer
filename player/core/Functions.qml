@@ -544,7 +544,8 @@ Rectangle {
 		if (settings.allowfullscreen == 1) {
 			settings.ismoving = 1;
 		
-			progressBar.effectDuration = 0;
+            //EDIT: STC to disable progress bar
+			//progressBar.effectDuration = 0;
 			toggleFullscreen();
 
 			if (oldAspectType != "Default") {
@@ -552,7 +553,8 @@ Rectangle {
 				else changeAspect(oldAspectValue,oldAspectType);
 			} else resetAspect();
 						
-			if (settings.multiscreen == 0) progressBar.effectDuration = 250;
+            //EDIT: STC to disable progress bar
+			//if (settings.multiscreen == 0) progressBar.effectDuration = 250;
 		}
 	}
 	// End Fullscreen Toggle
