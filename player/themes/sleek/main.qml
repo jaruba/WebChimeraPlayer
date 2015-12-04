@@ -105,7 +105,7 @@ Rectangle {
 		onPositionChanged: hotkeys.mouseMoved(mouse.x,mouse.y);
 		onWheel: hotkeys.mouseScroll(wheel.angleDelta.x,wheel.angleDelta.y);
 		Keys.onPressed: hotkeys.keys(event);		
-						
+	    cursorShape: Qt.ArrowCursor;
 		// Draw Toolbar
 		Loader.Toolbar {
 			id: toolbar
