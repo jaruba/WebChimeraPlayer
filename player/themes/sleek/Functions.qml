@@ -461,8 +461,6 @@ Rectangle {
 
             //TAKE A SNAPSHOT
 			if (startsWith(message,"[snapshot]")) snapshot();
-			if (startsWith(message,"[hide-mouse]")) hideMouse();
-			if (startsWith(message,"[show-mouse]")) showMouse();
 
 			if (startsWith(message,"[set-mute]")) { setMute(message.replace("[set-mute]","")); }
 			if (startsWith(message,"[toggle-subtitles]")) toggleSubtitles();
@@ -502,13 +500,6 @@ Rectangle {
 	// End Check On Page JS Message
 	
 	// END EVENT FUNCTIONS
-    function hideMouse() {
-        mousesurface.cursorShape = Qt.BlankCursor
-    }
-
-    function showMouse() {
-        mousesurface.cursorShape = Qt.ArrowCursor
-    }
 
     function snapshot() {
         takeSnapshot( videoSource );
