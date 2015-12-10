@@ -7,7 +7,7 @@ Rectangle {
 	property variant variables: {
 	
 		'settings': {
-			'iconFont': "fonts/glyphicons.ttf",
+			'iconFont': "glyphicons.ttf",
 			'defaultFont': "http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGNNE-IuDiR70wI4zXaKqWCM.ttf",
 			'secondaryFont': "http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf",
 			'toolbar': {
