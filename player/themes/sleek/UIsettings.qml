@@ -20,7 +20,7 @@ Rectangle {
 				'timeMargin': 11
 			},
 			'caching': false, // If cache progress bar is visible or not
-			'titleBar': "fullscreen", // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
+			'titleBar': 'none', // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
 			'buttonGlow': false // if button icons should glow when hovered
 		},
 		
