@@ -9,7 +9,7 @@ QtObject {
 	property var dragging: false;
 	property var ismoving: 1;
 	property var buffering: 0;
-	property var toolbar: 1;
+	property var toolbar: 0;
 	property var uiVisible: 1;
 	property var autoloop: 0;
 	property var automute: 0;
@@ -19,7 +19,7 @@ QtObject {
 	property var subtitlemenu: false;
 	property var totalSubs: 0;
 	property var title: "";
-    property var multiscreen: 0;
+    property var multiscreen: 1;
 	property var timervolume: 0;
 	property var glyphsLoaded: false;
 	property var firsttime: 1;
@@ -32,11 +32,11 @@ QtObject {
 	property var curZoom: 0;
 	property var curCrop: "Default";
 	property var curAspect: "Default";
-	property var mouseevents: 0;
+	property var mouseevents: 1;
 	property var downloaded: 0;
 	property var customLength: 0;
 	property var newProgress: 0;
-	property var openingText: "Loading Resource";
+	property var openingText: "";
 	property variant preventKey: [];
 	property variant preventClicked: [];
 	property variant aspectRatios: ["Default", "1:1", "4:3", "16:9", "16:10", "2.21:1", "2.35:1", "2.39:1", "5:4"];
