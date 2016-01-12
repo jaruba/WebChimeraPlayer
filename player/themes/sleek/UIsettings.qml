@@ -7,7 +7,7 @@ Rectangle {
 	property variant variables: {
 	
 		'settings': {
-			'iconFont': "fonts/glyphicons.ttf",
+			'iconFont': "glyphicons.ttf",
 			'defaultFont': "http://fonts.gstatic.com/s/sourcesanspro/v9/toadOcfmlt9b38dHJxOBGNNE-IuDiR70wI4zXaKqWCM.ttf",
 			'secondaryFont': "http://fonts.gstatic.com/s/opensans/v10/k3k702ZOKiLJc3WVjuplzInF5uFdDttMLvmWuJdhhgs.ttf",
 			'toolbar': {
@@ -20,7 +20,7 @@ Rectangle {
 				'timeMargin': 11
 			},
 			'caching': false, // If cache progress bar is visible or not
-			'titleBar': "fullscreen", // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
+			'titleBar': 'none', // When should the title bar be visible, possible values are: "fullscreen", "minimized", "both", "none"
 			'buttonGlow': false // if button icons should glow when hovered
 		},
 		
@@ -92,10 +92,14 @@ Rectangle {
 		
 			// Progress Bar Colors
 			'progress': {
-				'background': "#262626",
-				'viewed': "#08758F",
-				'position': "#e5e5e5",
-				'cache': "#3e3e3e"
+			//	'background': "#262626",
+			//	'viewed': "#08758F",
+			//	'position': "#e5e5e5",
+			//	'cache': "#3e3e3e"
+				'background': "transparent",
+				'viewed': "transparent",
+				'position': "transparent",
+				'cache': "transparent"
 			},
 		
 			// Appears when hovering over progress bar
