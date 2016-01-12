@@ -18,40 +18,38 @@
 
 import QtQuick 2.1
 import QmlVlc 0.1
-import "./" as LoadSettings
-import "../../core" as JsLogic
-import "components" as Loader
+import "./" as Local
 
 Rectangle {
 
 	// load core javascript functions and settings
 	property variant ui: {}
-	LoadSettings.UIsettings { id: skinData }
+	Local.UIsettings { id: skinData }
 	property var borderVisible: skinData.variables.settings.toolbar.borderVisible;
 	property var buttonWidth: skinData.variables.settings.toolbar.buttonWidth;
 	property var timeMargin: skinData.variables.settings.toolbar.timeMargin;
-	JsLogic.Settings { id: settings }
-	JsLogic.Functions { id: wjs }
-	JsLogic.Hotkeys { id: hotkeys }
-	JsLogic.Buttons { id: buttons }
+	Local.Settings { id: settings }
+	Local.Functions { id: wjs }
+	Local.Hotkeys { id: hotkeys }
+	Local.Buttons { id: buttons }
 	// end load core javascript functions and settings
 	
     id: theview;
     color: ui.colors.videoBackground; // Set Video Background Color
 	
-	Loader.Fonts {
+	Local.Fonts {
 		id: fonts
 		icons.source: ui.settings.iconFont
 		defaultFont.source: ui.settings.defaultFont
 		secondaryFont.source: ui.settings.secondaryFont
 	}
 	
-	Loader.ArtworkLayer { id: artwork } // Load Artwork Layer (if set with .addPlaylist)
+	Local.ArtworkLayer { id: artwork } // Load Artwork Layer (if set with .addPlaylist)
 
-	Loader.VideoLayer { id: videoSource } // Load Video Layer
+	Local.VideoLayer { id: videoSource } // Load Video Layer
 
 	// Start Subtitle Text Box
-	Loader.SubtitleText {
+	Local.SubtitleText {
 		id: subtitlebox
 		fontColor: ui.colors.font
 		fontShadow: ui.colors.fontShadow
@@ -59,7 +57,7 @@ Rectangle {
 	// End Start Subtitle Text Box
 
 	// Start Top Center Text Box (Opening, Buffering, etc.)
-	Loader.TopCenterText {
+	Local.TopCenterText {
 		id: buftext
 		fontColor: ui.colors.font
 		fontShadow: ui.colors.fontShadow
@@ -67,7 +65,7 @@ Rectangle {
 	// End Top Center Text Box
 			
 	// Draw Play Icon (appears in center of screen when Toggle Pause)
-	Loader.BigPlayIcon {
+	Local.BigPlayIcon {
 		id: playtog
 		color: ui.colors.bigIconBackground
 		icon: ui.icon.bigPlay
@@ -76,7 +74,7 @@ Rectangle {
 	// End Draw Play Icon (appears in center of screen when Toggle Pause)
 	
 	// Draw Pause Icon (appears in center of screen when Toggle Pause)
-	Loader.BigPauseIcon {
+	Local.BigPauseIcon {
 		id: pausetog
 		color: ui.colors.bigIconBackground
 		icon: ui.icon.bigPause
@@ -85,7 +83,7 @@ Rectangle {
 	// End Draw Pause Icon (appears in center of screen when Toggle Pause)
 		
 	// Start Loading Screen
-	Loader.SplashScreen {
+	Local.SplashScreen {
 		id: splashScreen
 		color: ui.colors.videoBackground
 		fontColor: ui.colors.font
@@ -95,7 +93,7 @@ Rectangle {
 	// End Loading Screen
 	
 	// Mouse Area over entire Surface (check mouse movement, toggle pause when clicked) includes Toolbar
-	Loader.MouseSurface {
+	Local.MouseSurface {
 		id: mousesurface
 		onWidthChanged: wjs.onSizeChanged();
 		onHeightChanged: wjs.onSizeChanged();
@@ -105,23 +103,23 @@ Rectangle {
 		onPositionChanged: hotkeys.mouseMoved(mouse.x,mouse.y);
 		onWheel: hotkeys.mouseScroll(wheel.angleDelta.x,wheel.angleDelta.y);
 		Keys.onPressed: hotkeys.keys(event);		
-						
+	    cursorShape: Qt.ArrowCursor;
 		// Draw Toolbar
-		Loader.Toolbar {
+		Local.Toolbar {
 			id: toolbar
 			height: fullscreen ? 32 : 30
 
-			Loader.ToolbarBackground {
+			Local.ToolbarBackground {
 				id: toolbarBackground
 				color: ui.colors.background
 				opacity: ui.settings.toolbar.opacity
 			}
 
 			// Start Left Side Buttons in Toolbar
-			Loader.ToolbarLeft {
+			Local.ToolbarLeft {
 	
 				// Start Playlist Previous Button
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: prevBut
 					icon: settings.glyphsLoaded ? ui.icon.prev : ""
 					iconSize: fullscreen ? 8 : 7
@@ -129,7 +127,7 @@ Rectangle {
 					glow: ui.settings.buttonGlow
 					onButtonClicked: buttons.clicked("prev");
 				}
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					color: ui.colors.toolbar.border
 					anchors.left: prevBut.right
 					visible: prevBut.visible ? borderVisible : false
@@ -137,7 +135,7 @@ Rectangle {
 				// End Playlist Previous Button
 	
 				// Start Play/Pause Button
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: playButton
 					icon: settings.glyphsLoaded ? vlcPlayer.playing ? ui.icon.pause : vlcPlayer.state != 6 ? ui.icon.play : ui.icon.replay : ""
 					iconSize: fullscreen ? 14 : 13
@@ -146,7 +144,7 @@ Rectangle {
 					glow: ui.settings.buttonGlow
 					onButtonClicked: buttons.clicked("play");
 				}
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					color: ui.colors.toolbar.border
 					anchors.left: playButton.right
 					visible: borderVisible
@@ -154,7 +152,7 @@ Rectangle {
 				// End Play/Pause Button
 	
 				// Start Playlist Next Button
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: nextBut
 					icon: settings.glyphsLoaded ? ui.icon.next : ""
 					iconSize: fullscreen ? 8 : 7
@@ -164,7 +162,7 @@ Rectangle {
 					glow: ui.settings.buttonGlow
 					onButtonClicked: buttons.clicked("next");
 				}
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					visible: nextBut.visible ? borderVisible : false
 					anchors.left: nextBut.right
 					color: ui.colors.toolbar.border
@@ -172,7 +170,7 @@ Rectangle {
 				// End Playlist Next Button
 				
 				// Start Mute Button
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: mutebut
 					anchors.left: nextBut.visible ? nextBut.right : playButton.right
 					anchors.leftMargin: 1
@@ -188,15 +186,15 @@ Rectangle {
 				// End Mute Button
 				
 				// Start Volume Control
-				Loader.VolumeHeat {
+				Local.VolumeHeat {
 									
-					Loader.VolumeHeatMouse {
+					Local.VolumeHeatMouse {
 						id: volumeMouse
 						onPressAndHold: wjs.hoverVolume(mouseX,mouseY)
 						onPositionChanged: wjs.clickVolume(mouseX,mouseY)
 						onReleased: wjs.clickVolume(mouseX,mouseY)
 					}
-					Loader.VolumeHeatGraphics {
+					Local.VolumeHeatGraphics {
 						id: volheat
 						backgroundColor: ui.colors.volumeHeat.background
 						volColor: ui.colors.volumeHeat.color
@@ -205,7 +203,7 @@ Rectangle {
 				}
 				// End Volume Control
 
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					id: volumeBorder
 					anchors.left: mutebut.right
 					anchors.leftMargin: settings.firstvolume == 1 ? 0 : mutebut.hover.containsMouse ? 130 : volumeMouse.dragger.containsMouse ? 130 : 0
@@ -215,12 +213,12 @@ Rectangle {
 				}
 	
 				// Start "Time / Length" Text in Toolbar
-				Loader.ToolbarTimeLength {
+				Local.ToolbarTimeLength {
 					id: showtime
 					text: wjs.getTime(vlcPlayer.time)
 					color: ui.colors.toolbar.currentTime
 				}
-				Loader.ToolbarTimeLength {
+				Local.ToolbarTimeLength {
 					anchors.left: showtime.right
 					anchors.leftMargin: 0
 					text: settings.refreshTime ? wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : "" : wjs.getLengthTime() != "" ? " / "+ wjs.getLengthTime() : ""
@@ -231,13 +229,13 @@ Rectangle {
 			// End Left Side Buttons in Toolbar
 			
 			// Start Right Side Buttons in Toolbar
-			Loader.ToolbarRight {
+			Local.ToolbarRight {
 				// Start Open Subtitle Menu Button
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					color: ui.colors.toolbar.border
 					visible: subButton.visible ? borderVisible : false
 				}
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: subButton
 					icon: settings.glyphsLoaded ? ui.icon.subtitles : ""
 					iconSize: fullscreen ? 17 : 16
@@ -250,12 +248,12 @@ Rectangle {
 				// End Open Subtitle Menu Button
 				
 				// Start Open Playlist Button
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					color: ui.colors.toolbar.border
 					anchors.right: playlistButton.left
 					visible: playlistButton.visible ? borderVisible : false
 				}
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: playlistButton
 					icon: settings.glyphsLoaded ? ui.icon.playlist : ""
 					iconSize: fullscreen ? 18 : 17
@@ -268,12 +266,12 @@ Rectangle {
 				// End Open Playlist Button
 				
 				// Fullscreen Button
-				Loader.ToolbarBorder {
+				Local.ToolbarBorder {
 					color: ui.colors.toolbar.border
 					anchors.right: fullscreenButton.left
 					visible: borderVisible
 				}
-				Loader.ToolbarButton {
+				Local.ToolbarButton {
 					id: fullscreenButton
 					anchors.right: parent.right
 					icon: settings.glyphsLoaded ? fullscreen ? ui.icon.minimize : ui.icon.maximize : ""
@@ -292,36 +290,36 @@ Rectangle {
 		// End Draw Toolbar
 		
 		// Draw Time Bubble (visible when hovering over Progress Bar)
-		Loader.TimeBubble {
-			id: timeBubble
-			fontColor: ui.colors.timeBubble.font
-			backgroundIcon: settings.glyphsLoaded ? timeBubble.srctime.length > 5 ? ui.icon.timeBubble.big : timeBubble.srctime.length == 0 ? "" : ui.icon.timeBubble.small : ""
-			backgroundColor: ui.colors.timeBubble.background
-			backgroundBorder: ui.colors.timeBubble.border
-			backgroundOpacity: 0.9
-		}
+	//	Local.TimeBubble {
+	//		id: timeBubble
+	//		fontColor: ui.colors.timeBubble.font
+	//		backgroundIcon: settings.glyphsLoaded ? ui.icon.timeBubble.small : ""
+	//		backgroundColor: ui.colors.timeBubble.background
+	//		backgroundBorder: ui.colors.timeBubble.border
+	//		backgroundOpacity: 0.9
+	//	}
 		// End Time Bubble
 
 		// Draw Progression Bar
-        Loader.ProgressBar {
-			id: progressBar
-			backgroundColor: ui.colors.progress.background
-			viewedColor: ui.colors.progress.viewed
-			positionColor: ui.colors.progress.position
-			cache.visible: vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
-			cache.color: ui.colors.progress.cache
-			onPressed: wjs.progressDrag(mouseX,mouseY);
-			onChanged: wjs.progressChanged(mouseX,mouseY);
-			onReleased: wjs.progressReleased(mouseX,mouseY);
-		}
+    //    Local.ProgressBar {
+	//		id: progressBar
+	//		backgroundColor: ui.colors.progress.background
+	//		viewedColor: ui.colors.progress.viewed
+	//		positionColor: ui.colors.progress.position
+	//		cache.visible: false // vlcPlayer.state > 0 ? ui.settings.caching : false // fix for non-notify issue
+	//		cache.color: ui.colors.progress.cache
+	//		//onPressed: wjs.progressDrag(mouseX,mouseY);
+	//		//onChanged: wjs.progressChanged(mouseX,mouseY);
+	//		//onReleased: wjs.progressReleased(mouseX,mouseY);
+	//	}
 		// End Draw Progress Bar
 		
-		Loader.DigitalZoom { id: digiZoom } // Digital Zoom Feature
+		Local.DigitalZoom { id: digiZoom } // Digital Zoom Feature
 
-		Loader.PIP { id: pip } // Picture in Picture Feature
+		Local.PIP { id: pip } // Picture in Picture Feature
 		
 		// Start Top Right Text Box
-		Loader.TopRightText {
+		Local.TopRightText {
 			id: volumebox
 			fontColor: ui.colors.font
 			fontShadow: ui.colors.fontShadow
@@ -329,7 +327,7 @@ Rectangle {
 		// End Top Right Text Box
 
 		// Title Bar (top bar)
-		Loader.TitleBar {
+		Local.TitleBar {
 			id: topText
 			fontColor: ui.colors.titleBar.font
 			backgroundColor: ui.colors.titleBar.background
@@ -338,12 +336,12 @@ Rectangle {
 		// End Title Bar (top bar)
 		
 		// Start Playlist Menu
-		Loader.Menu {
+		Local.Menu {
 			id: playlistblock
 			background.color: ui.colors.playlistMenu.background
 			
 			// Start Playlist Menu Scroll
-			Loader.MenuScroll {
+			Local.MenuScroll {
 				id: playlistScroll
 				draggerColor: ui.colors.playlistMenu.drag
 				backgroundColor: ui.colors.playlistMenu.scroller
@@ -352,19 +350,19 @@ Rectangle {
 			}
 			// End Playlist Menu Scroll
 		
-			Loader.MenuContent {
+			Local.MenuContent {
 				width: playlistblock.width < 694 ? (playlistblock.width -12) : 682
 				
-				Loader.PlaylistMenuItems { id: playlist } // Playlist Items Holder (This is where the Playlist Items will be loaded)
+				Local.PlaylistMenuItems { id: playlist } // Playlist Items Holder (This is where the Playlist Items will be loaded)
 		
 				// Top Holder (Title + Close Button)
-				Loader.MenuHeader {
+				Local.MenuHeader {
 					text: "Playlist Menu"
 					textColor: ui.colors.playlistMenu.headerFont
 					backgroundColor: ui.colors.playlistMenu.header
 										
 					// Start Close Playlist Button
-					Loader.MenuClose {
+					Local.MenuClose {
 						id: playlistClose
 						icon: settings.glyphsLoaded ? ui.icon.closePlaylist : ""
 						iconSize: 9
@@ -381,14 +379,14 @@ Rectangle {
 		// End Playlist Menu
 
 		// Start Replace MRL Text Box (for debug playlist feature)
-		Loader.ReplaceMRL {
+		Local.ReplaceMRL {
 			color: "#111111"
 			id: inputBox
 		}
 		// End Replace MRL Text Box (for debug playlist feature)
 
 		// Start Add MRL Text Box (for debug playlist feature)
-		Loader.AddMRL {
+		Local.AddMRL {
 			color: "#111111"
 			id: inputAddBox
 		}
@@ -396,12 +394,12 @@ Rectangle {
 
 
 		// Start Subtitle Menu
-		Loader.Menu {
+		Local.Menu {
 			id: subMenublock
 			background.color: ui.colors.playlistMenu.background
 			
 			// Start Subtitle Menu Scroll
-			Loader.MenuScroll {
+			Local.MenuScroll {
 				id: subMenuScroll
 				draggerColor: ui.colors.playlistMenu.drag
 				backgroundColor: ui.colors.playlistMenu.scroller
@@ -410,19 +408,19 @@ Rectangle {
 			}
 			// End Subtitle Menu Scroll
 		
-			Loader.MenuContent {
+			Local.MenuContent {
 				width: subMenublock.width < 694 ? (subMenublock.width -12) : 682
 				
-				Loader.SubtitleMenuItems { id: subMenu } // Subtitle Items Holder (This is where the Playlist Items will be loaded)
+				Local.SubtitleMenuItems { id: subMenu } // Subtitle Items Holder (This is where the Playlist Items will be loaded)
 		
 				// Top Holder (Title + Close Button)
-				Loader.MenuHeader {
+				Local.MenuHeader {
 					text: "Subtitle Menu"
 					textColor: ui.colors.playlistMenu.headerFont
 					backgroundColor: ui.colors.playlistMenu.header
 										
 					// Start Close Subtitle Menu Button
-					Loader.MenuClose {
+					Local.MenuClose {
 						id: subMenuClose
 						icon: settings.glyphsLoaded ? ui.icon.closePlaylist : ""
 						iconSize: 9
@@ -439,7 +437,7 @@ Rectangle {
 		// End Subtitle Menu
 		
 		// Start Context Menu
-		Loader.ContextMenu {
+		Local.ContextMenu {
 			id: contextblock
 			color: ui.colors.playlistMenu.background
 			border.color: "#979595"
